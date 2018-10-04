@@ -56,6 +56,16 @@
                         <button class="btn btn-outline-info" type="button">SZCZEGÓŁY</button>
                     </a>
                 </td>
+                <td>
+                    <a class="nav-link" th:href="@{'/worker/'+${car.id}+'/accept'}">
+                        <button class="btn btn-outline-info" type="button">DODAJ DO OFERTY</button>
+                    </a>
+                </td>
+                <td>
+                    <a class="nav-link" th:href="@{'/worker/'+${car.id}+'/delete'}">
+                        <button class="btn btn-outline-info" type="button">USUŃ Z LISTY</button>
+                    </a>
+                </td>
             </tr>
             </tbody>
         </table>

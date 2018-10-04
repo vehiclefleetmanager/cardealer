@@ -12,10 +12,7 @@ import com.example.cardealer.service.EventService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.Date;
 
@@ -45,9 +42,22 @@ public class WorkerController {
 
 
     @GetMapping("/cars-list")
-    public String show(@ModelAttribute("carDto") CarDto carDto) {
-
+    public String show(@ModelAttribute("carDto") CarDto carDto, Model model) {
+        model.addAttribute("cars", carService.findAll());
         return "/worker/cars-list";
+    }
+
+    @GetMapping("/{id}/customer-edit")
+    public String showEditCustomer(@PathVariable("id") Integer id, Model model) {
+        Customer databaseCustomer = customerService.findById(id);
+        model.addAttribute("customer", databaseCustomer);
+        return "/worker/customer-edit";
+    }
+
+    @PostMapping("/save")
+    public String saveCustomer(@ModelAttribute("customer") Customer customer) {
+        customerService.save(customer);
+        return "redirect:/worker/customer-list";
     }
 
     @GetMapping("/show/car")
@@ -56,8 +66,8 @@ public class WorkerController {
         return "/worker/cars-list";
     }
 
-    @GetMapping("/{id}/purchase")
-    public String purchaseCar(@PathVariable("id") @ModelAttribute("carDto") CarDto carDto, Integer id) {
+    @GetMapping("/{id}/accept")
+    public String acceptCar(@PathVariable("id") @ModelAttribute("carDto") CarDto carDto, Integer id) {
 
         /**przeniesienie auta z listy oczekujących na akceptacje przez serwis
          * na liste wystawionych do sprzedaży*/

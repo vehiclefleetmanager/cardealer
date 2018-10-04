@@ -27,4 +27,8 @@ public class CustomerService {
     public void save(Customer customer) {
         customerRepository.save(customer);
     }
+
+    public Customer findById(Integer id) {
+        return customerRepository.findById(id).get();
+    }
 }
