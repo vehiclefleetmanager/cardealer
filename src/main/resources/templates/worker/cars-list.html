@@ -1,0 +1,66 @@
+<!doctype html>
+<html xmlns:th="http://www.w3.org/1999/xhtml" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      lang="en"
+      layout:decorate="index">
+<head>
+    <meta charset="utf-8">
+    <title>AutoKomis.pl</title>
+</head>
+
+<body>
+
+<main role="main" class="col-md-9 ml-sm-auto col-lg-10 px-4 main" layout:fragment="main">
+    <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+        <div class="input-group mb-3">
+            <form th:action="@{/show/car}" th:object="${carDto}" method="get">
+                <div class="input-group-prepend">
+                    <label class="input-group-text" for="transaction">Wyświetl pojazdy według statusu:</label>
+                    <select class="custom-select" id="transaction" th:field="*{transaction}">
+                        <option th:each="type:${T(com.example.cardealer.model.enums.Transaction).values()}"
+                                th:value="${type}"
+                                th:text="${type.getType()}"></option>
+                    </select>
+                    <!--<div class="input-group-prepend">-->
+                    <button class="btn btn-outline-secondary" type="submit" id="button-addon2">Filtruj</button>
+                    <!-- </div>-->
+                </div>
+            </form>
+        </div>
+    </div>
+    <h2 th:text="'Lista pojazdów'"></h2>
+    <div class="table-responsive ">
+        <table class="table table-striped table-sm text-center">
+            <thead>
+            <tr>
+                <th>Zdjęcie</th>
+                <th>Marka</th>
+                <th>Model</th>
+                <th>Rok produkcji</th>
+                <th>Przebieg</th>
+                <th>Cena</th>
+                <th></th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="car :${cars}">
+                <td>
+                    <img th:src="@{/images/index/images.jpg}" width="275" height="183"/>
+                </td>
+                <td style="font-size: 18px;" th:text="${car.mark}"></td>
+                <td style="font-size: 18px;" th:text="${car.model}"></td>
+                <td style="font-size: 18px;" th:text="${car.productionYear}"></td>
+                <td style="font-size: 18px;" th:text="${car.distance}"></td>
+                <td style="font-size: 24px; color: #F00;" th:text="${car.price}+' '+PLN"></td>
+                <td>
+                    <a class="nav-link" th:href="@{'/customer/'+${car.id}+'/details'}">
+                        <button class="btn btn-outline-info" type="button">SZCZEGÓŁY</button>
+                    </a>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+</main>
+
+</body>
+</html>

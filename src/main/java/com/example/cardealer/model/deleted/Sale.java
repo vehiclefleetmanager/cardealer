@@ -1,3 +1,4 @@
+/*
 package com.example.cardealer.model.deleted;
 
 
@@ -5,9 +6,11 @@ import javax.persistence.*;
 import java.math.BigDecimal;
 import java.util.Date;
 
+*/
 /**
  * SPRZEDAŻ
- */
+ *//*
+
 @Entity
 @Table(name = "sales")
 public class Sale {
@@ -46,3 +49,4 @@ public class Sale {
         this.saleAmount = saleAmount;
     }
 }
+*/

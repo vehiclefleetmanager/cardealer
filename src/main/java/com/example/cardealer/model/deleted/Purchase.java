@@ -1,11 +1,14 @@
+/*
 package com.example.cardealer.model.deleted;
 
 import javax.persistence.*;
 import java.math.BigDecimal;
 
+*/
 /**
  * KUPNO
- */
+ *//*
+
 
 @Entity
 @Table(name = "purchases")
@@ -35,3 +38,4 @@ public class Purchase {
         this.amount = amount;
     }
 }
+*/

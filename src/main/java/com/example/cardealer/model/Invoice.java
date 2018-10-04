@@ -12,11 +12,13 @@ public class Invoice {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
+
     @Column(unique = true)
     private String invoiceNumber;
+
     @ManyToOne
     @JoinColumn(name = "agreement_id")
-    private Agreement agreement;
+    private Agreement agreements;
 
     @ManyToOne
     @JoinColumn(name = "worker_id")
@@ -41,5 +43,21 @@ public class Invoice {
 
     public void setInvoiceNumber(String invoiceNumber) {
         this.invoiceNumber = invoiceNumber;
+    }
+
+    public Agreement getAgreements() {
+        return agreements;
+    }
+
+    public void setAgreements(Agreement agreements) {
+        this.agreements = agreements;
+    }
+
+    public Worker getWorker() {
+        return worker;
+    }
+
+    public void setWorker(Worker worker) {
+        this.worker = worker;
     }
 }

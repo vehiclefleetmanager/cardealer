@@ -3,6 +3,7 @@ package com.example.cardealer.model;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import javax.persistence.*;
+import java.util.HashSet;
 import java.util.Set;
 
 /**
@@ -15,23 +16,42 @@ public class Customer {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer customerNumber;
+
     @Column
     private String lastName;
+
     @Column
     private String firstName;
+
     @Column
     private String address;
+
     @Column(unique = true)
-    private Integer tin;
+    private Long tin;
+
     @Column(unique = true)
+    private Long pesel;
 
     @JsonIgnore
-    @ManyToMany(mappedBy = "customerSet")
+    @ManyToMany(mappedBy = "customers", cascade = CascadeType.ALL)
     private Set<Car> cars;
 
-    private Integer pesel;
+    @OneToMany(mappedBy = "customer", cascade = CascadeType.ALL)
+    private Set<Agreement> agreements;
+
+    @OneToMany(mappedBy = "customer", cascade = CascadeType.ALL)
+    private Set<Event> events;
+
 
     public Customer() {
+    }
+
+    public Customer(String firstName, String lastName, String address, Long tin, Long pesel) {
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.address = address;
+        this.tin = tin;
+        this.pesel = pesel;
     }
 
     public Integer getCustomerNumber() {
@@ -66,19 +86,64 @@ public class Customer {
         this.address = address;
     }
 
-    public Integer getTin() {
+    public Long getTin() {
         return tin;
     }
 
-    public void setTin(Integer tin) {
+    public void setTin(Long tin) {
         this.tin = tin;
     }
 
-    public Integer getPesel() {
+    public Long getPesel() {
         return pesel;
     }
 
-    public void setPesel(Integer pesel) {
+    public void setPesel(Long pesel) {
         this.pesel = pesel;
+    }
+
+    public Set<Car> getCars() {
+        return cars;
+    }
+
+    public void setCars(Set<Car> cars) {
+        this.cars = cars;
+    }
+
+    public Set<Agreement> getAgreements() {
+        return agreements;
+    }
+
+    public void setAgreements(Set<Agreement> agreements) {
+        this.agreements = agreements;
+    }
+
+    public Set<Event> getEvents() {
+        return events;
+    }
+
+    public void setEvents(Set<Event> events) {
+        this.events = events;
+    }
+
+    public void addCar(Car car) {
+        if (cars == null) {
+            cars = new HashSet<>();
+        }
+        cars.add(car);
+    }
+
+    public void addEvents(Event event) {
+        if (events == null) {
+            events = new HashSet<>();
+        }
+        events.add(event);
+    }
+
+    public void addAgreement(Agreement agreement) {
+        if (agreements == null) {
+            agreements = new HashSet<>();
+        }
+        agreements.add(agreement);
     }
 }

@@ -1,3 +1,4 @@
+/*
 package com.example.cardealer.model.deleted;
 
 import com.example.cardealer.model.Agreement;
@@ -5,9 +6,11 @@ import com.example.cardealer.model.Agreement;
 import javax.persistence.*;
 import java.util.Date;
 
+*/
 /**
  * ODSTĄPIENIE
- */
+ *//*
+
 
 @Entity
 @Table(name = "renouncements")
@@ -41,3 +44,4 @@ public class Renouncement {
         this.renouncementDate = renouncementDate;
     }
 }
+*/

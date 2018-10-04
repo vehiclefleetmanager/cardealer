@@ -2,6 +2,7 @@ package com.example.cardealer.model;
 
 import javax.persistence.*;
 import java.util.Date;
+import java.util.Set;
 
 /**
  * PRACOWNIK
@@ -14,14 +15,22 @@ public class Worker {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
+
     @Column(name = "first_name")
     private String firstName;
+
     @Column(name = "last_name")
     private String lastName;
+
     @Column(name = "address")
     private String address;
+
     @Column(name = "date_of_employment")
     private Date employmentDate;
+
+    @OneToMany(mappedBy = "worker", cascade = CascadeType.ALL)
+    private Set<Event> events;
+
 
     public Worker() {
     }
