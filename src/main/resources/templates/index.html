@@ -1,7 +1,6 @@
 <!doctype html>
 <html xmlns:th="http://www.w3.org/1999/xhtml" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
-      lang="en"
-      layout:decorate="index">
+      lang="en">
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
@@ -12,10 +11,10 @@
     <title>AutoKomis.pl</title>
 
     <!-- Bootstrap core CSS -->
-    <link th:href="@{../css/bootstrap.min.css}" rel="stylesheet">
+    <link th:href="@{/css/bootstrap.min.css}" rel="stylesheet">
 
     <!-- Custom styles for this template -->
-    <link th:href="@{../css/index.css}" rel="stylesheet">
+    <link th:href="@{/css/index.css}" rel="stylesheet">
 
 
 </head>
@@ -50,7 +49,7 @@
                         </a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" th:href="@{worker/cars-list}">
+                        <a class="nav-link" th:href="@{/worker/cars-list}">
                             <span data-feather="shopping-cart"></span>
                             Samochody
                         </a>
@@ -131,54 +130,66 @@
 
             </div>
         </nav>
-
         <main role="main" class="col-md-9 ml-sm-auto col-lg-10 px-4 main" layout:fragment="main">
-            <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
-                <div class="input-group mb-3">
-                    <div class="input-group-prepend">
-                        <label class="input-group-text" for="inputGroupSelect01">Marka</label>
-                    </div>
-                    <select class="custom-select" id="inputGroupSelect01">
-                        <option selected>Wybierz</option>
-                        <option value="1"></option>
-                        <option value="2"></option>
-                        <option value="3"></option>
-                    </select>
-                    <div class="input-group-prepend">
-                        <label class="input-group-text" for="inputGroupSelect02">Model</label>
-                    </div>
-                    <select class="custom-select" id="inputGroupSelect02">
-                        <option selected>Wybierz</option>
-                        <option value="1"></option>
-                        <option value="2"></option>
-                        <option value="3"></option>
-                    </select>
-                    <div class="input-group-prepend">
-                        <label class="input-group-text" for="inputGroupSelect03">Rocznik</label>
-                    </div>
-                    <select class="custom-select" id="inputGroupSelect03">
-                        <option selected>Od</option>
-                        <option value="1"></option>
-                        <option value="2"></option>
-                        <option value="3"></option>
-                    </select>
-                    <select class="custom-select" id="inputGroupSelect04">
-                        <option selected>Do</option>
-                        <option value="1"></option>
-                        <option value="2"></option>
-                        <option value="3"></option>
-                    </select>
-                    <div class="input-group-prepend">
-                        <span class="input-group-text">Cena</span>
-                        <input type="text" aria-label="minPrice" class="form-control" placeholder="Od">
-                        <span class="input-group-text">PLN</span>
-                        <input type="text" aria-label="maxPrice" class="form-control" placeholder="Do">
-                        <span class="input-group-text">PLN</span>
-                    </div>
-                    <div class="input-group-prepend">
-                        <button class="btn btn-outline-secondary" type="button" id="button-addon2">Filtruj</button>
-                    </div>
+            <div class="jumbotron p-3 p-md-5 text-dark rounded bg-white col-md-12" id="jumbotron">
+                <div class="col-md-6 px-0">
+                    <h1 class="display-4 font-italic">Lorem ipsum dolor sit amet, consectetur adipiscing elit.</h1>
+                    <p class="lead my-3">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod
+                        tempor incididunt ut labore et dolore magna aliqua.</p>
                 </div>
+            </div>
+            <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+                <form th:action="@{/filter}" method="post" th:object="${carDto}">
+                    <div class="input-group mb-3">
+                        <div class="input-group-prepend">
+                            <label class="input-group-text" for="markField">Marka</label>
+                        </div>
+                        <select class="custom-select" id="markField" th:field="*{mark}">
+                            <option selected value=" ">Wybierz...</option>
+                            <option th:each="type:${markList}"
+                                    th:value="${type}"
+                                    th:text="${type}"
+                            ></option>
+
+                        </select>
+                        <div class="input-group-prepend">
+                            <label class="input-group-text" for="model">Model</label>
+                        </div>
+                        <select class="custom-select" id="model" th:field="*{model}">
+                            <option selected value=" ">Wybierz</option>
+                            <option th:each="type:${modelList}"
+                                    th:value="${type}"
+                                    th:text="${type}"></option>
+
+                        </select>
+                        <div class="input-group-prepend">
+                            <label class="input-group-text" for="production_year">Rocznik</label>
+                        </div>
+                        <select class="custom-select" id="production_year" th:field="*{productionYear}">
+                            <option selected value=" "></option>
+                            <option th:each="year:${years}"
+                                    th:value="${year}"
+                                    th:text="${year}"></option>
+                        </select>
+                        <select class="custom-select" th:object="${carDto}" th:field="*{productionYear}">
+                            <option selected value=" "></option>
+                            <option th:each="year:${years}"
+                                    th:value="${year}"
+                                    th:text="${year}"></option>
+                        </select>
+                        <div class="input-group-prepend">
+                            <span class="input-group-text">Cena</span>
+                            <input type="text" aria-label="minPrice" class="form-control" placeholder="Od">
+                            <span class="input-group-text">PLN</span>
+                            <input type="text" aria-label="maxPrice" class="form-control" placeholder="Do">
+                            <span class="input-group-text">PLN</span>
+                        </div>
+                        <div class="input-group-prepend">
+                            <button class="btn btn-outline-secondary" type="submit" id="button-addon2" hidden>Filtruj
+                            </button>
+                        </div>
+                    </div>
+                </form>
             </div>
             <h2>Lista dostępnych pojazdów</h2>
             <div class="table-responsive ">

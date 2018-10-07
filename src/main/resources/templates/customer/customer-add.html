@@ -10,17 +10,26 @@
 
 <body>
 <main role="main" class="col-md-9 ml-sm-auto col-lg-10 px-4 main" layout:fragment="main">
-
     <div class="row">
         <div class="col-md-11 order-md-1">
             <h4 class="mb-3">Informacje o pojeździe</h4>
             <form class="needs-validation" novalidate th:action="@{/customer/new/save}" method="post"
-                  th:object="${carDto}">
+                  th:object="${customerDto}">
+                <div class="row">
+                    <div class="col-md-12 mb-3">
+                        <input type="text" class="form-control" id="id"
+                               required th:object="${carDto}" th:field="*{id}" hidden>
+                        <div class="invalid-feedback">
+                            Valid mark name is required.
+                        </div>
+                    </div>
+                </div>
+
                 <div class="row">
                     <div class="col-md-6 mb-3">
                         <label for="markName">Marka pojazdu</label>
                         <input type="text" class="form-control" id="markName" placeholder="FSO" value=""
-                               required th:field="*{mark}">
+                               required th:object="${carDto}" th:field="*{mark}" readonly>
                         <div class="invalid-feedback">
                             Valid mark name is required.
                         </div>
@@ -28,7 +37,7 @@
                     <div class="col-md-6 mb-3">
                         <label for="modelName">Model pojazdu</label>
                         <input type="text" class="form-control" id="modelName" placeholder="Polonez"
-                               value="" required th:field="*{model}">
+                               value="" required th:object="${carDto}" th:field="*{model}" readonly>
                         <div class="invalid-feedback">
                             Valid model name is required.
                         </div>
@@ -39,7 +48,7 @@
                     <div class="col-md-6 mb-3">
                         <label for="productionYear">Rok produkcji</label>
                         <input type="text" class="form-control" id="productionYear" placeholder="1999"
-                               value="" required th:field="*{productionYear}">
+                               value="" required th:object="${carDto}" th:field="*{productionYear}" readonly>
                         <div class="invalid-feedback">
                             Valid production year is required.
                         </div>
@@ -47,7 +56,7 @@
                     <div class="col-md-6 mb-3">
                         <label for="vinBody">Numer nadwozia</label>
                         <input type="text" class="form-control" id="vinBody" placeholder="POLONEZ151999XYZ"
-                               value="" required th:field="*{bodyNumber}">
+                               value="" required th:object="${carDto}" th:field="*{bodyNumber}" readonly>
                         <div class="invalid-feedback">
                             Valid body vin is required.
                         </div>
@@ -58,7 +67,7 @@
                     <div class="col-md-6 mb-3">
                         <label for="registerNumber">Numer rejestracyjny</label>
                         <input type="text" class="form-control" id="registerNumber" placeholder="" value=""
-                               required th:field="*{regNumber}">
+                               required th:object="${carDto}" th:field="*{regNumber}" readonly>
                         <div class="invalid-feedback">
                             Valid register number is required.
                         </div>
@@ -66,7 +75,7 @@
                     <div class="col-md-6 mb-3">
                         <label for="policyNumber">Numer polisy</label>
                         <input type="text" class="form-control" id="policyNumber" placeholder="" value=""
-                               required th:field="*{ocNumber}">
+                               required th:object="${carDto}" th:field="*{ocNumber}" readonly>
                         <div class="invalid-feedback">
                             Valid policy number is required.
                         </div>
@@ -76,7 +85,8 @@
                 <div class="row">
                     <div class="col-md-6 mb-3">
                         <label for="fuelType">Rodzaj paliwa</label>
-                        <select id="fuelType" class="form-control" th:field="*{fuelType}">
+                        <select id="fuelType" class="form-control" th:object="${carDto}" th:field="*{fuelType}" readonly
+                                disabled>
                             <option selected="selected" value=" ">Wybierz...</option>
                             <option th:each="type:${T(com.example.cardealer.model.enums.FuelType).values()}"
                                     th:value="${type}"
@@ -90,7 +100,7 @@
                     <div class="col-md-6 mb-3">
                         <label for="distance">Przebieg</label>
                         <input type="text" class="form-control" id="distance" placeholder="" value=""
-                               required th:field="*{distance}">
+                               required th:object="${carDto}" th:field="*{distance}" readonly>
                         <div class="invalid-feedback">
                             Valid distance is required.
                         </div>
@@ -101,7 +111,7 @@
                     <div class="col-md-6 mb-3">
                         <label for="capacityEngine">Pojemność silnika</label>
                         <input type="text" class="form-control" id="capacityEngine" placeholder="" value=""
-                               required th:field="*{capacityEngine}">
+                               required th:object="${carDto}" th:field="*{capacityEngine}" readonly>
                         <div class="invalid-feedback">
                             Valid capacity engine is required.
                         </div>
@@ -109,7 +119,7 @@
                     <div class="col-md-6 mb-3">
                         <label for="powerEngine">Moc silnika</label>
                         <input type="text" class="form-control" id="powerEngine" placeholder="" value=""
-                               required th:field="*{powerEngine}">
+                               required th:object="${carDto}" th:field="*{powerEngine}" readonly>
                         <div class="invalid-feedback">
                             Valid power engine is required.
                         </div>
@@ -119,7 +129,8 @@
                 <div class="row">
                     <div class="col-md-6 mb-3">
                         <label for="transmission">Rodzaj skrzyni biegów</label>
-                        <select id="transmission" class="form-control" th:field="*{transmission}">
+                        <select id="transmission" class="form-control" th:object="${carDto}" th:field="*{transmission}"
+                                readonly disabled>
                             <option selected="selected" value=" ">Wybierz...</option>
                             <option th:each="type:${T(com.example.cardealer.model.enums.Transmission).values()}"
                                     th:value="${type}"
@@ -133,7 +144,8 @@
                     <div class="col-md-6 mb-3">
                         <label for="price">Proponowana cena</label>
                         <input type="text" class="form-control" id="price" placeholder="" required
-                               th:field="*{price}">
+                               th:object="${carDto}"
+                               th:field="*{price}" readonly>
                         <div class="invalid-feedback">
                             Valid price is required.
                         </div>
@@ -144,7 +156,7 @@
                     <div class="col-md-12 mb-6">
                         <label for="description">Opis</label>
                         <textarea type="text" class="form-control" id="description" rows="8" placeholder=""
-                                  required th:field="*{description}"></textarea>
+                                  required th:object="${carDto}" th:field="*{description}" readonly></textarea>
                         <div class="invalid-feedback">
                             Valid price is required.
                         </div>
@@ -199,15 +211,20 @@
                             Valid pesel is required.
                         </div>
                     </div>
-                    <div class="col-md-6 mb-3 ">
-                        <label for="send"></label>
-                        <button id="send" class="btn btn-secondary btn-lg btn-block" type="submit">Dodaj pojazd</button>
+                    <div class="col-md-6 mb-3">
+                        <label for="date"></label>
+                        <input type="date" class="form-control" id="date" value=""
+                               required th:field="*{testingDate}">
+                        <div class="invalid-feedback">
+                            Valid date is required.
+                        </div>
                     </div>
                 </div>
-
+                <div class="col-md-6 mb-3 offset-sm-3">
+                    <label for="send"></label>
+                    <button id="send" class="btn btn-secondary btn-lg btn-block" type="submit">Dodaj spotkanie</button>
+                </div>
                 <hr class="mb-4">
-
-
             </form>
         </div>
     </div>

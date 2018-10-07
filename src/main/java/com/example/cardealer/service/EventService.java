@@ -1,5 +1,6 @@
 package com.example.cardealer.service;
 
+import com.example.cardealer.model.Customer;
 import com.example.cardealer.model.Event;
 import com.example.cardealer.repository.EventRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,4 +30,13 @@ public class EventService {
         return eventRepository.findById(id).get();
     }
 
+    public Customer findCustomerByCarId(Integer id) {
+        Customer customerByCarId = eventRepository.findCustomerByCarId(id);
+        return customerByCarId;
+    }
+
+    public Event findEventByCarId(Integer id) {
+        Event eventByCarId = eventRepository.findEventByCarId(id);
+        return eventByCarId;
+    }
 }

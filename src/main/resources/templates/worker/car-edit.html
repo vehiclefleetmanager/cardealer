@@ -14,8 +14,14 @@
     <div class="row">
         <div class="col-md-11 order-md-1">
             <h4 class="mb-3">Informacje o pojeździe</h4>
-            <form class="needs-validation" novalidate th:action="@{/customer/new/save}" method="post"
-                  th:object="${carDto}">
+            <form class="needs-validation" novalidate th:action="@{/worker/car-save}" method="post"
+                  th:object="${car}">
+                <div class="row">
+                    <div class="col-md-12 mb-3">
+                        <input type="number" class="form-control" th:field="*{id}"
+                               readonly hidden>
+                    </div>
+                </div>
                 <div class="row">
                     <div class="col-md-6 mb-3">
                         <label for="markName">Marka pojazdu</label>
@@ -130,10 +136,18 @@
                         </div>
                     </div>
 
-                    <div class="col-md-6 mb-3">
+                    <div class="col-md-3 mb-3">
                         <label for="price">Proponowana cena</label>
                         <input type="text" class="form-control" id="price" placeholder="" required
                                th:field="*{price}">
+                        <div class="invalid-feedback">
+                            Valid price is required.
+                        </div>
+                    </div>
+                    <div class="col-md-3 mb-3">
+                        <label for="testing-drive">Ilość jazd próbnych</label>
+                        <input type="text" class="form-control" id="testing-drive" placeholder="" required
+                               th:field="*{testDrive}">
                         <div class="invalid-feedback">
                             Valid price is required.
                         </div>
@@ -152,59 +166,10 @@
                 </div>
                 <hr class="mb-4">
 
-                <h4 class="mb-3">Informacje o kliencie</h4>
 
-                <div class="row">
-                    <div class="col-md-6 mb-3">
-                        <label for="firstName"></label>
-                        <input type="text" class="form-control" id="firstName" placeholder="Imię" value=""
-                               required th:field="*{firstName}">
-                        <div class="invalid-feedback">
-                            Valid first name is required.
-                        </div>
-                    </div>
-                    <div class="col-md-6 mb-3">
-                        <label for="lastName"></label>
-                        <input type="text" class="form-control" id="lastName" placeholder="Nazwisko" value=""
-                               required th:field="*{lastName}">
-                        <div class="invalid-feedback">
-                            Valid last name is required.
-                        </div>
-                    </div>
+                <div class="col-md-6 mb-3 offset-md-3">
+                    <button class="btn btn-secondary btn-lg btn-block" type="submit">OK</button>
                 </div>
-                <div class="row">
-                    <div class="col-md-6 mb-3">
-                        <label for="address"></label>
-                        <input type="text" class="form-control" id="address" placeholder="Adres" value=""
-                               required th:field="*{address}">
-                        <div class="invalid-feedback">
-                            Valid address is required.
-                        </div>
-                    </div>
-                    <div class="col-md-6 mb-3">
-                        <label for="tin"></label>
-                        <input type="text" class="form-control" id="tin" placeholder="NIP" value=""
-                               required th:field="*{tin}">
-                        <div class="invalid-feedback">
-                            Valid tax number is required.
-                        </div>
-                    </div>
-                </div>
-                <div class="row">
-                    <div class="col-md-6 mb-3">
-                        <label for="pesel"></label>
-                        <input type="text" class="form-control" id="pesel" placeholder="Pesel" value=""
-                               required th:field="*{pesel}">
-                        <div class="invalid-feedback">
-                            Valid pesel is required.
-                        </div>
-                    </div>
-                    <div class="col-md-6 mb-3 ">
-                        <label for="send"></label>
-                        <button id="send" class="btn btn-secondary btn-lg btn-block" type="submit">Dodaj pojazd</button>
-                    </div>
-                </div>
-
                 <hr class="mb-4">
 
 

@@ -30,8 +30,8 @@ public class CustomerController {
 
 
     @GetMapping("/sale")
-    public String showFormToSale(@ModelAttribute("carDto") CarDto carDto) {
-
+    public String showFormToSale(Model model) {
+        model.addAttribute("carDto", new CarDto());
         return "/customer/sale";
     }
 
@@ -39,6 +39,14 @@ public class CustomerController {
     public String showDetailsCar(@PathVariable("id") Integer id, Model model) {
         model.addAttribute("car", carService.getCar(id));
         return "/customer/details";
+    }
+
+    @GetMapping("/{id}/customer-add")
+    public String addCustomer(@PathVariable("id") Integer id, Model customerModel, CarDto carDto, Model carModel) {
+        Car databaseCar = carService.getCar(id);
+        carModel.addAttribute("carDto", databaseCar);
+        customerModel.addAttribute("customerDto", new Customer());
+        return "/customer/customer-add";
     }
 
     @PostMapping("/new/save")
@@ -66,13 +74,14 @@ public class CustomerController {
                 carDto.getDescription(),
                 carDto.getPrice());
 
-        Event event = new Event(Transaction.SALE,
+        Event event = new Event(Transaction.WAITING,
                 new Date(),
                 customer,
                 car);
 
         customer.addCar(car);
         car.addCustomer(customer);
+
 
         carService.save(car);
         eventService.save(event);

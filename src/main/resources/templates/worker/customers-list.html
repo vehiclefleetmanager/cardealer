@@ -9,6 +9,7 @@
 
 <body>
 <main role="main" class="col-md-9 ml-sm-auto col-lg-10 px-4 main" layout:fragment="main">
+
     <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
         <div class="input-group mb-3">
             <div class="input-group-prepend">
@@ -27,6 +28,15 @@
         </div>
     </div>
     <h2>Lista klientów</h2>
+    <div class="input-group mb-3">
+        <div class="input-group-prepend">
+            <div class="input-group-prepend">
+                <a th:href="@{/worker/customer-add}">
+                    <button class="btn btn-outline-success" type="button">Dodaj klienta</button>
+                </a>
+            </div>
+        </div>
+    </div>
     <div class="table-responsive ">
         <table class="table table-striped table-sm text-center">
             <thead>
@@ -53,7 +63,7 @@
                     </a>
                 </td>
                 <td>
-                    <a class="nav-link" th:href="@{'/worker/'+*{customerNumber}+'/delete'}">
+                    <a class="nav-link" th:href="@{'/worker/'+*{customerNumber}+'/customer-delete'}">
                         <button class="btn btn-outline-danger" type="button">USUŃ</button>
                     </a>
                 </td>

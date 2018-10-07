@@ -4,7 +4,8 @@ public enum Transaction {
     PURCHASE("zakupionych"),
     RENOUNCEMENT("odstąpionych"),
     SALE("sprzedanych"),
-    WAITING("oczekujących");
+    WAITING("oczekujących"),
+    TESTING("testowanie");
 
     private String type;
 

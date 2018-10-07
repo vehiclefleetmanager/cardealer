@@ -1,13 +1,15 @@
 package com.example.cardealer.dto;
 
+import com.example.cardealer.model.Event;
 import com.example.cardealer.model.enums.FuelType;
 import com.example.cardealer.model.enums.Transaction;
 import com.example.cardealer.model.enums.Transmission;
 
 import java.math.BigDecimal;
+import java.util.Date;
 
 public class CarDto {
-    private String carId;
+    private Integer id;
     private String bodyNumber;
     private Integer productionYear;
     private String mark;
@@ -30,14 +32,19 @@ public class CarDto {
     private Long tin;
     private Long pesel;
 
+    private Date testingDate;
+
+    private Event event;
+
     private Transaction transaction;
 
-    public String getCarId() {
-        return carId;
+
+    public Integer getId() {
+        return id;
     }
 
-    public void setCarId(String carId) {
-        this.carId = carId;
+    public void setId(Integer id) {
+        this.id = id;
     }
 
     public String getBodyNumber() {
@@ -201,11 +208,27 @@ public class CarDto {
         this.pesel = pesel;
     }
 
+    public Event getEvent() {
+        return event;
+    }
+
+    public void setEvent(Event event) {
+        this.event = event;
+    }
+
     public Transaction getTransaction() {
         return transaction;
     }
 
     public void setTransaction(Transaction transaction) {
         this.transaction = transaction;
+    }
+
+    public Date getTestingDate() {
+        return testingDate;
+    }
+
+    public void setTestingDate(Date testingDate) {
+        this.testingDate = testingDate;
     }
 }

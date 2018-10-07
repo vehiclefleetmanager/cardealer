@@ -14,7 +14,7 @@ public class Event {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
-    @Enumerated(EnumType.STRING)
+    @Enumerated(EnumType.ORDINAL)
     private Transaction transaction;
 
     @ManyToOne(cascade = CascadeType.ALL)
@@ -26,6 +26,7 @@ public class Event {
     private Car car;
 
     @Column
+    @Temporal(TemporalType.TIMESTAMP)
     private Date eventDate;
 
     @ManyToOne(cascade = CascadeType.ALL)
@@ -95,4 +96,5 @@ public class Event {
     public void setWorker(Worker worker) {
         this.worker = worker;
     }
+
 }

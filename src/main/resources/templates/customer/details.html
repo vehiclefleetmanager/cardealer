@@ -34,7 +34,7 @@
     <div class="col-md-5 p-lg-5 mx-auto my-5">
         <h1 class="display-4 font-weight-normal" th:text="${car.mark}+' '+${car.model}"></h1>
         <h2 class=" font-weight-normal" th:text="@{'Rok produkcji: '+${car.productionYear}}"></h2>
-        <h2 class=" font-weight-normal" th:text="@{'Rodzaj paliwa: '+${car.fuelType}}"></h2>
+        <h2 class=" font-weight-normal" th:text="@{'Rodzaj paliwa: '+${car.fuelType.getType()}}"></h2>
         <p class="lead font-weight-normal" th:text="${car.description}"></p>
         <h2 class="display-4 font-weight-normal" th:text="${car.price}+' '+PLN"></h2>
         <a class="btn btn-outline-secondary" href="#photos">Przejdź do zdjęć</a>
@@ -99,7 +99,9 @@
     </div>
     <div class="bg-light mr-md-3 pt-3 px-3 pt-md-5 px-md-5 text-center overflow-hidden">
         <div class="my-3 py-3">
-            <button class="btn btn-outline-info btn-lg" type="button">Umów się na <br/> jazdę próbną</button>
+            <a th:href="@{'/customer/'+ ${id} + '/customer-add'}">
+                <button class="btn btn-outline-info btn-lg" type="button">Umów się na <br/> jazdę próbną</button>
+            </a>
         </div>
     </div>
 </div>

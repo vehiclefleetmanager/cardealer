@@ -133,7 +133,7 @@ public class Customer {
         cars.add(car);
     }
 
-    public void addEvents(Event event) {
+    public void addEvent(Event event) {
         if (events == null) {
             events = new HashSet<>();
         }

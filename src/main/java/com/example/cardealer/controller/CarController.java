@@ -1,3 +1,4 @@
+/*
 package com.example.cardealer.controller;
 
 import com.example.cardealer.repository.CarRepository;
@@ -27,9 +28,12 @@ public class CarController {
 
 }
 
-    /*@PostMapping("/add")
+    */
+/*@PostMapping("/add")
     public String addCar(Model model) {
         model.addAttribute("sale", new Car());
         return "redirect:/";
-    }*/
+    }*//*
 
+
+ */

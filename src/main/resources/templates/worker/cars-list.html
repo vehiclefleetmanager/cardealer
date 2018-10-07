@@ -10,9 +10,10 @@
 <body>
 
 <main role="main" class="col-md-9 ml-sm-auto col-lg-10 px-4 main" layout:fragment="main">
+
     <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
         <div class="input-group mb-3">
-            <form th:action="@{/show/car}" th:object="${carDto}" method="get">
+            <form th:action="@{/worker/show/car}" th:object="${carDto}" method="get">
                 <div class="input-group-prepend">
                     <label class="input-group-text" for="transaction">Wyświetl pojazdy według statusu:</label>
                     <select class="custom-select" id="transaction" th:field="*{transaction}">
@@ -27,7 +28,16 @@
             </form>
         </div>
     </div>
-    <h2 th:text="'Lista pojazdów'"></h2>
+    <h2>Lista pojazdów</h2>
+    <div class="input-group mb-3">
+        <div class="input-group-prepend">
+            <div class="input-group-prepend">
+                <a th:href="@{/worker/car-add}">
+                    <button class="btn btn-outline-success" type="button">Dodaj samochód do oferty</button>
+                </a>
+            </div>
+        </div>
+    </div>
     <div class="table-responsive ">
         <table class="table table-striped table-sm text-center">
             <thead>
@@ -38,6 +48,8 @@
                 <th>Rok produkcji</th>
                 <th>Przebieg</th>
                 <th>Cena</th>
+                <th></th>
+                <th></th>
                 <th></th>
             </tr>
             </thead>
@@ -52,24 +64,29 @@
                 <td style="font-size: 18px;" th:text="${car.distance}"></td>
                 <td style="font-size: 24px; color: #F00;" th:text="${car.price}+' '+PLN"></td>
                 <td>
-                    <a class="nav-link" th:href="@{'/customer/'+${car.id}+'/details'}">
-                        <button class="btn btn-outline-info" type="button">SZCZEGÓŁY</button>
+                    <a class="nav-link" th:href="@{'/worker/'+${car.id}+'/car-edit'}">
+                        <button class="btn btn-outline-info" type="button">EDYTUJ</button>
                     </a>
                 </td>
                 <td>
-                    <a class="nav-link" th:href="@{'/worker/'+${car.id}+'/accept'}">
-                        <button class="btn btn-outline-info" type="button">DODAJ DO OFERTY</button>
+                    <!--th:attribute="${#httpServletRequest.getRequestURI().endWith('/car?transaction=WAITING') ? '':'hidden'}"-->
+                    <a
+                            class="nav-link" th:href="@{'/worker/'+${car.id}+'/car-accept'}">
+                        <button class="btn btn-outline-success" type="button">DODAJ <br/>DO OFERTY</button>
+                        <!--trzy butony i zależnie od tego co przyjdzie z adresu, wyświetla
+                        odpowiednią treść-->
                     </a>
                 </td>
                 <td>
-                    <a class="nav-link" th:href="@{'/worker/'+${car.id}+'/delete'}">
-                        <button class="btn btn-outline-info" type="button">USUŃ Z LISTY</button>
+                    <a class="nav-link" th:href="@{'/worker/'+${car.id}+'/car-delete'}">
+                        <button class="btn btn-outline-danger" type="button">USUŃ</button>
                     </a>
                 </td>
             </tr>
             </tbody>
         </table>
     </div>
+
 </main>
 
 </body>

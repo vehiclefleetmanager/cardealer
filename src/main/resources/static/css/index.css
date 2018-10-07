@@ -98,3 +98,11 @@ body {
     border-color: transparent;
     box-shadow: 0 0 0 3px rgba(255, 255, 255, .25);
 }
+
+.jumbotron {
+    background-size: cover;
+    background: url('../images/details/details.jpg') no-repeat top right;
+    width: 100%;
+    height: auto;
+
+}
