@@ -10,7 +10,10 @@
 <body>
 
 <main role="main" class="col-md-9 ml-sm-auto col-lg-10 px-4 main" layout:fragment="main">
-
+    <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+        <div class="input-group mb-3">
+        </div>
+    </div>
     <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
         <div class="input-group mb-3">
             <form th:action="@{/worker/show/car}" th:object="${carDto}" method="get">
@@ -22,8 +25,8 @@
                                 th:text="${type.getType()}"></option>
                     </select>
                     <!--<div class="input-group-prepend">-->
-                    <button class="btn btn-outline-secondary" type="submit" id="button-addon2">Filtruj</button>
-                    <!-- </div>-->
+                    <button class="btn btn-outline-secondary" type="submit" id="button-addon2">Wyświetl</button>
+                    <!--</div>-->
                 </div>
             </form>
         </div>
@@ -70,8 +73,7 @@
                 </td>
                 <td>
                     <!--th:attribute="${#httpServletRequest.getRequestURI().endWith('/car?transaction=WAITING') ? '':'hidden'}"-->
-                    <a
-                            class="nav-link" th:href="@{'/worker/'+${car.id}+'/car-accept'}">
+                    <a class="nav-link" th:href="@{'/worker/'+${car.id}+'/car-accept'}">
                         <button class="btn btn-outline-success" type="button">DODAJ <br/>DO OFERTY</button>
                         <!--trzy butony i zależnie od tego co przyjdzie z adresu, wyświetla
                         odpowiednią treść-->

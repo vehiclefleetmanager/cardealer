@@ -2,6 +2,7 @@ package com.example.cardealer.service;
 
 import com.example.cardealer.model.Customer;
 import com.example.cardealer.model.Event;
+import com.example.cardealer.model.enums.Transaction;
 import com.example.cardealer.repository.EventRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -38,5 +39,9 @@ public class EventService {
     public Event findEventByCarId(Integer id) {
         Event eventByCarId = eventRepository.findEventByCarId(id);
         return eventByCarId;
+    }
+
+    public List<Event> findEventByTesting(Transaction transaction) {
+        return eventRepository.findEventByTransactionIsLikeTesting(transaction);
     }
 }

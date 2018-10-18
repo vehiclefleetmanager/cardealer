@@ -32,6 +32,9 @@ public class Customer {
     @Column(unique = true)
     private Long pesel;
 
+    @Column
+    private String phoneNumber;
+
     @JsonIgnore
     @ManyToMany(mappedBy = "customers", cascade = CascadeType.ALL)
     private Set<Car> cars;
@@ -100,6 +103,14 @@ public class Customer {
 
     public void setPesel(Long pesel) {
         this.pesel = pesel;
+    }
+
+    public String getPhoneNumber() {
+        return phoneNumber;
+    }
+
+    public void setPhoneNumber(String phoneNumber) {
+        this.phoneNumber = phoneNumber;
     }
 
     public Set<Car> getCars() {

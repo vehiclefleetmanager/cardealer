@@ -5,7 +5,7 @@ public enum Transaction {
     RENOUNCEMENT("odstąpionych"),
     SALE("sprzedanych"),
     WAITING("oczekujących"),
-    TESTING("testowanie");
+    TESTING("testowanych");
 
     private String type;
 

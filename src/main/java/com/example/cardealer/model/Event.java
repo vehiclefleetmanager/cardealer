@@ -42,11 +42,12 @@ public class Event {
         this.eventDate = date;
     }
 
-    public Event(Transaction transaction, Date date, Customer customer, Car car) {
+    public Event(Transaction transaction, Date date,
+                 Customer customer, Car car) {
         this.transaction = transaction;
         this.eventDate = date;
-        this.car = car;
         this.customer = customer;
+        this.car = car;
     }
 
     public Transaction getTransaction() {

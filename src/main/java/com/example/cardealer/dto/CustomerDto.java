@@ -14,6 +14,7 @@ public class CustomerDto {
 
     private Date testingDate;
 
+
     public Integer getCustomerId() {
         return customerId;
     }

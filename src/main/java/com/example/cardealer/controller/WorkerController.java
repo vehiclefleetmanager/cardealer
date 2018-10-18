@@ -1,6 +1,7 @@
 package com.example.cardealer.controller;
 
 import com.example.cardealer.dto.CarDto;
+import com.example.cardealer.dto.EventDto;
 import com.example.cardealer.model.Agreement;
 import com.example.cardealer.model.Car;
 import com.example.cardealer.model.Customer;
@@ -74,7 +75,7 @@ public class WorkerController {
 
 
     @GetMapping("/cars-list")
-    public String show(@ModelAttribute("carDto") CarDto carDto, Model model) {
+    public String showCars(@ModelAttribute("carDto") CarDto carDto, Model model) {
         List<Car> cars = carService.findAll();
         model.addAttribute("cars", cars);
         return "/worker/cars-list";
@@ -109,17 +110,17 @@ public class WorkerController {
 
     /*Filtrowanie list po typie transakcji*/
     @GetMapping("/show/car")
-    public String showCar(@ModelAttribute("carDto") CarDto carDto, @RequestParam("transaction") Transaction transaction, Model model) {
+    public String showCars(@ModelAttribute("carDto") CarDto carDto, @RequestParam("transaction") Transaction transaction, Model model) {
         model.addAttribute("cars", carService.findCarByTransactionLike(transaction));
         return "/worker/cars-list";
     }
 
 
+    /*przeniesienie auta:
+     - z listy oczekujących na akceptacje przez serwis
+     - na liste wystawionych do sprzedaży*/
     @GetMapping("/{id}/car-accept")
     public String acceptCar(@PathVariable("id") Integer id, Event event, Car car, Customer customer) {
-
-        /**przeniesienie auta z listy oczekujących na akceptacje przez serwis
-         * na liste wystawionych do sprzedaży*/
 
         /**wyciągamy z bazy zdarzenie o przekazanym id samochodu*/
         event = eventService.findEventByCarId(id);
@@ -134,16 +135,13 @@ public class WorkerController {
         event.setTransaction(Transaction.RENOUNCEMENT);
         event.setEventDate(new Date());
 
-
         /**spisujemy umowe odstąpienia*/
         Agreement agreement = new Agreement();
         agreement.setCar(event.getCar());
         agreement.setCustomer(event.getCustomer());
         agreement.setTransaction(event.getTransaction());
 
-
         /**dodajemy umowe do auta i klienta*/
-
         customer.addAgreement(agreement);
 
         /**dodajemy zdrzenie do auta i klienta*/
@@ -154,6 +152,26 @@ public class WorkerController {
         eventService.save(event);
         agreementService.save(agreement);
         return "redirect:/worker/cars-list";
+    }
+
+    @GetMapping("/orders-list")
+    public String showOrders(Model eventModel,
+                             Model carModel,
+                             Model customerModel) {
+        List<Event> events = eventService.findEventByTesting(Transaction.TESTING);
+        eventModel.addAttribute("events", events);
+        carModel.addAttribute("car");
+        customerModel.addAttribute("customer");
+        return "/worker/orders-list";
+    }
+
+    @GetMapping("{id}/orders")
+    public String showOrders(@PathVariable("id") Integer id,
+                             @ModelAttribute("eventDto") EventDto eventDto,
+                             Model model) {
+        Event databaseEvent = eventService.getEvent(id);
+        model.addAttribute("eventDto", databaseEvent);
+        return "orders-list";
     }
 
 }

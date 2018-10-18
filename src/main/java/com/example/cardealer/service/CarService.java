@@ -71,4 +71,8 @@ public class CarService {
     public List<Integer> findProductionYear() {
         return carRepository.findProductionYear();
     }
+
+    public void updateTestDrive(Car car) {
+        car.setTestDrive(car.getTestDrive() + 1);
+    }
 }

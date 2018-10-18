@@ -23,4 +23,6 @@ public interface EventRepository extends JpaRepository<Event, Integer> {
     @Query("select e from Event e where e.car.id = :id")
     Event findEventByCarId(@Param("id") Integer integer);
 
+    @Query("select e from Event e where e.transaction = 4")
+    List<Event> findEventByTransactionIsLikeTesting(@Param("transaction") Transaction transaction);
 }

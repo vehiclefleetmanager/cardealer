@@ -90,7 +90,7 @@ public class Car {
             FuelType fuelType, Integer distance,
             Integer capacityEngine, Integer powerEngine,
             Transmission transmission,
-            String description, BigDecimal price) {
+            String description, BigDecimal price, Integer testDrive) {
         this.bodyNumber = bodyNumber;
         this.productionYear = productionYear;
         this.mark = mark;
@@ -104,6 +104,7 @@ public class Car {
         this.transmission = transmission;
         this.description = description;
         this.price = price;
+        this.testDrive = testDrive;
     }
 
     public Integer getId() {
@@ -162,7 +163,7 @@ public class Car {
         this.regNumber = regNumber;
     }
 
-    public Enum<FuelType> getFuelType() {
+    public FuelType getFuelType() {
         return fuelType;
     }
 
@@ -194,7 +195,7 @@ public class Car {
         this.powerEngine = powerEngine;
     }
 
-    public Enum<Transmission> getTransmission() {
+    public Transmission getTransmission() {
         return transmission;
     }
 
