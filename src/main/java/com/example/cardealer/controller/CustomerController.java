@@ -1,21 +1,17 @@
 package com.example.cardealer.controller;
 
 import com.example.cardealer.dto.CarDto;
-import com.example.cardealer.dto.EventDto;
 import com.example.cardealer.model.Car;
 import com.example.cardealer.model.Customer;
 import com.example.cardealer.model.Event;
-import com.example.cardealer.model.enums.Transaction;
 import com.example.cardealer.service.CarService;
 import com.example.cardealer.service.EventService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.*;
-
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.Date;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestMapping;
 
 @Controller
 @RequestMapping("/customer")
@@ -54,7 +50,7 @@ public class CustomerController {
         return "/customer/customer-add";
     }
 
-    @PostMapping("/new/save")
+   /* @PostMapping("/new/save")
     public String saleCar(@ModelAttribute("carDto") CarDto carDto) {
 
         Customer customer = new Customer(
@@ -94,9 +90,9 @@ public class CustomerController {
         eventService.save(event);
 
         return "redirect:/";
-    }
+    }*/
 
-    @PostMapping("/add-meet")
+    /*@PostMapping("/add-meet")
     public String addMeetToTestDrive(@ModelAttribute("carDto") CarDto carDto, EventDto eventDto) {
 
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat("YYYY-MM-dd");
@@ -108,7 +104,7 @@ public class CustomerController {
         }
 
         Car databaseCar = carService.getCar(carDto.getId());
-        /*aktualizacja stanu jazd testowych*/
+        *//*aktualizacja stanu jazd testowych*//*
         carService.updateTestDrive(databaseCar);
 
         Customer customer = new Customer();
@@ -130,6 +126,6 @@ public class CustomerController {
 
         return "redirect:/";
     }
-
+*/
 
 }

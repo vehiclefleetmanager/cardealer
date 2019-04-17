@@ -16,7 +16,7 @@
     </div>
     <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
         <div class="input-group mb-3">
-            <form th:action="@{/worker/show/car}" th:object="${carDto}" method="get">
+            <form method="get" th:action="@{/worker/cars-list-filter}" th:object="${carDto}">
                 <div class="input-group-prepend">
                     <label class="input-group-text" for="transaction">Wyświetl pojazdy według statusu:</label>
                     <select class="custom-select" id="transaction" th:field="*{transaction}">
@@ -71,13 +71,22 @@
                         <button class="btn btn-outline-info" type="button">EDYTUJ</button>
                     </a>
                 </td>
-                <td>
-                    <!--th:attribute="${#httpServletRequest.getRequestURI().endWith('/car?transaction=WAITING') ? '':'hidden'}"-->
+                <td th:style="${#httpServletRequest.getRequestURI().startsWith('/worker/show/car?transaction=RENOUNCEMENT') ? 'display:none':''}">
                     <a class="nav-link" th:href="@{'/worker/'+${car.id}+'/car-accept'}">
                         <button class="btn btn-outline-success" type="button">DODAJ <br/>DO OFERTY</button>
                         <!--trzy butony i zależnie od tego co przyjdzie z adresu, wyświetla
                         odpowiednią treść-->
                     </a>
+                    <!--<a class="nav-link" th:href="@{'/worker/'+${car.id}+'/car-sale'}" >
+                        <button class="btn btn-outline-success" type="button">DODAJ <br/>DO OFERTY</button>
+                        &lt;!&ndash;trzy butony i zależnie od tego co przyjdzie z adresu, wyświetla
+                        odpowiednią treść&ndash;&gt;
+                    </a>
+                    <a class="nav-link" th:href="@{'/worker/'+${car.id}+'/car-accept'}" >
+                        <button class="btn btn-outline-success" type="button">DODAJ <br/>DO OFERTY</button>
+                        &lt;!&ndash;trzy butony i zależnie od tego co przyjdzie z adresu, wyświetla
+                        odpowiednią treść&ndash;&gt;
+                    </a>-->
                 </td>
                 <td>
                     <a class="nav-link" th:href="@{'/worker/'+${car.id}+'/car-delete'}">

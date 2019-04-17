@@ -11,6 +11,7 @@ public class CustomerDto {
     private String address;
     private Long tin;
     private Long pesel;
+    private String phoneNumber;
 
     private Date testingDate;
 
@@ -69,5 +70,13 @@ public class CustomerDto {
 
     public void setTestingDate(Date testingDate) {
         this.testingDate = testingDate;
+    }
+
+    public String getPhoneNumber() {
+        return phoneNumber;
+    }
+
+    public void setPhoneNumber(String phoneNumber) {
+        this.phoneNumber = phoneNumber;
     }
 }

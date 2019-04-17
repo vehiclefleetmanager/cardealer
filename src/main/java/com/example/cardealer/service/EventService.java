@@ -32,13 +32,11 @@ public class EventService {
     }
 
     public Customer findCustomerByCarId(Integer id) {
-        Customer customerByCarId = eventRepository.findCustomerByCarId(id);
-        return customerByCarId;
+        return eventRepository.findCustomerByCarId(id);
     }
 
     public Event findEventByCarId(Integer id) {
-        Event eventByCarId = eventRepository.findEventByCarId(id);
-        return eventByCarId;
+        return eventRepository.findEventByCarId(id);
     }
 
     public List<Event> findEventByTesting(Transaction transaction) {

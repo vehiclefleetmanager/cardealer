@@ -2,7 +2,6 @@ package com.example.cardealer.controller;
 
 import com.example.cardealer.dto.CarDto;
 import com.example.cardealer.dto.EventDto;
-import com.example.cardealer.model.Agreement;
 import com.example.cardealer.model.Car;
 import com.example.cardealer.model.Customer;
 import com.example.cardealer.model.Event;
@@ -16,7 +15,6 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.Date;
 import java.util.List;
 
 @Controller
@@ -66,12 +64,12 @@ public class WorkerController {
         return "redirect:/worker/customers-list";
     }
 
-    @GetMapping("/{id}/delete-customer")
+    /*@GetMapping("/{id}/delete-customer")
     public String deleteCustomer(@PathVariable("id") Integer id, Customer customer) {
         id = customer.getCustomerNumber();
         customerService.deleteById(id);
         return "redirect:/worker/customers-list";
-    }
+    }*/
 
 
     @GetMapping("/cars-list")
@@ -81,6 +79,13 @@ public class WorkerController {
         return "/worker/cars-list";
     }
 
+    /*Filtrowanie list po typie transakcji pojazdu*/
+    @GetMapping("/cars-list-filter")
+    public String showCarsFilter(@ModelAttribute("carDto") CarDto carDto, @RequestParam("transaction") Transaction transaction, Model model) {
+        List<Car> carByTransactionLike = carService.findCarByTransactionLike(transaction);
+        model.addAttribute("cars", carByTransactionLike);
+        return "/worker/cars-list";
+    }
 
     @GetMapping("{id}/car-edit")
     public String editCar(@PathVariable("id") Integer id, Model model) {
@@ -108,51 +113,64 @@ public class WorkerController {
         return "redirect:/worker/cars-list";
     }
 
-    /*Filtrowanie list po typie transakcji*/
-    @GetMapping("/show/car")
-    public String showCars(@ModelAttribute("carDto") CarDto carDto, @RequestParam("transaction") Transaction transaction, Model model) {
-        model.addAttribute("cars", carService.findCarByTransactionLike(transaction));
-        return "/worker/cars-list";
+    @GetMapping("{id}/car-details")
+    public String showDetailsCar(@PathVariable("id") Integer id, Model model) {
+        model.addAttribute("car", carService.getCar(id));
+        return "/worker/car-details";
     }
+
+
+    @GetMapping("/show/car?transaction=WAITING")
+    public String showCarsWaiting(@ModelAttribute("carDto") CarDto carDto, @RequestParam("transaction") Transaction transaction, Model model) {
+        model.addAttribute("cars", carService.findByWaitingLike(transaction));
+        return "/worker/cars-waiting";
+    }
+
+
+
 
 
     /*przeniesienie auta:
      - z listy oczekujących na akceptacje przez serwis
      - na liste wystawionych do sprzedaży*/
-    @GetMapping("/{id}/car-accept")
-    public String acceptCar(@PathVariable("id") Integer id, Event event, Car car, Customer customer) {
+   /* @GetMapping("/{id}/car-accept")
+    public String acceptCar(@PathVariable("id") Integer id, Car car, Customer customer) {
+        *//**wyciągamy z bazy zdarzenie o przekazanym id samochodu*//*
 
-        /**wyciągamy z bazy zdarzenie o przekazanym id samochodu*/
-        event = eventService.findEventByCarId(id);
+        Event eventByCarId = eventService.findEventByCarId(id);
 
-        /**wyciągamy z bazy samochód o przekazanym id samochodu*/
-        event.setCar(carService.getCar(id));
+        *//**wyciągamy z bazy samochód o przekazanym id samochodu*//*
+        eventByCarId.setCar(carService.getCar(id));
 
-        /**wyciągamy z bazy klienta o przekazanym id samochodu*/
-        event.setCustomer(eventService.findCustomerByCarId(id));
+        *//**wyciągamy z bazy klienta o przekazanym id samochodu*//*
+        eventByCarId.setCustomer(eventService.findCustomerByCarId(id));
 
-        /**zmieniamy typ transakcji oraz date zdarzenia*/
-        event.setTransaction(Transaction.RENOUNCEMENT);
-        event.setEventDate(new Date());
+        *//**zmieniamy typ transakcji oraz date zdarzenia*//*
+        eventByCarId.setTransaction(Transaction.RENOUNCEMENT);
+        eventByCarId.setEventDate(new LacalDate());
 
-        /**spisujemy umowe odstąpienia*/
+        *//**spisujemy umowe odstąpienia*//*
         Agreement agreement = new Agreement();
-        agreement.setCar(event.getCar());
-        agreement.setCustomer(event.getCustomer());
-        agreement.setTransaction(event.getTransaction());
+        agreement.setCar(eventByCarId.getCar());
+        agreement.setCustomer(eventByCarId.getCustomer());
+        agreement.setTransaction(eventByCarId.getTransaction());
 
-        /**dodajemy umowe do auta i klienta*/
+        *//**dodajemy umowe do auta i klienta*//*
         customer.addAgreement(agreement);
 
-        /**dodajemy zdrzenie do auta i klienta*/
-        car.addEvent(event);
-        customer.addEvent(event);
+        *//**dodajemy zdrzenie do auta i klienta*//*
+        car.addEvent(eventByCarId);
+        customer.addEvent(eventByCarId);
 
-        /**zapisujemy zmiany*/
-        eventService.save(event);
+        */
+
+    /**
+     * zapisujemy zmiany
+     *//*
+        eventService.save(eventByCarId);
         agreementService.save(agreement);
         return "redirect:/worker/cars-list";
-    }
+    }*/
 
     @GetMapping("/orders-list")
     public String showOrders(Model eventModel,

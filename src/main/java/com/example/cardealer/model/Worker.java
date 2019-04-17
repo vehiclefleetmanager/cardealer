@@ -1,77 +1,40 @@
 package com.example.cardealer.model;
 
+import lombok.*;
+
 import javax.persistence.*;
-import java.util.Date;
+import java.time.LocalDate;
+import java.util.HashSet;
 import java.util.Set;
 
 /**
- * PRACOWNIK
+ * This class describes the Workers in the application.
  */
 
+@EqualsAndHashCode(callSuper = true)
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
+@Data
 @Entity
 @Table(name = "workers")
-@Inheritance(strategy = InheritanceType.JOINED)
-public class Worker {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer id;
-
-    @Column(name = "first_name")
-    private String firstName;
-
-    @Column(name = "last_name")
-    private String lastName;
-
-    @Column(name = "address")
-    private String address;
+//@Inheritance(strategy = InheritanceType.JOINED)
+public class Worker extends Person {
 
     @Column(name = "date_of_employment")
-    private Date employmentDate;
+    private LocalDate employmentDate;
 
     @OneToMany(mappedBy = "worker", cascade = CascadeType.ALL)
     private Set<Event> events;
 
-
-    public Worker() {
+    public Set<Event> getEvents() {
+        if (events == null) {
+            events = new HashSet<>();
+        }
+        return events;
     }
 
-    public Integer getId() {
-        return id;
-    }
-
-    public void setId(Integer id) {
-        this.id = id;
-    }
-
-    public String getFirstName() {
-        return firstName;
-    }
-
-    public void setFirstName(String firstName) {
-        this.firstName = firstName;
-    }
-
-    public String getLastName() {
-        return lastName;
-    }
-
-    public void setLastName(String lastName) {
-        this.lastName = lastName;
-    }
-
-    public String getAddress() {
-        return address;
-    }
-
-    public void setAddress(String address) {
-        this.address = address;
-    }
-
-    public Date getEmploymentDate() {
-        return employmentDate;
-    }
-
-    public void setEmploymentDate(Date employmentDate) {
-        this.employmentDate = employmentDate;
+    public void addEvent(Event event) {
+        getEvents().add(event);
     }
 }

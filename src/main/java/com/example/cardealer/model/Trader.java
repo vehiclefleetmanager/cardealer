@@ -1,25 +1,23 @@
 package com.example.cardealer.model;
 
-import javax.persistence.*;
+import lombok.Data;
+import lombok.EqualsAndHashCode;
+
+import javax.persistence.Entity;
+import javax.persistence.Table;
 
 /**
- * HANDLOWIEC
+ * This class describes the Traders in the application.
  */
-
+@EqualsAndHashCode(callSuper = true)
+@Data
 @Entity
 @Table(name = "traders")
 public class Trader extends Worker {
 
-    private Integer traderNumber;
+    private static Integer traderNumber = 0;
 
     public Trader() {
-    }
-
-    public Integer getTraderNumber() {
-        return traderNumber;
-    }
-
-    public void setTraderNumber(Integer traderNumber) {
-        this.traderNumber = traderNumber;
+        traderNumber++;
     }
 }

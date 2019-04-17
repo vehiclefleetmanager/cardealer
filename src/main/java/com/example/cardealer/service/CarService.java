@@ -39,6 +39,9 @@ public class CarService {
         return eventRepository.findByRenouncement(transaction);
     }
 
+    public List<Car> findByWaitingLike(Transaction transaction) {
+        return eventRepository.findByWaiting(transaction);
+    }
 
     public void save(Car car) {
         carRepository.save(car);

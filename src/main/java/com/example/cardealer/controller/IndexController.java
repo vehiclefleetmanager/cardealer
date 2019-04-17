@@ -14,7 +14,8 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 import java.util.List;
 
-/*Kontroler którego zadaniem jest porzedstawienie oferty komisu na stronie głownej*/
+/*Kontroler którego zadaniem jest porzedstawienie
+oferty komisu na stronie głownej*/
 @Controller
 @RequestMapping("/")
 public class IndexController {

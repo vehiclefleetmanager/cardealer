@@ -1,17 +1,22 @@
 package com.example.cardealer.model;
 
 import com.example.cardealer.model.enums.Transaction;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
-import java.math.BigDecimal;
-import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
 
 /**
- * UMOWA
+ * This class describes the Agreements in the application.
  */
-
+@Builder
+@AllArgsConstructor
+@NoArgsConstructor
+@Data
 @Entity
 @Table(name = "agreements")
 public class Agreement {
@@ -37,72 +42,17 @@ public class Agreement {
     @OneToMany(mappedBy = "agreements")
     private Set<Invoice> invoices;
 
-    public Agreement() {
-    }
 
-    public Agreement(Transaction transaction, Date dateTransaction) {
-        this.transaction = transaction;
-
-    }
-
-    public Agreement(Transaction transaction,
-                     BigDecimal value, Date dateTransaction, Set<Invoice> invoices) {
-
-    }
-
-    public Integer getId() {
-        return id;
-    }
-
-    public void setId(Integer id) {
-        this.id = id;
-    }
-
-    public String getContent() {
-        return content;
-    }
-
-    public void setContent(String content) {
-        this.content = content;
-    }
-
-    public Transaction getTransaction() {
-        return transaction;
-    }
-
-    public void setTransaction(Transaction transaction) {
-        this.transaction = transaction;
-    }
-
-    public Customer getCustomer() {
-        return customer;
-    }
-
-    public void setCustomer(Customer customer) {
-        this.customer = customer;
-    }
-
-    public Car getCar() {
-        return car;
-    }
-
-    public void setCar(Car car) {
-        this.car = car;
-    }
-
-    public Set<Invoice> getInvoices() {
-        return invoices;
-    }
-
-    public void setInvoices(Set<Invoice> invoices) {
-        this.invoices = invoices;
-    }
-
-    public void addInvoice(Invoice invoice) {
+    public Set<Invoice> getIvoices() {
         if (invoices == null) {
             invoices = new HashSet<>();
         }
-        invoices.add(invoice);
+        return invoices;
+    }
+
+    public void addInvoice(Invoice invoice) {
+        getInvoices().add(invoice);
+        invoice.setId(this.getId());
     }
 
 }

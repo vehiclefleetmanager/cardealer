@@ -20,9 +20,12 @@ public interface EventRepository extends JpaRepository<Event, Integer> {
     @Query("select e.customer from Event e where e.car.id = :id")
     Customer findCustomerByCarId(@Param("id") Integer integer);
 
-    @Query("select e from Event e where e.car.id = :id")
+    @Query("select e from Event e where e.car.id = ?1")
     Event findEventByCarId(@Param("id") Integer integer);
 
     @Query("select e from Event e where e.transaction = 4")
     List<Event> findEventByTransactionIsLikeTesting(@Param("transaction") Transaction transaction);
+
+    @Query("select e.car from Event e where e.transaction = 3")
+    List<Car> findByWaiting(@Param("transaction") Transaction transaction);
 }

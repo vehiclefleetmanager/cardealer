@@ -30,7 +30,7 @@ public class CarDto {
     private String address;
     private Long tin;
     private Long pesel;
-
+    private String phoneNumber;
 
     private String eventDate;
 
@@ -228,5 +228,13 @@ public class CarDto {
 
     public void setEventDate(String eventDate) {
         this.eventDate = eventDate;
+    }
+
+    public String getPhoneNumber() {
+        return phoneNumber;
+    }
+
+    public void setPhoneNumber(String phoneNumber) {
+        this.phoneNumber = phoneNumber;
     }
 }
