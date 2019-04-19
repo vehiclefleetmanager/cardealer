@@ -1,6 +1,6 @@
 package com.example.cardealer.controller;
 
-import com.example.cardealer.dto.CarDto;
+import com.example.cardealer.model.dtos.CarDto;
 import com.example.cardealer.model.Car;
 import com.example.cardealer.model.enums.Transaction;
 import com.example.cardealer.service.CarService;

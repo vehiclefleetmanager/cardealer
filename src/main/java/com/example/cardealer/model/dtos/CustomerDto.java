@@ -1,4 +1,4 @@
-package com.example.cardealer.dto;
+package com.example.cardealer.model.dtos;
 
 import java.util.Date;
 

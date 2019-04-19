@@ -1,6 +1,6 @@
 package com.example.cardealer.controller;
 
-import com.example.cardealer.dto.CarDto;
+import com.example.cardealer.model.dtos.CarDto;
 import com.example.cardealer.model.Car;
 import com.example.cardealer.model.Customer;
 import com.example.cardealer.model.Event;

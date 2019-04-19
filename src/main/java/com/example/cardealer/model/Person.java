@@ -15,7 +15,6 @@ public class Person implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
-
     @Column(name = "first_name")
     @NotEmpty
     private String firstName;
@@ -27,6 +26,9 @@ public class Person implements Serializable {
     @Column(name = "address")
     @NotEmpty
     private String address;
+
+    @Column(name = "phone_number")
+    private String phoneNumber;
 
     public Integer getId() {
         return id;
@@ -54,5 +56,13 @@ public class Person implements Serializable {
 
     public void setAddress(String address) {
         this.address = address;
+    }
+
+    public String getPhoneNumber() {
+        return phoneNumber;
+    }
+
+    public void setPhoneNumber(String phoneNumber) {
+        this.phoneNumber = phoneNumber;
     }
 }

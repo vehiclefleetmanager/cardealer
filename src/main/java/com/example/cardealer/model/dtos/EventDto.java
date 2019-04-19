@@ -1,5 +1,5 @@
 
-package com.example.cardealer.dto;
+package com.example.cardealer.model.dtos;
 
 import com.example.cardealer.model.Car;
 import com.example.cardealer.model.Customer;

@@ -77,21 +77,15 @@ public class Car implements Serializable {
     @OneToMany(mappedBy = "car")
     private Set<Agreement> agreements;
 
-    @ManyToMany(cascade = CascadeType.ALL)
-    @JoinTable(name = "cars_customers",
-        joinColumns = {
-            @JoinColumn(name = "car_id")
-        },
-    inverseJoinColumns = {
-            @JoinColumn(name = "customer_id" )
-    })
-    private Set<Customer> customers;
+    @ManyToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "owner_id")
+    private Owner owner;
 
     @OneToMany(mappedBy = "car", cascade = CascadeType.ALL)
     private Set<Event> events;
 
 
-    private enum Transmission {
+    public enum Transmission {
         MANUAL("Manualna"),
         AUTOMATIC("Automatyczna"),
         DSG("DSG");
@@ -107,7 +101,7 @@ public class Car implements Serializable {
         }
     }
 
-    private enum FuelType {
+    public enum FuelType {
         DIESEL("Diesel"),
         PETROL("Benzyna"),
         GAS_PETROL("Gaz + Benzyna"),
@@ -125,7 +119,7 @@ public class Car implements Serializable {
         }
     }
 
-    private enum Status {
+    public enum Status {
         WAIT("Oczekujący"),
         AVAILABLE("Dostępny"),
         SOLD("Sprzedany"),
@@ -142,12 +136,6 @@ public class Car implements Serializable {
         }
     }
 
-    public void addCustomer(Customer customer) {
-        if (customers == null) {
-            customers = new HashSet<>();
-        }
-        customers.add(customer);
-    }
 
     public void addAgreement(Agreement agreement) {
         if (agreements == null) {
@@ -162,6 +150,4 @@ public class Car implements Serializable {
         }
         events.add(event);
     }
-
-
 }
