@@ -1,24 +1,98 @@
 package com.example.cardealer.service;
 
+import com.example.cardealer.mappers.CarMapper;
 import com.example.cardealer.model.Car;
+import com.example.cardealer.model.dtos.CarDto;
 import com.example.cardealer.model.enums.Transaction;
 import com.example.cardealer.repository.CarRepository;
 import com.example.cardealer.repository.EventRepository;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.Data;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
+@Data
 @Service
 public class CarService {
     private final CarRepository carRepository;
     private final EventRepository eventRepository;
+    private final CarMapper carMapper;
 
-    @Autowired
-    public CarService(CarRepository carRepository, EventRepository eventRepository) {
+    public CarService(CarRepository carRepository,
+                      EventRepository eventRepository,
+                      CarMapper carMapper) {
         this.carRepository = carRepository;
         this.eventRepository = eventRepository;
+        this.carMapper = carMapper;
+    }
+
+    public List<CarDto> getCarsDto(){
+        return carRepository
+                .findAll()
+                .stream()
+                .map(carMapper::map)
+                .collect(Collectors.toList());
+    }
+
+    public List<CarDto> getCarsDtoByMark(String mark){
+        return carRepository
+                .findCarsByMark(mark)
+                .stream()
+                .map(carMapper::map)
+                .collect(Collectors.toList());
+    }
+
+    public List<CarDto> getCarsDtoByModel(String model){
+        return carRepository
+                .findCarsByMark(model)
+                .stream()
+                .map(carMapper::map)
+                .collect(Collectors.toList());
+    }
+
+    public CarDto getCarFindByRegNumber(String regNumber){
+            return carRepository.findCarByRegNumber(regNumber)
+                    .map(carMapper::map)
+                    .get();
+    }
+
+    public CarDto getCarFindByBodyNumber(String bodyNumber){
+        return carRepository.findCarByRegNumber(bodyNumber)
+                .map(carMapper::map)
+                .get();
+    }
+
+    public Car addCar(CarDto carDto){
+        return carRepository.save(carMapper.reverse(carDto));
+    }
+
+    public void updateCar(CarDto carDto) {
+        carRepository.findCarByRegNumber(carDto.getRegNumber())
+                .ifPresent(car -> {
+                    car.setModel(carDto.getModel());
+                    car.setMark(carDto.getMark());
+                    car.setBodyNumber(carDto.getBodyNumber());
+                    car.setCapacityEngine(carDto.getCapacityEngine());
+                    car.setDescription(carDto.getDescription());
+                    car.setTestDrive(carDto.getTestDrive());
+                    car.setDistance(carDto.getDistance());
+                    car.setFuelType(carDto.getFuelType());
+                    car.setOcNumber(carDto.getOcNumber());
+                    car.setPowerEngine(carDto.getPowerEngine());
+                    car.setPrice(carDto.getPrice());
+                    car.setProductionYear(carDto.getProductionYear());
+                    car.setRegNumber(carDto.getRegNumber());
+                    car.setStatus(carDto.getStatus());
+                    car.setTransmission(carDto.getTransmission());
+                    car.setOwner(carDto.getOwner());
+                    carRepository.save(car);
+                });
+    }
+
+    public void deleteCarByRegNumber(String regNumber){
+        carRepository.deleteByRegNumber(regNumber);
     }
 
     public List<Car> findAll() {
@@ -78,4 +152,6 @@ public class CarService {
     public void updateTestDrive(Car car) {
         car.setTestDrive(car.getTestDrive() + 1);
     }
+
+
 }

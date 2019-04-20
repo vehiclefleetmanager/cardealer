@@ -2,10 +2,14 @@ package com.example.cardealer.repository;
 
 import com.example.cardealer.model.Car;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.stereotype.Repository;
 
+import javax.transaction.Transactional;
 import java.util.List;
-
+import java.util.Optional;
+@Repository
 public interface CarRepository extends JpaRepository<Car, Integer> {
 
     List<Car> findCarsByMark(String mark);
@@ -20,4 +24,15 @@ public interface CarRepository extends JpaRepository<Car, Integer> {
 
     @Query("select distinct c.productionYear from Car c order by c.productionYear asc")
     List<Integer> findProductionYear();
+
+    @Query("select c from Car c where c.regNumber = ?1")
+    Optional<Car> findCarByRegNumber(String regNumber);
+
+    @Query("select c from Car c where c.bodyNumber = ?1")
+    Optional<Car> findCarByBodyNumber(String bodyNumber);
+
+    @Transactional
+    @Modifying
+    @Query("delete from Car c where c.regNumber = ?1")
+    void deleteByRegNumber(String regNumber);
 }

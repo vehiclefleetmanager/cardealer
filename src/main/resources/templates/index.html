@@ -139,7 +139,7 @@
                 </div>
             </div>
             <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
-                <form th:action="@{/filter}" method="post" th:object="${carDto}">
+                <form th:action="@{/filter}" method="post" th:object="${cars}">
                     <div class="input-group mb-3">
                         <div class="input-group-prepend">
                             <label class="input-group-text" for="markField">Marka</label>
@@ -171,7 +171,7 @@
                                     th:value="${year}"
                                     th:text="${year}"></option>
                         </select>
-                        <select class="custom-select" th:object="${carDto}" th:field="*{productionYear}">
+                        <select class="custom-select" th:object="${cars}" th:field="*{productionYear}">
                             <option selected value=" "></option>
                             <option th:each="year:${years}"
                                     th:value="${year}"

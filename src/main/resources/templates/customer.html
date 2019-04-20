@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymleaf.org">
+<head th:replace="header :: head"></head>
+
+
+<body>
+<div class="container">
+    <div class="row">
+        <div class="col-sm-12 text-center">
+            <h3>Panel Klienta</h3>
+            <hr>
+        </div>
+    </div>
+    <div class="row">
+        <div th:replace="add :: add"></div>
+    </div>
+    <div class="row">
+        <div th:replace="table :: table"></div>
+    </div>
+    <a th:href="@{/}">back to home page</a>
+</div>
+</body>
+</html>

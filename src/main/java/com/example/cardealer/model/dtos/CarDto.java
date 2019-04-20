@@ -1,11 +1,9 @@
 package com.example.cardealer.model.dtos;
 
 import com.example.cardealer.model.Car;
+import com.example.cardealer.model.Owner;
 import com.example.cardealer.model.enums.Transaction;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import java.math.BigDecimal;
 
@@ -31,6 +29,8 @@ public class CarDto {
     private String description;
     private Integer testDrive;
     private BigDecimal price;
+    private Owner owner;
+
 
    /* private Integer customerId;
     private String lastName;

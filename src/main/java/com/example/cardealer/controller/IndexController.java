@@ -1,33 +1,33 @@
 package com.example.cardealer.controller;
 
-import com.example.cardealer.model.dtos.CarDto;
-import com.example.cardealer.model.Car;
-import com.example.cardealer.model.enums.Transaction;
 import com.example.cardealer.service.CarService;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Controller;
+import lombok.Data;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-
-import java.util.List;
+import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 /*Kontroler którego zadaniem jest porzedstawienie
 oferty komisu na stronie głownej*/
-@Controller
-@RequestMapping("/")
+@CrossOrigin
+@Data
+@RestController
 public class IndexController {
 
     private final CarService carService;
 
-    @Autowired
     public IndexController(CarService carService) {
         this.carService = carService;
     }
 
-    @RequestMapping
+    @GetMapping("/")
+    public String mainPage(Model model) {
+        model.addAttribute("cars", carService.getCarsDto());
+        return "index";
+    }
+
+
+    /*@RequestMapping
     public String showCars(@ModelAttribute("carDto") CarDto carDto, Model model) {
         List<Car> cars = carService.findByRenouncementLike(Transaction.RENOUNCEMENT);
         model.addAttribute("cars", cars);
@@ -54,5 +54,5 @@ public class IndexController {
         model.addAttribute("cars", cars);
         return "index";
     }
-
+*/
 }
