@@ -2,7 +2,9 @@ package com.example.cardealer.mappers;
 
 import com.example.cardealer.model.Car;
 import com.example.cardealer.model.dtos.CarDto;
+import org.springframework.stereotype.Component;
 
+@Component
 public class CarMapper implements Mapper<Car, CarDto> {
     @Override
     public CarDto map(Car from) {

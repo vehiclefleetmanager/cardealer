@@ -2,9 +2,11 @@ package com.example.cardealer.controller;
 
 import com.example.cardealer.service.CarService;
 import lombok.Data;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 /*Kontroler którego zadaniem jest porzedstawienie
@@ -12,10 +14,12 @@ oferty komisu na stronie głownej*/
 @CrossOrigin
 @Data
 @RestController
+//@RequestMapping("/")
 public class IndexController {
 
-    private final CarService carService;
+    private CarService carService;
 
+    @Autowired
     public IndexController(CarService carService) {
         this.carService = carService;
     }

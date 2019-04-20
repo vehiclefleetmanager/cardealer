@@ -80,12 +80,12 @@ public class WorkerController {
     }
 
     /*Filtrowanie list po typie transakcji pojazdu*/
-    @GetMapping("/cars-list-filter")
+    /*@GetMapping("/cars-list-filter")
     public String showCarsFilter(@ModelAttribute("carDto") CarDto carDto, @RequestParam("transaction") Transaction transaction, Model model) {
         List<Car> carByTransactionLike = carService.findCarByTransactionLike(transaction);
         model.addAttribute("cars", carByTransactionLike);
         return "/worker/cars-list";
-    }
+    }*/
 
     @GetMapping("{id}/car-edit")
     public String editCar(@PathVariable("id") Integer id, Model model) {
@@ -120,12 +120,12 @@ public class WorkerController {
     }
 
 
-    @GetMapping("/show/car?transaction=WAITING")
+    /*@GetMapping("/show/car?transaction=WAITING")
     public String showCarsWaiting(@ModelAttribute("carDto") CarDto carDto, @RequestParam("transaction") Transaction transaction, Model model) {
         model.addAttribute("cars", carService.findByWaitingLike(transaction));
         return "/worker/cars-waiting";
     }
-
+*/
 
 
 

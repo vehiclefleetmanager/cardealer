@@ -7,6 +7,7 @@ import com.example.cardealer.model.enums.Transaction;
 import com.example.cardealer.repository.CarRepository;
 import com.example.cardealer.repository.EventRepository;
 import lombok.Data;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -16,15 +17,16 @@ import java.util.stream.Collectors;
 @Data
 @Service
 public class CarService {
-    private final CarRepository carRepository;
-    private final EventRepository eventRepository;
-    private final CarMapper carMapper;
+    private CarRepository carRepository;
+   /* private final EventRepository eventRepository;*/
+    private CarMapper carMapper;
 
+    @Autowired
     public CarService(CarRepository carRepository,
-                      EventRepository eventRepository,
+                      /*EventRepository eventRepository,*/
                       CarMapper carMapper) {
         this.carRepository = carRepository;
-        this.eventRepository = eventRepository;
+       /* this.eventRepository = eventRepository;*/
         this.carMapper = carMapper;
     }
 
@@ -105,18 +107,18 @@ public class CarService {
     }
 
 
-    public List<Car> findCarByTransactionLike(Transaction transaction) {
+   /* public List<Car> findCarByTransactionLike(Transaction transaction) {
         return eventRepository.findByTransaction(transaction);
     }
 
     public List<Car> findByRenouncementLike(Transaction transaction) {
         return eventRepository.findByRenouncement(transaction);
-    }
+    }*/
 
-    public List<Car> findByWaitingLike(Transaction transaction) {
+  /*  public List<Car> findByWaitingLike(Transaction transaction) {
         return eventRepository.findByWaiting(transaction);
     }
-
+*/
     public void save(Car car) {
         carRepository.save(car);
     }
