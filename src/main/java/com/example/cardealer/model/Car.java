@@ -50,7 +50,7 @@ public class Car implements Serializable {
 
     @Column
     @Enumerated(EnumType.STRING)
-    private Status status;
+    private Status status = Status.WAIT;
 
     @Column
     private Integer distance;

@@ -1,0 +1,103 @@
+<nav class="col-md-2 d-none d-md-block bg-light sidebar" th:fragment="sidebar" xmlns:th="http://www.thymleaf.org">
+    <div class="sidebar-sticky">
+        <ul class="nav flex-column">
+            <h4 class="sidebar-heading d-flex justify-content-between align-items-center px-3 mt-4 mb-1 text-muted">
+                <span>Panel Komisu</span>
+                <a class="d-flex align-items-center text-muted" href="#">
+                    <span data-feather="plus-circle"></span>
+                </a>
+            </h4>
+            <li class="nav-item ">
+                <a class="nav-link" th:href="@{/worker/orders-list}">
+                    <span data-feather="file"></span>
+                    Zamówienia
+                </a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" th:href="@{/worker/cars}">
+                    <span data-feather="shopping-cart"></span>
+                    Samochody
+                </a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" th:href="@{/worker/customers}">
+                    <span data-feather="users"></span>
+                    Klienci
+                </a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="#">
+                    <span data-feather="bar-chart-2"></span>
+                    Raporty
+                </a>
+            </li>
+        </ul>
+
+        <h4 class="sidebar-heading d-flex justify-content-between align-items-center px-3 mt-4 mb-1 text-muted">
+            <a href="/customer"><span>Panel Klienta</span></a>
+            <a class="d-flex align-items-center text-muted" href="#">
+                <span data-feather="plus-circle"></span>
+            </a>
+        </h4>
+        <ul class="nav flex-column mb-2">
+            <li class="nav-item">
+                <a class="nav-link" th:href="@{/customer/sale}">
+                    <span data-feather="file-text"></span>
+                    Sprzedam samochód
+                </a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" th:href="@{/customer/cars}">
+                    <span data-feather="file-text"></span>
+                    Moje samochody
+                </a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="#">
+                    <span data-feather="phone-call"></span>
+                    Skontaktuj się z doradcą
+                </a>
+            </li>
+        </ul>
+        <br/>
+        <h4 class="sidebar-heading d-flex justify-content-between align-items-center px-3 mt-4 mb-1 text-muted">
+            <span>AutoKomis.pl</span>
+            <a class="d-flex align-items-center text-muted" th:href="@{/}">
+            </a>
+        </h4>
+        <ul class="nav flex-column mb-2">
+            <li class="nav-item">
+                <a class="nav-link" th:href="@{/}">
+                    <span data-feather="map-pin"></span>
+                    00-111 San Escobar <br/>
+                    al. Nielegalnych Wyścigów 8
+                </a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" th:href="@{/}">
+                    <span data-feather="phone"></span>
+                    111 - 222 - 333
+                </a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" th:href="@{/}">
+                    <span data-feather="phone"></span>
+                    222 - 333 - 444
+                </a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" th:href="@{/}">
+                    <span data-feather="mail"></span>
+                    biuro@autokomis.pl
+                </a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" th:href="@{/}">
+                    <span data-feather="globe"></span>
+                    www.autokomis.pl
+                </a>
+            </li>
+        </ul>
+
+    </div>
+</nav>

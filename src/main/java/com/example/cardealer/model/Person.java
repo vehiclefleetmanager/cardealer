@@ -28,7 +28,7 @@ public class Person implements Serializable {
     private String address;
 
     @Column(name = "phone_number")
-    private String phoneNumber;
+    private Integer phoneNumber;
 
     public Integer getId() {
         return id;
@@ -58,11 +58,11 @@ public class Person implements Serializable {
         this.address = address;
     }
 
-    public String getPhoneNumber() {
+    public Integer getPhoneNumber() {
         return phoneNumber;
     }
 
-    public void setPhoneNumber(String phoneNumber) {
+    public void setPhoneNumber(Integer phoneNumber) {
         this.phoneNumber = phoneNumber;
     }
 }

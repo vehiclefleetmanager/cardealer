@@ -1,0 +1,38 @@
+<div class="container" th:fragment="client-cars" xmlns:th="http://www.thymeleaf.org">
+    <div class="row">
+        <div class="col-sm-12 text-center">
+            <div class="table-responsive ">
+                <table class="table table-striped table-sm text-center">
+                    <thead>
+                    <tr>
+                        <th>Zdjęcie</th>
+                        <th>Marka</th>
+                        <th>Model</th>
+                        <th>Rok produkcji</th>
+                        <th>Przebieg</th>
+                        <th>Cena</th>
+                        <th></th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr th:each="car : ${cars}">
+                        <td>
+                            <img height="183" th:src="@{/images/index/images.jpg}" width="275"/>
+                        </td>
+                        <td style="font-size: 18px;" th:text="${car.getMark()}"></td>
+                        <td style="font-size: 18px;" th:text="${car.getModel()}"></td>
+                        <td style="font-size: 18px;" th:text="${car.getProductionYear()}"></td>
+                        <td style="font-size: 18px;" th:text="${car.getDistance()}"></td>
+                        <td style="font-size: 24px; color: #F00;" th:text="${car.getPrice()}+' '+PLN"></td>
+                        <td>
+                            <a class="nav-link" th:href="@{'/customer/'+${car.getId()}+'/details'}">
+                                <button class="btn btn-outline-info" type="button">SZCZEGÓŁY</button>
+                            </a>
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>

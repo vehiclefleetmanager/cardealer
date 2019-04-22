@@ -5,28 +5,27 @@ import com.example.cardealer.model.Car;
 import com.example.cardealer.model.dtos.CarDto;
 import com.example.cardealer.service.CarService;
 import lombok.Data;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
-
 @CrossOrigin
 @Data
-@RestController
+/*@RestController*/
 @Controller
-@RequestMapping("/cars")
 public class CarController {
 
     private final CarService carService;
 
+    @Autowired
     public CarController(CarService carService) {
         this.carService = carService;
     }
 
-    @GetMapping("/cars")
+    /*@GetMapping("/cars")
     public List<CarDto> getCars() {
-        return carService.getCarsDto();
-    }
+        return carService.getCars();
+    }*/
 
     /*metodę trzeba zabezpieczyć przed nullem*/
     @GetMapping("/cars/{reg_number}")

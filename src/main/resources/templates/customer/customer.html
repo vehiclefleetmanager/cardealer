@@ -1,0 +1,39 @@
+<!doctype html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="header :: head"></head>
+<body>
+<div th:replace="top-nav :: nav"></div>
+<div th:replace="sidebar :: sidebar"></div>
+<br>
+<br>
+<br>
+<div class="container" th:object="${owner}">
+    <div class="row">
+        <div class="col-md-2 offset-md-1">
+            <h4 th:text="${owner.getFirstName()}"></h4>
+            <h4 th:text="${owner.getLastName()}"></h4>
+            <h4 th:text="${owner.getAddress()}"></h4>
+            <h4 th:text="${owner.getPhoneNumber()}"></h4>
+            <h4 th:text="${owner.getTin()}"></h4>
+            <h4 th:text="${owner.getPesel()}"></h4>
+        </div>
+        <div class="col-md-3">
+            <a class="nav-link" th:href="@{'/customer/'+${owner.getOwnerId()}+'/update'}">
+                <button class="btn btn-outline-info" type="button">Edytuj</button>
+            </a>
+        </div>
+        <div class="col-md-3">
+            <a class="nav-link" th:href="@{'/customer/'+${owner.getOwnerId()}+'/car-add'}">
+                <button class="btn btn-outline-success" type="button">Dodaj samochód</button>
+            </a>
+        </div>
+        <div class="col-md-3">
+            <a class="nav-link" th:href="@{'/customer/'+${owner.getOwnerId()}+'/cars'}">
+                <button class="btn btn-outline-secondary" type="button">Moje samochody</button>
+            </a>
+        </div>
+    </div>
+</div>
+
+</body>
+</html>

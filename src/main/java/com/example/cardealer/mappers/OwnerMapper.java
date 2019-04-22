@@ -2,7 +2,9 @@ package com.example.cardealer.mappers;
 
 import com.example.cardealer.model.Owner;
 import com.example.cardealer.model.dtos.OwnerDto;
+import org.springframework.stereotype.Component;
 
+@Component
 public class OwnerMapper implements Mapper<Owner, OwnerDto> {
     @Override
     public OwnerDto map(Owner from) {
@@ -13,6 +15,7 @@ public class OwnerMapper implements Mapper<Owner, OwnerDto> {
                 .phoneNumber(from.getPhoneNumber())
                 .pesel(from.getPesel())
                 .tin(from.getTin())
+                .status(from.getStatus())
                 .build();
     }
 
@@ -25,6 +28,7 @@ public class OwnerMapper implements Mapper<Owner, OwnerDto> {
                 .lastName(to.getLastName())
                 .pesel(to.getPesel())
                 .tin(to.getTin())
+                .status(to.getStatus())
                 .build();
     }
 }

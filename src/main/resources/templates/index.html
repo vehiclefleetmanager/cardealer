@@ -1,136 +1,13 @@
 <!doctype html>
-<html xmlns:th="http://www.w3.org/1999/xhtml" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
-      lang="en">
-<head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    <meta name="description" content="">
-    <meta name="author" content="">
-    <link rel="icon" href="../../../../favicon.ico">
-
-    <title>AutoKomis.pl</title>
-
-    <!-- Bootstrap core CSS -->
-    <link th:href="@{/css/bootstrap.min.css}" rel="stylesheet">
-
-    <!-- Custom styles for this template -->
-    <link th:href="@{/css/index.css}" rel="stylesheet">
-
-
-</head>
-
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="header :: head"></head>
 <body>
-<nav class="navbar navbar-dark fixed-top bg-dark flex-md-nowrap p-0 shadow">
-    <a class="navbar-brand col-sm-3 col-md-2 mr-0" th:href="@{/}">AutoKomis.pl</a>
-    <ul class="navbar-nav px-3">
-        <li class="nav-item text-nowrap">
-            <a class="nav-link" href="#">Zaloguj
-                <span data-feather="log-in"></span>
-            </a>
-        </li>
-    </ul>
-</nav>
+<div th:replace="top-nav :: nav"></div>
 
 <div class="container-fluid">
     <div class="row">
-        <nav class="col-md-2 d-none d-md-block bg-light sidebar">
-            <div class="sidebar-sticky">
-                <ul class="nav flex-column">
-                    <h4 class="sidebar-heading d-flex justify-content-between align-items-center px-3 mt-4 mb-1 text-muted">
-                        <span>Panel Komisu</span>
-                        <a class="d-flex align-items-center text-muted" href="#">
-                            <span data-feather="plus-circle"></span>
-                        </a>
-                    </h4>
-                    <li class="nav-item ">
-                        <a class="nav-link" th:href="@{/worker/orders-list}">
-                            <span data-feather="file"></span>
-                            Zamówienia
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" th:href="@{/worker/cars-list}">
-                            <span data-feather="shopping-cart"></span>
-                            Samochody
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" th:href="@{/worker/customers-list}">
-                            <span data-feather="users"></span>
-                            Klienci
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="#">
-                            <span data-feather="bar-chart-2"></span>
-                            Raporty
-                        </a>
-                    </li>
-                </ul>
-
-                <h4 class="sidebar-heading d-flex justify-content-between align-items-center px-3 mt-4 mb-1 text-muted">
-                    <span>Panel Klienta</span>
-                    <a class="d-flex align-items-center text-muted" href="#">
-                        <span data-feather="plus-circle"></span>
-                    </a>
-                </h4>
-                <ul class="nav flex-column mb-2">
-                    <li class="nav-item">
-                        <a class="nav-link" th:href="@{/customer/sale}">
-                            <span data-feather="file-text"></span>
-                            Sprzedaj samochód
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="#">
-                            <span data-feather="phone-call"></span>
-                            Skontaktuj się z doradcą
-                        </a>
-                    </li>
-                </ul>
-                <br/>
-                <h4 class="sidebar-heading d-flex justify-content-between align-items-center px-3 mt-4 mb-1 text-muted">
-                    <span>AutoKomis.pl</span>
-                    <a class="d-flex align-items-center text-muted" th:href="@{/}">
-                    </a>
-                </h4>
-                <ul class="nav flex-column mb-2">
-                    <li class="nav-item">
-                        <a class="nav-link" th:href="@{/}">
-                            <span data-feather="map-pin"></span>
-                            00-111 San Escobar <br/>
-                            al. Nielegalnych Wyścigów 8
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" th:href="@{/}">
-                            <span data-feather="phone"></span>
-                            111 - 222 - 333
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" th:href="@{/}">
-                            <span data-feather="phone"></span>
-                            222 - 333 - 444
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" th:href="@{/}">
-                            <span data-feather="mail"></span>
-                            biuro@autokomis.pl
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" th:href="@{/}">
-                            <span data-feather="globe"></span>
-                            www.autokomis.pl
-                        </a>
-                    </li>
-                </ul>
-
-            </div>
-        </nav>
-        <main role="main" class="col-md-9 ml-sm-auto col-lg-10 px-4 main" layout:fragment="main">
+        <div th:replace="sidebar :: sidebar"></div>
+        <main class="col-md-9 ml-sm-auto col-lg-10 px-4 main" role="main">
             <div class="jumbotron p-3 p-md-5 text-dark rounded bg-white col-md-12" id="jumbotron">
                 <div class="col-md-6 px-0">
                     <h1 class="display-4 font-italic">Lorem ipsum dolor sit amet, consectetur adipiscing elit.</h1>
@@ -144,7 +21,7 @@
                         <div class="input-group-prepend">
                             <label class="input-group-text" for="markField">Marka</label>
                         </div>
-                        <select class="custom-select" id="markField" th:field="*{mark}">
+                        <select class="custom-select" id="markField">
                             <option selected value=" ">Wybierz...</option>
                             <option th:each="type:${markList}"
                                     th:value="${type}"
@@ -155,7 +32,7 @@
                         <div class="input-group-prepend">
                             <label class="input-group-text" for="model">Model</label>
                         </div>
-                        <select class="custom-select" id="model" th:field="*{model}">
+                        <select class="custom-select" id="model">
                             <option selected value=" ">Wybierz</option>
                             <option th:each="type:${modelList}"
                                     th:value="${type}"
@@ -165,13 +42,13 @@
                         <div class="input-group-prepend">
                             <label class="input-group-text" for="production_year">Rocznik</label>
                         </div>
-                        <select class="custom-select" id="production_year" th:field="*{productionYear}">
+                        <select class="custom-select" id="production_year">
                             <option selected value=" "></option>
                             <option th:each="year:${years}"
                                     th:value="${year}"
                                     th:text="${year}"></option>
                         </select>
-                        <select class="custom-select" th:object="${cars}" th:field="*{productionYear}">
+                        <select class="custom-select">
                             <option selected value=" "></option>
                             <option th:each="year:${years}"
                                     th:value="${year}"
@@ -191,7 +68,6 @@
                     </div>
                 </form>
             </div>
-            <h2>Lista dostępnych pojazdów</h2>
             <div class="table-responsive ">
                 <table class="table table-striped table-sm text-center">
                     <thead>
@@ -206,17 +82,17 @@
                     </tr>
                     </thead>
                     <tbody>
-                    <tr th:each="car :${cars}">
+                    <tr th:each="car : ${cars}">
                         <td>
                             <img th:src="@{/images/index/images.jpg}" width="275" height="183"/>
                         </td>
-                        <td style="font-size: 18px;" th:text="${car.mark}"></td>
-                        <td style="font-size: 18px;" th:text="${car.model}"></td>
-                        <td style="font-size: 18px;" th:text="${car.productionYear}"></td>
-                        <td style="font-size: 18px;" th:text="${car.distance}"></td>
-                        <td style="font-size: 24px; color: #F00;" th:text="${car.price}+' '+PLN"></td>
+                        <td style="font-size: 18px;" th:text="${car.getMark()}"></td>
+                        <td style="font-size: 18px;" th:text="${car.getModel()}"></td>
+                        <td style="font-size: 18px;" th:text="${car.getProductionYear()}"></td>
+                        <td style="font-size: 18px;" th:text="${car.getDistance()}"></td>
+                        <td style="font-size: 24px; color: #F00;" th:text="${car.getPrice()}+' '+PLN"></td>
                         <td>
-                            <a class="nav-link" th:href="@{'/customer/'+${car.id}+'/details'}">
+                            <a class="nav-link" th:href="@{'/customer/'+${car.getId()}+'/details'}">
                                 <button class="btn btn-outline-info" type="button">SZCZEGÓŁY</button>
                             </a>
                         </td>
@@ -227,22 +103,6 @@
         </main>
     </div>
 </div>
-
-<!-- Bootstrap core JavaScript
-================================================== -->
-<!-- Placed at the end of the document so the pages load faster -->
-<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
-        integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"
-        crossorigin="anonymous"></script>
-<script>window.jQuery || document.write('<script th:src="@{/assets/js/vendor/jquery-slim.min.js}"><\/script>')</script>
-<script th:src="@{/assets/js/vendor/popper.min.js}"></script>
-<script th:src="@{/js/bootstrap.min.js}"></script>
-
-<!-- Icons -->
-<script src="https://unpkg.com/feather-icons/dist/feather.min.js"></script>
-<script>
-    feather.replace()
-</script>
 
 </body>
 </html>

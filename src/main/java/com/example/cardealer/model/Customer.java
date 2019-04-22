@@ -1,6 +1,5 @@
 package com.example.cardealer.model;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.*;
 
 import javax.persistence.*;
@@ -20,10 +19,10 @@ import java.util.Set;
 public class Customer extends Person {
 
     @Column(name = "tin", unique = true)
-    private Long tin;
+    private Integer tin;
 
     @Column(name = "pesel", unique = true)
-    private Long pesel;
+    private String pesel;
 
     /*@JsonIgnore
     @ManyToMany(mappedBy = "customers", cascade = CascadeType.ALL)

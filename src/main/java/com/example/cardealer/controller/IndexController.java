@@ -1,20 +1,14 @@
 package com.example.cardealer.controller;
 
 import com.example.cardealer.service.CarService;
-import lombok.Data;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
 
 /*Kontroler którego zadaniem jest porzedstawienie
 oferty komisu na stronie głownej*/
-@CrossOrigin
-@Data
-@RestController
-//@RequestMapping("/")
+@Controller
 public class IndexController {
 
     private CarService carService;
@@ -26,9 +20,25 @@ public class IndexController {
 
     @GetMapping("/")
     public String mainPage(Model model) {
-        model.addAttribute("cars", carService.getCarsDto());
+        model.addAttribute("cars", carService.getAvailableCars());
+        model.addAttribute("markList", carService.findMark());
+        model.addAttribute("modelList", carService.findModel());
+        model.addAttribute("years", carService.findProductionYear());
         return "index";
     }
+
+    @GetMapping("/login")
+    public String loginPage() {
+        return "login";
+    }
+
+
+
+    /*@PostMapping("/sale")
+    public String addCarToSale(@ModelAttribute CarDto carDto){
+        carService.addCar(carDto);
+        return "customer/sale";
+    }*/
 
 
     /*@RequestMapping

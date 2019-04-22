@@ -1,10 +1,10 @@
 package com.example.cardealer.controller;
 
-import com.example.cardealer.model.dtos.CarDto;
-import com.example.cardealer.model.dtos.EventDto;
 import com.example.cardealer.model.Car;
 import com.example.cardealer.model.Customer;
 import com.example.cardealer.model.Event;
+import com.example.cardealer.model.dtos.CarDto;
+import com.example.cardealer.model.dtos.EventDto;
 import com.example.cardealer.model.enums.Transaction;
 import com.example.cardealer.service.AgreementService;
 import com.example.cardealer.service.CarService;
@@ -36,6 +36,21 @@ public class WorkerController {
         this.eventService = eventService;
         this.agreementService = agreementService;
     }
+
+
+    @GetMapping("/cars")
+    public String allCarsAdminPage(Model model) {
+        model.addAttribute("cars", carService.findAll());
+        return "worker/cars";
+    }
+
+    @GetMapping("/customers")
+    public String allCustomersAdminPage(Model model) {
+        model.addAttribute("customers", customerService.findAll());
+        return "worker/customers";
+    }
+
+
 
 
     @GetMapping("/customers-list")

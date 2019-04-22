@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymleaf.org">
+<head th:replace="header :: head"></head>
+
+
+<body>
+<div th:replace="top-nav :: nav"></div>
+<div th:replace="sidebar :: sidebar"></div>
+<br>
+<br>
+<br>
+<div class="container">
+    <div class="row">
+        <div class="col-md-12 text-center">
+            <h3>AutoKomis - lista wszystkich klientów</h3>
+            <div class="offset-md-1">
+                <div th:replace="all-customers-list :: all-customers-list"></div>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+</html>

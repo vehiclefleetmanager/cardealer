@@ -23,3 +23,9 @@
 /dist/
 /nbdist/
 /.nb-gradle/
+
+### VS Code ###
+/src/main/resources/config.properties
+mvnw
+mvnw.cmd
+/.mvn

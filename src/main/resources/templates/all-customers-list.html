@@ -1,0 +1,43 @@
+<div class="container" th:fragment="all-customers-list" xmlns:th="http://www.thymeleaf.org">
+    <div class="row">
+        <div class="col-sm-12 text-center">
+            <div class="table-responsive ">
+                <table class="table table-striped table-sm text-center">
+                    <thead>
+                    <tr>
+                        <th>Imię</th>
+                        <th>Nazwisko</th>
+                        <th>Adres</th>
+                        <th>Pesel</th>
+                        <th>Nip</th>
+                        <th>Telefon</th>
+                        <th></th>
+                        <th></th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr th:each="c :${customers}">
+                        <td style="font-size: 18px;" th:text="${c.getFirstName()}"></td>
+                        <td style="font-size: 18px;" th:text="${c.getLastName()}"></td>
+                        <td style="font-size: 18px; width: 220px" th:text="${c.getAddress()}"></td>
+                        <td style="font-size: 18px;" th:text="${c.getPesel()}"></td>
+                        <td style="font-size: 18px; " th:text="${c.getTin()}"></td>
+                        <td style="font-size: 18px; " th:text="${c.getPhoneNumber()}"></td>
+
+                        <td>
+                            <a class="nav-link" th:href="@{'/worker/'+*{customerNumber}+'/customer-edit'}">
+                                <button class="btn btn-outline-info" type="button">EDYTUJ</button>
+                            </a>
+                        </td>
+                        <td>
+                            <a class="nav-link" th:href="@{'/worker/'+*{customerNumber}+'/customer-delete'}">
+                                <button class="btn btn-outline-danger" type="button">USUŃ</button>
+                            </a>
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>

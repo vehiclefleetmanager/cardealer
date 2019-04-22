@@ -1,6 +1,7 @@
 package com.example.cardealer.repository;
 
 import com.example.cardealer.model.Car;
+import com.example.cardealer.model.Owner;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
@@ -22,8 +23,14 @@ public interface CarRepository extends JpaRepository<Car, Integer> {
     @Query("select distinct c.model from Car c order by c.model asc")
     List<String> findModel();
 
+    @Query("select c from Car c where c.owner.status = ?1")
+    List<Car> findCarsByOwnerStatus(Owner.Status status);
+
     @Query("select distinct c.productionYear from Car c order by c.productionYear asc")
     List<Integer> findProductionYear();
+
+    @Query("select c from Car c where c.status = ?1")
+    List<Car> findCarsByStatusIsAvailable(Car.Status status);
 
     @Query("select c from Car c where c.regNumber = ?1")
     Optional<Car> findCarByRegNumber(String regNumber);

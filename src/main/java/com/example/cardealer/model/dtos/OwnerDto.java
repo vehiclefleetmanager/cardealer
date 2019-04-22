@@ -1,5 +1,6 @@
 package com.example.cardealer.model.dtos;
 
+import com.example.cardealer.model.Owner;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -18,4 +19,5 @@ public class OwnerDto {
     private Long tin;
     private Long pesel;
     private String phoneNumber;
+    private Owner.Status status;
 }

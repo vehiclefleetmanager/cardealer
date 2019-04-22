@@ -1,9 +1,11 @@
 package com.example.cardealer.model;
 
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
-import java.io.Serializable;
 import java.util.Set;
 
 @Builder
@@ -12,11 +14,11 @@ import java.util.Set;
 @Data
 @Entity
 @Table(name = "owners")
-public class Owner implements Serializable {
+public class Owner {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer id;
+    private Integer ownerId;
 
     @Column(name = "first_name")
     private String firstName;

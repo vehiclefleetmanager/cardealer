@@ -2,10 +2,9 @@ package com.example.cardealer.service;
 
 import com.example.cardealer.mappers.CarMapper;
 import com.example.cardealer.model.Car;
+import com.example.cardealer.model.Owner;
 import com.example.cardealer.model.dtos.CarDto;
-import com.example.cardealer.model.enums.Transaction;
 import com.example.cardealer.repository.CarRepository;
-import com.example.cardealer.repository.EventRepository;
 import lombok.Data;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -18,19 +17,19 @@ import java.util.stream.Collectors;
 @Service
 public class CarService {
     private CarRepository carRepository;
-   /* private final EventRepository eventRepository;*/
+    /* private final EventRepository eventRepository;*/
     private CarMapper carMapper;
 
     @Autowired
     public CarService(CarRepository carRepository,
-                      /*EventRepository eventRepository,*/
+            /*EventRepository eventRepository,*/
                       CarMapper carMapper) {
         this.carRepository = carRepository;
-       /* this.eventRepository = eventRepository;*/
+        /* this.eventRepository = eventRepository;*/
         this.carMapper = carMapper;
     }
 
-    public List<CarDto> getCarsDto(){
+    public List<CarDto> getCars() {
         return carRepository
                 .findAll()
                 .stream()
@@ -38,7 +37,15 @@ public class CarService {
                 .collect(Collectors.toList());
     }
 
-    public List<CarDto> getCarsDtoByMark(String mark){
+    public List<CarDto> getAvailableCars() {
+        return carRepository
+                .findCarsByStatusIsAvailable(Car.Status.AVAILABLE)
+                .stream()
+                .map(carMapper::map)
+                .collect(Collectors.toList());
+    }
+
+    public List<CarDto> getCarsDtoByMark(String mark) {
         return carRepository
                 .findCarsByMark(mark)
                 .stream()
@@ -46,7 +53,7 @@ public class CarService {
                 .collect(Collectors.toList());
     }
 
-    public List<CarDto> getCarsDtoByModel(String model){
+    public List<CarDto> getCarsDtoByModel(String model) {
         return carRepository
                 .findCarsByMark(model)
                 .stream()
@@ -54,19 +61,27 @@ public class CarService {
                 .collect(Collectors.toList());
     }
 
-    public CarDto getCarFindByRegNumber(String regNumber){
-            return carRepository.findCarByRegNumber(regNumber)
-                    .map(carMapper::map)
-                    .get();
+    public List<CarDto> getCarsWhereOwnerIsPresent() {
+        return carRepository
+                .findCarsByOwnerStatus(Owner.Status.PRESENT)
+                .stream()
+                .map(carMapper::map)
+                .collect(Collectors.toList());
     }
 
-    public CarDto getCarFindByBodyNumber(String bodyNumber){
+    public CarDto getCarFindByRegNumber(String regNumber) {
+        return carRepository.findCarByRegNumber(regNumber)
+                .map(carMapper::map)
+                .get();
+    }
+
+    public CarDto getCarFindByBodyNumber(String bodyNumber) {
         return carRepository.findCarByRegNumber(bodyNumber)
                 .map(carMapper::map)
                 .get();
     }
 
-    public Car addCar(CarDto carDto){
+    public Car addCar(CarDto carDto) {
         return carRepository.save(carMapper.reverse(carDto));
     }
 
@@ -93,7 +108,7 @@ public class CarService {
                 });
     }
 
-    public void deleteCarByRegNumber(String regNumber){
+    public void deleteCarByRegNumber(String regNumber) {
         carRepository.deleteByRegNumber(regNumber);
     }
 
@@ -114,11 +129,11 @@ public class CarService {
     public List<Car> findByRenouncementLike(Transaction transaction) {
         return eventRepository.findByRenouncement(transaction);
     }*/
+    /*  public List<Car> findByWaitingLike(Transaction transaction) {
+          return eventRepository.findByWaiting(transaction);
+      }
+  */
 
-  /*  public List<Car> findByWaitingLike(Transaction transaction) {
-        return eventRepository.findByWaiting(transaction);
-    }
-*/
     public void save(Car car) {
         carRepository.save(car);
     }
@@ -154,6 +169,5 @@ public class CarService {
     public void updateTestDrive(Car car) {
         car.setTestDrive(car.getTestDrive() + 1);
     }
-
 
 }
