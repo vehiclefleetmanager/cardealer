@@ -83,7 +83,7 @@ public class CustomerController {
 
     @GetMapping("/customer/{id}/cars")
     public String getCarsList(Model model) {
-        model.addAttribute("cars", carService.getCarsWhereOwnerIsPresent());
+        model.addAttribute("cars", carService.getCarsByOwnersIds());
         return "customer/my-cars";
     }
 

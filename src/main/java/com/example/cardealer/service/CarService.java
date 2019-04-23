@@ -2,7 +2,6 @@ package com.example.cardealer.service;
 
 import com.example.cardealer.mappers.CarMapper;
 import com.example.cardealer.model.Car;
-import com.example.cardealer.model.Owner;
 import com.example.cardealer.model.dtos.CarDto;
 import com.example.cardealer.repository.CarRepository;
 import lombok.Data;
@@ -61,9 +60,9 @@ public class CarService {
                 .collect(Collectors.toList());
     }
 
-    public List<CarDto> getCarsWhereOwnerIsPresent() {
+    public List<CarDto> getCarsByOwnersIds() {
         return carRepository
-                .findCarsByOwnerStatus(Owner.Status.PRESENT)
+                .findCarsByOwnerId()
                 .stream()
                 .map(carMapper::map)
                 .collect(Collectors.toList());
@@ -82,6 +81,7 @@ public class CarService {
     }
 
     public Car addCar(CarDto carDto) {
+
         return carRepository.save(carMapper.reverse(carDto));
     }
 

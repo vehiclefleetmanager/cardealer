@@ -6,6 +6,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
+import java.util.HashSet;
 import java.util.Set;
 
 @Builder
@@ -58,5 +59,17 @@ public class Owner {
         public String getStatus() {
             return status;
         }
+    }
+
+    public Set<Car> getCars() {
+        if (cars == null) {
+            cars = new HashSet<>();
+        }
+        return cars;
+    }
+
+    public void addCar(Car car) {
+        getCars().add(car);
+        car.setId(this.getOwnerId());
     }
 }
