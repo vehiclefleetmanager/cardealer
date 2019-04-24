@@ -9,6 +9,7 @@ public class CustomerMapper implements Mapper<Customer, CustomerDto>{
     @Override
     public CustomerDto map(Customer from) {
         return CustomerDto.builder()
+                .id(from.getId())
                 .address(from.getAddress())
                 .firstName(from.getFirstName())
                 .lastName(from.getLastName())

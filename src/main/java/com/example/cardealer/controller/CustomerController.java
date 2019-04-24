@@ -34,57 +34,66 @@ public class CustomerController {
         this.carService = carService;
     }
 
+    /*Metode należy zmienić tak aby wybierała usera/właściciela dynamicznie z bazy
+     * w momencie kiedy ten loguje się na swoje konto*/
     @GetMapping("/customer")
-    public String customerPage(Model model) {
+    public String getOwnerMainPage(Model model) {
         model.addAttribute("owner", ownerService.getOwnerById(15));
-        return "customer/customer";
+        return "customer";
     }
 
     @PutMapping("/customer/update")
-    public String updateOwner(@ModelAttribute OwnerDto ownerDto) {
+    public String updateActualOwner(@ModelAttribute OwnerDto ownerDto) {
         ownerService.updateOwner(ownerDto);
         return "redirect:/customer";
     }
 
-    @GetMapping("/customer/{id}/update")
-    public String getUpdateOwnerPage(@PathVariable Integer id, Model model) {
-        model.addAttribute("owner", ownerService.getOwnerById(id));
+    @GetMapping("/customer/{ownerId}/update")
+    public String getPageForUpdateOwnersById(@PathVariable Integer ownerId, Model model) {
+        model.addAttribute("owner", ownerService.getOwnerById(ownerId));
         return "customer/owner-update";
     }
 
     @GetMapping("/customer/sale")
-    public String registerOwner(Model model) {
+    public String getPageForRegisterNewOwner(Model model) {
         model.addAttribute("owner", new OwnerDto());
         return "customer/owner-add";
     }
 
     @PostMapping("/customer/addOwner")
-    public String addOwner(@ModelAttribute OwnerDto ownerDto) {
+    public String addNewOwner(@ModelAttribute OwnerDto ownerDto) {
         ownerDto.setStatus(Owner.Status.PRESENT);
         ownerService.addOwner(ownerDto);
         return "redirect:car-add";
     }
 
-    @GetMapping("/customer/{id}/car-add")
-    public String registerCar(Model model, @PathVariable Integer id) {
-        model.addAttribute("owner", ownerService.getOwnerById(id));
+    @GetMapping("/customer/{ownerId}/car-add")
+    public String getPageForRegisterNewCarByOwnerId(Model model, @PathVariable Integer ownerId) {
+        model.addAttribute("owner", ownerService.getOwnerById(ownerId));
         model.addAttribute("car", new CarDto());
         return "customer/car-add";
     }
 
-    @PostMapping("/customer/{id}/addCar")
-    public String addCar(@ModelAttribute CarDto carDto, @PathVariable Integer id) {
-        Owner owner = ownerService.getOwnerById(id);
-        carDto.setOwner(owner);
+
+    @PostMapping("/customer/{ownerId}/addCar")
+    public String addNewCar(@ModelAttribute CarDto carDto, @PathVariable Integer ownerId) {
         carDto.setStatus(Car.Status.WAIT);
+        //carDto.setOwnerId(ownerService.getOwnerById(ownerId).getOwnerId());
         carService.addCar(carDto);
         return "redirect:cars";
     }
 
-    @GetMapping("/customer/{id}/cars")
-    public String getCarsList(Model model) {
+    @GetMapping("/customer/{ownerId}/cars")
+    public String getPageWhereIsListCarsOfOwner(Model model, @PathVariable Integer ownerId) {
         model.addAttribute("cars", carService.getCarsByOwnersIds());
+        model.addAttribute("owner", ownerService.getOwnerById(ownerId));
         return "customer/my-cars";
+    }
+
+    @GetMapping("/customer/{carId}/details")
+    public String getPageWhereIsDetailsCar(Model model, @PathVariable Integer carId) {
+        model.addAttribute("car", carService.getCar(carId));
+        return "customer/details";
     }
 
     /*##########################*/

@@ -1,7 +1,6 @@
 package com.example.cardealer.model.dtos;
 
 import com.example.cardealer.model.Car;
-import com.example.cardealer.model.Owner;
 import com.example.cardealer.model.enums.Transaction;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -32,7 +31,7 @@ public class CarDto {
     private String description;
     private Integer testDrive;
     private BigDecimal price;
-    private Owner owner;
+    private Integer ownerId;
 
 
     private Integer customerId;

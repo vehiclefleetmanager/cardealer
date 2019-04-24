@@ -43,7 +43,7 @@ public class Owner {
     @Enumerated(EnumType.STRING)
     private Status status;
 
-    @OneToMany(mappedBy = "owner", cascade = CascadeType.ALL)
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "ownerId")
     private Set<Car> cars;
 
     public enum Status {
@@ -70,6 +70,6 @@ public class Owner {
 
     public void addCar(Car car) {
         getCars().add(car);
-        car.setId(this.getOwnerId());
+        car.setOwnerId(this.getOwnerId());
     }
 }

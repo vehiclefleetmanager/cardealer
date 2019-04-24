@@ -11,9 +11,9 @@
 <div class="container">
     <div class="row">
         <div class="col-md-12 text-center">
-            <h3>{Nazwa klienta} - Lista samochodów</h3>
+            <h3><span th:text="${owner.getFirstName()}+' '+${owner.getLastName()}"></span> - Lista samochodów </h3>
             <div class="offset-md-1">
-                <div th:replace="all-cars-list :: all-cars-list"></div>
+                <div th:object="cars" th:replace="all-cars-list :: all-cars-list"></div>
             </div>
         </div>
     </div>

@@ -22,7 +22,7 @@ public interface CarRepository extends JpaRepository<Car, Integer> {
     @Query("select distinct c.model from Car c order by c.model asc")
     List<String> findModel();
 
-    @Query("select c from Car c inner join Owner o on c.owner.ownerId=o.ownerId")
+    @Query("select c from Car c inner join Owner o on c.ownerId=o.ownerId")
     List<Car> findCarsByOwnerId();
 
     @Query("select distinct c.productionYear from Car c order by c.productionYear asc")

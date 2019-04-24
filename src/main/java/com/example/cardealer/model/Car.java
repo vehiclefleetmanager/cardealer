@@ -74,12 +74,11 @@ public class Car implements Serializable {
     @Column
     private BigDecimal price;
 
-    @OneToMany(mappedBy = "car")
+    @OneToMany(mappedBy = "car", cascade = CascadeType.ALL)
     private Set<Agreement> agreements;
 
-    @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "owner_id")
-    private Owner owner;
+    private Integer ownerId;
 
     @OneToMany(mappedBy = "car", cascade = CascadeType.ALL)
     private Set<Event> events;

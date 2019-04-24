@@ -9,6 +9,7 @@ public class OwnerMapper implements Mapper<Owner, OwnerDto> {
     @Override
     public OwnerDto map(Owner from) {
         return OwnerDto.builder()
+                .ownerId(from.getOwnerId())
                 .address(from.getAddress())
                 .firstName(from.getFirstName())
                 .lastName(from.getLastName())
@@ -22,6 +23,7 @@ public class OwnerMapper implements Mapper<Owner, OwnerDto> {
     @Override
     public Owner reverse(OwnerDto to) {
         return Owner.builder()
+                .ownerId(to.getOwnerId())
                 .firstName(to.getFirstName())
                 .address(to.getAddress())
                 .phoneNumber(to.getPhoneNumber())

@@ -10,6 +10,7 @@ public class CarMapper implements Mapper<Car, CarDto> {
     public CarDto map(Car from) {
 
         return CarDto.builder()
+                .id(from.getId())
                 .bodyNumber(from.getBodyNumber())
                 .capacityEngine(from.getCapacityEngine())
                 .description(from.getDescription())
@@ -25,12 +26,14 @@ public class CarMapper implements Mapper<Car, CarDto> {
                 .status(from.getStatus())
                 .testDrive(from.getTestDrive())
                 .transmission(from.getTransmission())
+                .ownerId(from.getOwnerId())
                 .build();
     }
 
     @Override
     public Car reverse(CarDto to) {
         return Car.builder()
+                .id(to.getId())
                 .bodyNumber(to.getBodyNumber())
                 .capacityEngine(to.getCapacityEngine())
                 .description(to.getDescription())
@@ -46,6 +49,7 @@ public class CarMapper implements Mapper<Car, CarDto> {
                 .status(to.getStatus())
                 .testDrive(to.getTestDrive())
                 .transmission(to.getTransmission())
+                .ownerId(to.getOwnerId())
                 .build();
     }
 }

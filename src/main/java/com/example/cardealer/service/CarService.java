@@ -1,6 +1,7 @@
 package com.example.cardealer.service;
 
 import com.example.cardealer.mappers.CarMapper;
+import com.example.cardealer.mappers.OwnerMapper;
 import com.example.cardealer.model.Car;
 import com.example.cardealer.model.dtos.CarDto;
 import com.example.cardealer.repository.CarRepository;
@@ -18,14 +19,17 @@ public class CarService {
     private CarRepository carRepository;
     /* private final EventRepository eventRepository;*/
     private CarMapper carMapper;
+    private OwnerMapper ownerMapper;
 
     @Autowired
     public CarService(CarRepository carRepository,
             /*EventRepository eventRepository,*/
-                      CarMapper carMapper) {
+                      CarMapper carMapper,
+                      OwnerMapper ownerMapper) {
         this.carRepository = carRepository;
         /* this.eventRepository = eventRepository;*/
         this.carMapper = carMapper;
+        this.ownerMapper = ownerMapper;
     }
 
     public List<CarDto> getCars() {
@@ -81,7 +85,6 @@ public class CarService {
     }
 
     public Car addCar(CarDto carDto) {
-
         return carRepository.save(carMapper.reverse(carDto));
     }
 
@@ -103,7 +106,7 @@ public class CarService {
                     car.setRegNumber(carDto.getRegNumber());
                     car.setStatus(carDto.getStatus());
                     car.setTransmission(carDto.getTransmission());
-                    car.setOwner(carDto.getOwner());
+                    car.setOwnerId(carDto.getOwnerId());
                     carRepository.save(car);
                 });
     }

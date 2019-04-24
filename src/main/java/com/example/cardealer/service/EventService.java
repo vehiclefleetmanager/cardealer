@@ -23,8 +23,8 @@ public class EventService {
         return eventRepository.findAll();
     }
 
-    public void save(Event event) {
-        eventRepository.save(event);
+    public Event save(Event event) {
+        return eventRepository.save(event);
     }
 
     public Event getEvent(Integer id) {

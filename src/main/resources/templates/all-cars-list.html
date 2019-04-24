@@ -25,7 +25,7 @@
                         <td style="font-size: 18px;" th:text="${car.getDistance()}"></td>
                         <td style="font-size: 24px; color: #F00;" th:text="${car.getPrice()}+' '+PLN"></td>
                         <td>
-                            <a class="nav-link" th:href="@{'/customer/'+${car.getId()}+'/details'}">
+                            <a class="nav-link" th:href="@{'/customer/' + ${car.getId()} + '/details'}">
                                 <button class="btn btn-outline-info" type="button">SZCZEGÓŁY</button>
                             </a>
                         </td>

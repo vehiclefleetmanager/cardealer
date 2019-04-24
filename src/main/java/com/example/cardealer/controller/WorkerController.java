@@ -50,9 +50,6 @@ public class WorkerController {
         return "worker/customers";
     }
 
-
-
-
     @GetMapping("/customers-list")
     public String showCustomers(Model model) {
         List<Customer> customers = customerService.findAll();
