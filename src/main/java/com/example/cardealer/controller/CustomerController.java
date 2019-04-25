@@ -38,8 +38,8 @@ public class CustomerController {
      * w momencie kiedy ten loguje się na swoje konto*/
     @GetMapping("/customer")
     public String getOwnerMainPage(Model model) {
-        model.addAttribute("owner", ownerService.getOwnerById(15));
-        return "customer";
+        model.addAttribute("owner", ownerService.getOwnerById(1));
+        return "/customer";
     }
 
     @PutMapping("/customer/update")
@@ -61,26 +61,38 @@ public class CustomerController {
     }
 
     @PostMapping("/customer/addOwner")
-    public String addNewOwner(@ModelAttribute OwnerDto ownerDto) {
+    public String addNewOwner(@ModelAttribute("ownerDto") OwnerDto ownerDto) {
         ownerDto.setStatus(Owner.Status.PRESENT);
         ownerService.addOwner(ownerDto);
         return "redirect:car-add";
     }
 
+    @GetMapping("/customer/car-add")
+    public String getPageForRegisterNewCar(Model model) {
+        model.addAttribute("car", new CarDto());
+        return "customer/car-add";
+    }
+
     @GetMapping("/customer/{ownerId}/car-add")
-    public String getPageForRegisterNewCarByOwnerId(Model model, @PathVariable Integer ownerId) {
-        model.addAttribute("owner", ownerService.getOwnerById(ownerId));
+    public String getPageForRegisterNewCarByOwnerId(Model model) {
         model.addAttribute("car", new CarDto());
         return "customer/car-add";
     }
 
 
     @PostMapping("/customer/{ownerId}/addCar")
-    public String addNewCar(@ModelAttribute CarDto carDto, @PathVariable Integer ownerId) {
+    public String addNewCarByOwnerId(@ModelAttribute CarDto carDto, @PathVariable Integer ownerId) {
         carDto.setStatus(Car.Status.WAIT);
-        //carDto.setOwnerId(ownerService.getOwnerById(ownerId).getOwnerId());
+        carDto.setOwnerId(ownerService.getOwnerById(ownerId).getOwnerId());
         carService.addCar(carDto);
         return "redirect:cars";
+    }
+
+    @PostMapping("/customer/addCar")
+    public String addNewCar(@ModelAttribute("carDto") CarDto carDto) {
+        carDto.setStatus(Car.Status.WAIT);
+        carService.addCar(carDto);
+        return "redirect:my-cars";
     }
 
     @GetMapping("/customer/{ownerId}/cars")
