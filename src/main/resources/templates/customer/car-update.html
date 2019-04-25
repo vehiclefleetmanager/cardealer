@@ -1,0 +1,80 @@
+<!doctype html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="header :: head"></head>
+<body>
+<div th:replace="top-nav :: nav"></div>
+<div th:replace="sidebar :: sidebar"></div>
+<br>
+<br>
+<br>
+<div class="container">
+    <div class="row">
+        <div class="col-md-6 offset-md-6">
+            <table class="table">
+                <tbody th:object="${car}">
+                <input hidden name="id" readonly th:value="${car.getId()}" type="text">
+                <tr>
+                    <td>Status</td>
+                    <td readonly th:text="${car.getStatus().getStatus()}"></td>
+                </tr>
+                <tr>
+                    <td>Marka</td>
+                    <input name="mark" th:value="${car.getMark()}" type="text">
+                </tr>
+                <tr>
+                    <td>Model</td>
+                    <input name="model" th:value="${car.getModel()}" type="text">
+                </tr>
+                <tr>
+                    <td>Rok produkcji</td>
+                    <input name="productionYear" th:value="${car.getProductionYear()}" type="number">
+                </tr>
+                <tr>
+                    <td>Przebieg</td>
+                    <input name="distance" th:value="${car.getDistance()}" type="number">
+                </tr>
+                <tr>
+                    <td>Typ Nadwozia</td>
+                    <input name="bodyType" th:value="${car.getBodyType().getType()}" type="text">
+                </tr>
+                <tr>
+                    <td>Skrzynia Biegów</td>
+                    <input name="transmission" th:value="${car.getTransmission().getType()}" type="text">
+
+                </tr>
+                <tr>
+                    <td>Moc [KM]</td>
+                    <input name="powerEngine" th:value="${car.getPowerEngine()}" type="text">
+                    <td th:text=""></td>
+                </tr>
+                <tr>
+                    <td>Pojemność silnika [ccm]</td>
+                    <input name="capacityEngine" th:value="${car.getCapacityEngine()}" type="text">
+                </tr>
+                <tr>
+                    <td>Rodaj paliwa</td>
+                    <input name="fuelType" th:value="${car.getFuelType().getType()}" type="text">
+                </tr>
+                <tr>
+                    <td>VIN</td>
+                    <input name="bodyNumber" th:value="${car.getBodyNumber()}" type="text">
+                </tr>
+                <tr>
+                    <td>Cena [pln]</td>
+                    <input name="price" th:value="${car.getPrice()}" type="text">
+                </tr>
+                <tr>
+                    <td>Jazdy testowe</td>
+                    <td readonly th:text="${car.getTestDrive()}"></td>
+                </tr>
+                <tr>
+                    <td>Opis samochodu</td>
+                    <input name="description" th:value="${car.getDescription()}" type="text">
+                </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+</body>
+</html>

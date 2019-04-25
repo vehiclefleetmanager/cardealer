@@ -13,36 +13,44 @@
             <table class="table">
                 <tbody th:object="${car}">
                 <tr>
+                    <td>Status</td>
+                    <td th:text="${car.getStatus().getStatus()}"></td>
+                </tr>
+                <tr>
                     <td>Marka</td>
-                    <td th:text="${car.getMark()}">Marka</td>
+                    <td th:text="${car.getMark()}"></td>
                 </tr>
                 <tr>
                     <td>Model</td>
-                    <td th:text="${car.getModel()}">Model</td>
+                    <td th:text="${car.getModel()}"></td>
                 </tr>
                 <tr>
                     <td>Rok produkcji</td>
-                    <td th:text="${car.getProductionYear()}">Production Year</td>
+                    <td th:text="${car.getProductionYear()}"></td>
                 </tr>
                 <tr>
                     <td>Przebieg</td>
-                    <td th:text="${car.getDistance()}">Distance</td>
+                    <td th:text="${car.getDistance()}"></td>
                 </tr>
-                <!--<tr>  DODAĆ
+                <tr>
                     <td>Typ Nadwozia</td>
-                    <td th:text="${car.bodyType}">Body</td>
-                </tr>-->
+                    <td th:text="${car.getBodyType().getBodyType()}"></td>
+                </tr>
                 <tr>
                     <td>Skrzynia Biegów</td>
-                    <td th:text="${car.getTransmission()}">Gearbox</td>
+                    <td th:text="${car.getTransmission().getType()}"></td>
                 </tr>
                 <tr>
-                    <td>Moc[KM]</td>
-                    <td th:text="${car.getPowerEngine()}">Engine power</td>
+                    <td>Moc [KM]</td>
+                    <td th:text="${car.getPowerEngine()}"></td>
+                </tr>
+                <tr>
+                    <td>Pojemność silnika[ccm]</td>
+                    <td th:text="${car.getCapacityEngine()}"></td>
                 </tr>
                 <tr>
                     <td>Rodaj paliwa</td>
-                    <td th:text="${car.getFuelType()}"></td>
+                    <td th:text="${car.getFuelType().getType()}"></td>
                 </tr>
                 <tr>
                     <td>VIN</td>
@@ -51,6 +59,10 @@
                 <tr>
                     <td>Cena [pln]</td>
                     <td th:text="${car.getPrice()}"></td>
+                </tr>
+                <tr>
+                    <td>Jazdy testowe</td>
+                    <td th:text="${car.getTestDrive()}"></td>
                 </tr>
                 <tr>
                     <td>Opis samochodu</td>

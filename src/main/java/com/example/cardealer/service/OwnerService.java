@@ -22,8 +22,10 @@ public class OwnerService {
         return ownerRepository.save(ownerMapper.reverse(ownerDto));
     }
 
-    public Owner getOwnerById(Integer ownerId) {
-        return ownerRepository.getOne(ownerId);
+    public OwnerDto getOwnerById(Integer ownerId) {
+        return ownerRepository.findById(ownerId)
+                .map(ownerMapper::map)
+                .get();
     }
 
     public void updateOwner(OwnerDto ownerDto) {

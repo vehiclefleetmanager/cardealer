@@ -24,6 +24,7 @@ public class CarDto {
     private String regNumber;
     private Car.FuelType fuelType;
     private Car.Status status;
+    private Car.BodyType bodyType;
     private Integer distance;
     private Integer capacityEngine;
     private Integer powerEngine;

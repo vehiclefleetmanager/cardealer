@@ -56,6 +56,10 @@ public class Car implements Serializable {
     private Integer distance;
 
     @Column
+    @Enumerated(EnumType.STRING)
+    private BodyType bodyType;
+
+    @Column
     private Integer capacityEngine;
 
     @Column
@@ -132,6 +136,25 @@ public class Car implements Serializable {
 
         public String getStatus() {
             return status;
+        }
+    }
+
+    public enum BodyType {
+        HATCHBACK("Hatchback"),
+        COMBI("Combi"),
+        SEDAN("Sedan"),
+        SUV("Suv"),
+        VAN("Van"),
+        COUPE("Coupe");
+
+        private String type;
+
+        BodyType(String type) {
+            this.type = type;
+        }
+
+        public String getBodyType() {
+            return type;
         }
     }
 

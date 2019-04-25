@@ -1,10 +1,19 @@
-<div class="container" th:fragment="client-add-car" xmlns:th="http://www.thymeleaf.org">
+<!doctype html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="header :: head"></head>
+<body>
+<div th:replace="top-nav :: nav"></div>
+<div th:replace="sidebar :: sidebar"></div>
+<br>
+<br>
+<br>
+<div class="container">
     <div class="row">
-        <div class="col-md-11 order-md-1">
+        <div class="col-md-10 text-center offset-md-2">
             <h4 class="mb-3">Informacje o pojeździe</h4>
-            <form class="needs-validation" novalidate th:action="@{'/customer/addCar'}"
-                  th:method="post"
-                  th:object="${car}">
+            <form class="needs-validation" novalidate th:action="@{'/owner/'+ ${owner.getOwnerId()} +'/addCar'}"
+                  th:method="post" th:object="${carDto}">
+                <input hidden name="ownerId" readonly th:value="${owner.getOwnerId()}">
                 <div class="row">
                     <div class="col-md-6 mb-3">
                         <label for="markName">Marka pojazdu</label>
@@ -65,13 +74,25 @@
                 </div>
 
                 <div class="row">
-                    <div class="col-md-6 mb-3">
+                    <div class="col-md-3 mb-3">
                         <label for="fuelType">Rodzaj paliwa</label>
                         <select class="form-control" id="fuelType" name="fuelType">
                             <option selected="selected" value=" ">Wybierz...</option>
                             <option th:each="type:${T(com.example.cardealer.model.enums.FuelType).values()}"
-                                    th:value="${type}"
-                                    th:text="${type.getType()}"></option>
+                                    th:text="${type.getType()}"
+                                    th:value="${type}"></option>
+                        </select>
+                        <div class="invalid-feedback">
+                            Valid fuel type is required.
+                        </div>
+                    </div>
+                    <div class="col-md-3 mb-3">
+                        <label for="bodyType">Rodzaj nadwozia</label>
+                        <select class="form-control" id="bodyType" name="bodyType">
+                            <option selected="selected" value=" ">Wybierz...</option>
+                            <option th:each="type:${T(com.example.cardealer.model.enums.BodyType).values()}"
+                                    th:text="${type.getBodyType()}"
+                                    th:value="${type}"></option>
                         </select>
                         <div class="invalid-feedback">
                             Valid fuel type is required.
@@ -115,8 +136,8 @@
                         <select class="form-control" id="transmission" name="transmission">
                             <option selected="selected" value=" ">Wybierz...</option>
                             <option th:each="type:${T(com.example.cardealer.model.enums.Transmission).values()}"
-                                    th:value="${type}"
-                                    th:text="${type.getType()}"></option>
+                                    th:text="${type.getType()}"
+                                    th:value="${type}"></option>
                         </select>
                         <div class="invalid-feedback">
                             Valid transmission type is required.
@@ -151,13 +172,5 @@
         </div>
     </div>
 </div>
-
-<footer class="my-5 pt-5 text-muted text-center text-small">
-    <p class="mb-1">&copy; 2017-2018 Company Name</p>
-    <ul class="list-inline">
-        <li class="list-inline-item"><a href="#">Privacy</a></li>
-        <li class="list-inline-item"><a href="#">Terms</a></li>
-        <li class="list-inline-item"><a href="#">Support</a></li>
-    </ul>
-</footer>
-
+</body>
+</html>
