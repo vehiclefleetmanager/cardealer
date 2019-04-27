@@ -1,0 +1,56 @@
+<div class="col-md-10 ml-sm-auto col-lg-10" th:fragment="search" th:object="${carDto}"
+     xmlns:th="http://www.thymleaf.org">
+    <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+        <form th:action="@{/search}" th:method="post">
+            <div class="input-group mb-3">
+                <div class="input-group-prepend">
+                    <label class="input-group-text" for="markField">Marka</label>
+                </div>
+                <select class="custom-select" id="markField" name="mark">
+                    <option selected value="">Wybierz...</option>
+                    <option th:each="type:${markList}"
+                            th:text="${type}"
+                            th:value="${type}"
+                    ></option>
+
+                </select>
+                <div class="input-group-prepend">
+                    <label class="input-group-text" for="model">Model</label>
+                </div>
+                <select class="custom-select" id="model" name="model">
+                    <option selected value="">Wybierz</option>
+                    <option th:each="type:${modelList}"
+                            th:text="${type}"
+                            th:value="${type}"></option>
+
+                </select>
+                <div class="input-group-prepend">
+                    <label class="input-group-text" for="production_year">Rocznik</label>
+                </div>
+                <select class="custom-select" id="production_year" name="productionYearFrom">
+                    <option selected value=""></option>
+                    <option th:each="year:${years}"
+                            th:text="${year}"
+                            th:value="${year}"></option>
+                </select>
+                <select class="custom-select" name="productionYearTo">
+                    <option selected value=""></option>
+                    <option th:each="year:${years}"
+                            th:text="${year}"
+                            th:value="${year}"></option>
+                </select>
+                <div class="input-group-prepend">
+                    <span class="input-group-text">Cena</span>
+                    <input aria-label="minPrice" class="form-control" name="priceFrom" placeholder="Od" type="text">
+                    <span class="input-group-text">PLN</span>
+                    <input aria-label="maxPrice" class="form-control" name="priceTo" placeholder="Do" type="text">
+                    <span class="input-group-text">PLN</span>
+                </div>
+                <div class="input-group-prepend">
+                    <button class="btn btn-outline-secondary" id="button-addon2" type="submit">Szukaj
+                    </button>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>

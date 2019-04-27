@@ -7,8 +7,10 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
 import javax.transaction.Transactional;
+import java.math.BigDecimal;
 import java.util.List;
 import java.util.Optional;
+
 @Repository
 public interface CarRepository extends JpaRepository<Car, Integer> {
 
@@ -22,8 +24,14 @@ public interface CarRepository extends JpaRepository<Car, Integer> {
     @Query("select distinct c.model from Car c order by c.model asc")
     List<String> findModel();
 
-    @Query("select c from Car c inner join Owner o on c.ownerId=o.ownerId")
-    List<Car> findCarsByOwnerId();
+    @Query("select c from Car c where c.ownerId =?1")
+    List<Car> findCarsByOwnerId(Integer ownerId);
+
+    @Query("select c from Car c where c.status=?1 and c.mark=?2 or c.model =?3 " +
+            "or c.productionYear between ?4 and ?5 or c.price between ?6 and ?7 ")
+    List<Car> findCarsFromSearchButton(Car.Status status, String carMark, String carModel,
+                                       Integer fromYear, Integer toYear,
+                                       BigDecimal fromPrice, BigDecimal toPrice);
 
     @Query("select distinct c.productionYear from Car c order by c.productionYear asc")
     List<Integer> findProductionYear();

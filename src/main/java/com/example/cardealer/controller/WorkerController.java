@@ -183,7 +183,6 @@ public class WorkerController {
         agreementService.save(agreement);
         return "redirect:/worker/cars-list";
     }*/
-
     @GetMapping("/orders-list")
     public String showOrders(Model eventModel,
                              Model carModel,

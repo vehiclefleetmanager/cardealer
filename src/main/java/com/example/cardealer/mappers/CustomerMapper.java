@@ -5,7 +5,7 @@ import com.example.cardealer.model.dtos.CustomerDto;
 import org.springframework.stereotype.Component;
 
 @Component
-public class CustomerMapper implements Mapper<Customer, CustomerDto>{
+public class CustomerMapper implements Mapper<Customer, CustomerDto> {
     @Override
     public CustomerDto map(Customer from) {
         return CustomerDto.builder()

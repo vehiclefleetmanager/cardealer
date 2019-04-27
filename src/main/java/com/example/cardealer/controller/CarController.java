@@ -29,13 +29,14 @@ public class CarController {
     /*metodę trzeba zabezpieczyć przed nullem*/
     @GetMapping("/cars/{reg_number}")
     public CarDto getCarByRegNumber(@RequestParam(value = "reg_number", required = false)
-                                     @PathVariable String reg_number) {
+                                    @PathVariable String reg_number) {
         return carService.getCarFindByRegNumber(reg_number);
     }
+
     /*metodę trzeba zabezpieczyć przed nullem*/
     @GetMapping("/cars/{body_number}")
     public CarDto getCarByBodyNumber(@RequestParam(value = "body_number", required = false)
-                                    @PathVariable String body_number) {
+                                     @PathVariable String body_number) {
         return carService.getCarFindByRegNumber(body_number);
     }
 

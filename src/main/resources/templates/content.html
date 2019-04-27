@@ -1,0 +1,20 @@
+<div class="container-fluid" th:fragment="content" xmlns:th="http://www.thymleaf.org">
+    <div class="row offset-md-2">
+        <div class="col-xs-9 col-sm-9 col-md-4 col-xl-4" th:each="c : ${cars}">
+            <div class="card m-1">
+                <div class="card-body text-center">
+                    <span style="font-size: 22px; color: #b21f2d;" th:text="${c.getPrice()+' PLN'}"></span>
+                    <h5 class="card-title" th:text="${c.getMark()+' '+c.getModel()}"></h5>
+                    <a th:href="@{${c.getId()+'/more'}}">
+                        <!--this img tag is to retrieve the photo from the database-->
+                        <!--img th:src="@{c.getMainPhoto()}"-->
+                        <img alt="Car image" style="width: 80%; height: 80%;"
+                             th:src="@{/images/index/images.jpg}"/>
+                    </a>
+                    <p class="card-text" th:text="'Rok prdukcji: '+${c.getProductionYear()}"></p>
+                    <p class="card-text" th:text="'Aktualny przebieg: '+${c.getDistance() +' km'}"></p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

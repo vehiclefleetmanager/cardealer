@@ -43,6 +43,9 @@ public class Owner {
     @Enumerated(EnumType.STRING)
     private Status status;
 
+    @Column(name = "e_mail", unique = true)
+    private String email;
+
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "ownerId")
     private Set<Car> cars;
 

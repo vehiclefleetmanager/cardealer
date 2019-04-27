@@ -11,7 +11,7 @@
     <div class="row">
         <div class="col-md-10 text-center offset-md-2">
             <h4 class="mb-3">Informacje o właścicielu</h4>
-            <form action="/customer/addOwner" class="needs-validation" novalidate th:action="@{'addPerson'}"
+            <form class="needs-validation" novalidate th:action="@{'/addPerson'}"
                   th:method="post" th:object="${person}">
                 <div class="row">
                     <div class="col-md-6 mb-3">
@@ -43,16 +43,16 @@
                         </div>
                     </div>
                     <div class="col-md-6 mb-3">
-                        <label for="tin"></label>
-                        <input class="form-control" id="tin" name="tin" placeholder="NIP" required type="text"
-                               value="">
+                        <label for="phoneNumber"></label>
+                        <input class="form-control" id="phoneNumber" name="phoneNumber" placeholder="Telefon"
+                               required type="text" value="">
                         <div class="invalid-feedback">
-                            Valid tax number is required.
+                            Valid date is required.
                         </div>
                     </div>
                 </div>
                 <div class="row">
-                    <div class="col-md-6 mb-3">
+                    <div class="col-md-4 mb-3">
                         <label for="pesel"></label>
                         <input class="form-control" id="pesel" name="pesel" placeholder="Pesel" required type="text"
                                value="">
@@ -60,12 +60,20 @@
                             Valid pesel is required.
                         </div>
                     </div>
-                    <div class="col-md-6 mb-3">
-                        <label for="phoneNumber"></label>
-                        <input class="form-control" id="phoneNumber" name="phoneNumber" placeholder="Telefon"
-                               required type="text" value="">
+                    <div class="col-md-4 mb-3">
+                        <label for="tin"></label>
+                        <input class="form-control" id="tin" name="tin" placeholder="NIP" required type="text"
+                               value="">
                         <div class="invalid-feedback">
-                            Valid date is required.
+                            Valid tax number is required.
+                        </div>
+                    </div>
+                    <div class="col-md-4 mb-3">
+                        <label for="email"></label>
+                        <input class="form-control" id="email" name="email" placeholder="e-mail" required type="text"
+                               value="">
+                        <div class="invalid-feedback">
+                            Valid tax number is required.
                         </div>
                     </div>
                 </div>
@@ -78,15 +86,6 @@
             </form>
         </div>
     </div>
-
-    <footer class="my-5 pt-5 text-muted text-center text-small">
-        <p class="mb-1">&copy; 2017-2018 Company Name</p>
-        <ul class="list-inline">
-            <li class="list-inline-item"><a href="#">Privacy</a></li>
-            <li class="list-inline-item"><a href="#">Terms</a></li>
-            <li class="list-inline-item"><a href="#">Support</a></li>
-        </ul>
-    </footer>
 </div>
 
 </body>

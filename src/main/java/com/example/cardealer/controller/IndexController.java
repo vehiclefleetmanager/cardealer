@@ -11,6 +11,8 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
+import java.math.BigDecimal;
+
 /*Kontroler którego zadaniem jest porzedstawienie
 oferty komisu na stronie głownej*/
 @Controller
@@ -28,7 +30,7 @@ public class IndexController {
 
     /*Main page methods part*/
     @GetMapping("/")
-    public String mainPage(Model model) {
+    public String getMainApplicationPageView(Model model) {
         model.addAttribute("cars", carService.getAvailableCars());
         model.addAttribute("markList", carService.findMark());
         model.addAttribute("modelList", carService.findModel());
@@ -37,72 +39,77 @@ public class IndexController {
     }
 
     @GetMapping("/login")
-    public String loginPage() {
+    public String getLoginPageInApplicationView() {
         return "login";
     }
 
 
     /*Owner methods part*/
     @GetMapping("/owner")
-    public String getOwnerPage(Model model) {
-        model.addAttribute("owner", ownerService.getOwnerById(1));
+    public String getOwnerPageView(Model model) {
+        model.addAttribute("owner", ownerService.getOwnerById(19));
         return "owner";
     }
 
     @GetMapping("/owner/{ownerId}/owner-update")
-    public String getUpdateOwnerPage(@PathVariable Integer ownerId, Model model) {
+    public String getPageViewToUpdateOwner(@PathVariable Integer ownerId, Model model) {
         model.addAttribute("owner", ownerService.getOwnerById(ownerId));
         return "owner-update";
     }
 
     @PutMapping("/updateOwner")
-    public String updateOwner(@ModelAttribute("ownerDto") OwnerDto ownerDto) {
+    public String doOwnerUpdate(@ModelAttribute("ownerDto") OwnerDto ownerDto) {
         ownerService.updateOwner(ownerDto);
         return "redirect:/owner";
     }
 
-    @GetMapping("/owner/{ownerId}/add-car")
-    public String getPageToAddCarByOwnerId(@PathVariable Integer ownerId, Model model) {
-        model.addAttribute("owner", ownerService.getOwnerById(ownerId));
-        model.addAttribute("carDto", new CarDto());
-        return "add-car";
-    }
-
-    @PostMapping("/owner/{objectId}/addCar")
-    public String addCarByOwnerId(@ModelAttribute("carDto") CarDto carDto, @PathVariable Integer objectId) {
-        carDto.setOwnerId(ownerService.getOwnerById(objectId).getOwnerId());
-        carDto.setStatus(Car.Status.WAIT);
-        carDto.setTestDrive(0);
-        carService.addCar(carDto);
-        return "redirect:/owner";
-    }
-
-
     @GetMapping("/sale")
-    public String getPageForRegisterNewOwner(Model model) {
+    public String getPageForRegisterNewOwnerView(Model model) {
         model.addAttribute("person", new OwnerDto());
         return "person-add";
     }
 
     @PostMapping("/addPerson")
-    public String addNewOwner(@ModelAttribute("ownerDto") OwnerDto ownerDto) {
+    public String doAddNewOwner(@ModelAttribute("ownerDto") OwnerDto ownerDto) {
         ownerDto.setStatus(Owner.Status.PRESENT);
-        ownerService.addOwner(ownerDto);
-        return "redirect:add-car";
+        Owner owner = ownerService.addOwner(ownerDto);
+        Integer ownerId = owner.getOwnerId();
+        return "redirect:/" + ownerId + "/add-car";
     }
 
-    @GetMapping("/owner/{ownerId}/cars")
-    public String getPageWhereIsListCarsOfOwner(Model model, @PathVariable Integer ownerId) {
-        model.addAttribute("cars", carService.getCarsByOwnersIds());
+    @GetMapping("/{ownerId}/add-car")
+    public String getPageForRegisterNewCarView(@PathVariable Integer ownerId, Model model) {
+        model.addAttribute("car", new CarDto());
         model.addAttribute("owner", ownerService.getOwnerById(ownerId));
-        return "cars-list";
+        return "add-car";
     }
 
-    @GetMapping("/owner/{carId}/details")
-    public String getPageWhereIsDetailsCar(Model model, @PathVariable Integer carId) {
-        model.addAttribute("car", carService.getCar(carId));
-        return "details";
+    @PostMapping("/{ownerId}/addCar")
+    public String doAddNewCar(@ModelAttribute("carDto") CarDto carDto, @PathVariable Integer ownerId) {
+        carDto.setStatus(Car.Status.WAIT);
+        carDto.setOwnerId(ownerId);
+        carDto.setTestDrive(0);
+        carService.addCar(carDto);
+        return "redirect:/";
     }
+
+    @PostMapping("/search")
+    public String filters(@ModelAttribute(value = "carDto") CarDto carDto,
+                          @RequestParam(value = "mark", required = false) @PathVariable String carMark,
+                          @RequestParam(value = "model", required = false) @PathVariable String carModel,
+                          @RequestParam(value = "productionYearFrom", required = false) @PathVariable Integer productionYearFrom,
+                          @RequestParam(value = "productionYearTo", required = false) @PathVariable Integer productionYearTo,
+                          @RequestParam(value = "priceFrom", required = false) @PathVariable BigDecimal priceFrom,
+                          @RequestParam(value = "priceTo", required = false) @PathVariable BigDecimal priceTo,
+                          Model model) {
+        model.addAttribute("cars",
+                carService.getCarsFromSearchButton(Car.Status.AVAILABLE, carMark, carModel, productionYearFrom, productionYearTo,
+                        priceFrom, priceTo));
+        return "result";
+    }
+    /*?mark="+carMark+"&model="+carModel+"&productionYear="+productionYear+"&productionYear="
+            +productionYear+"&price="+price+"&price="+price;*/
+
 
 
     /*@PostMapping("/sale")
@@ -129,15 +136,6 @@ public class IndexController {
         return "index";
     }
 
-    @PostMapping("/filter")
-    public String filters(@ModelAttribute("carDto") CarDto carDto,
-                          @RequestParam("mark") String carMark,
-                          @RequestParam("model") String carModel, Model model) {
-        List<Car> cars = carService.findCarByMark(carMark);
-        carService.findCarsByModel(carModel);
 
-        model.addAttribute("cars", cars);
-        return "index";
-    }
 */
 }

@@ -100,9 +100,21 @@ body {
 }
 
 .jumbotron {
+    margin: 0;
+    padding: 0;
     background-size: cover;
     background: url('../images/details/details.jpg') no-repeat top right;
     width: 100%;
-    height: auto;
+    background-size: 40%;
+}
 
+.display-5 {
+    padding-top: 20px;
+    font-size: 3rem;
+    font-weight: 300;
+    line-height: 1.2;
+}
+
+.card {
+    box-shadow: #606060 1px 1px 4px;
 }

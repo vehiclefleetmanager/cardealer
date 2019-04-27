@@ -19,5 +19,6 @@ public class OwnerDto {
     private Long tin;
     private Long pesel;
     private String phoneNumber;
+    private String email;
     private Owner.Status status;
 }

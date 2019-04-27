@@ -11,7 +11,7 @@
     <div class="row">
         <div class="col-md-10 text-center offset-md-2">
             <h4 class="mb-3">Informacje o pojeździe</h4>
-            <form class="needs-validation" novalidate th:action="@{'/owner/'+ ${owner.getOwnerId()} +'/addCar'}"
+            <form class="needs-validation" novalidate th:action="@{'/'+${owner.getOwnerId()}+'/addCar'}"
                   th:method="post" th:object="${carDto}">
                 <input hidden name="ownerId" readonly th:value="${owner.getOwnerId()}">
                 <div class="row">

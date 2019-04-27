@@ -9,6 +9,7 @@ import lombok.Data;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.math.BigDecimal;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -40,6 +41,16 @@ public class CarService {
                 .collect(Collectors.toList());
     }
 
+    public List<CarDto> getCarsFromSearchButton(Car.Status status, String carMark, String carModel,
+                                                Integer fromYear, Integer toYear,
+                                                BigDecimal fromPrice, BigDecimal toPrice) {
+        return carRepository.findCarsFromSearchButton(status, carMark,
+                carModel, fromYear, toYear, fromPrice, toPrice)
+                .stream()
+                .map(carMapper::map)
+                .collect(Collectors.toList());
+    }
+
     public List<CarDto> getAvailableCars() {
         return carRepository
                 .findCarsByStatusIsAvailable(Car.Status.AVAILABLE)
@@ -64,9 +75,9 @@ public class CarService {
                 .collect(Collectors.toList());
     }
 
-    public List<CarDto> getCarsByOwnersIds() {
+    public List<CarDto> getCarsByOwnersIds(Integer ownerId) {
         return carRepository
-                .findCarsByOwnerId()
+                .findCarsByOwnerId(ownerId)
                 .stream()
                 .map(carMapper::map)
                 .collect(Collectors.toList());
@@ -124,7 +135,6 @@ public class CarService {
         return carRepository.findById(id).get();
     }
 
-
    /* public List<Car> findCarByTransactionLike(Transaction transaction) {
         return eventRepository.findByTransaction(transaction);
     }
@@ -132,6 +142,7 @@ public class CarService {
     public List<Car> findByRenouncementLike(Transaction transaction) {
         return eventRepository.findByRenouncement(transaction);
     }*/
+
     /*  public List<Car> findByWaitingLike(Transaction transaction) {
           return eventRepository.findByWaiting(transaction);
       }
@@ -172,5 +183,4 @@ public class CarService {
     public void updateTestDrive(Car car) {
         car.setTestDrive(car.getTestDrive() + 1);
     }
-
 }

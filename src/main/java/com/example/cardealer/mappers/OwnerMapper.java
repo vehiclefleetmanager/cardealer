@@ -16,6 +16,7 @@ public class OwnerMapper implements Mapper<Owner, OwnerDto> {
                 .phoneNumber(from.getPhoneNumber())
                 .pesel(from.getPesel())
                 .tin(from.getTin())
+                .email(from.getEmail())
                 .status(from.getStatus())
                 .build();
     }
@@ -30,6 +31,7 @@ public class OwnerMapper implements Mapper<Owner, OwnerDto> {
                 .lastName(to.getLastName())
                 .pesel(to.getPesel())
                 .tin(to.getTin())
+                .email(to.getEmail())
                 .status(to.getStatus())
                 .build();
     }

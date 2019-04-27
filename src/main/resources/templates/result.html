@@ -3,17 +3,16 @@
 <head th:replace="header :: head"></head>
 <body>
 <div th:replace="top-nav :: nav"></div>
-
+<br>
+<br>
+<br>
 <div class="container-fluid">
     <div class="row">
         <div th:replace="sidebar :: sidebar"></div>
-
-        <div th:replace="welcome :: welcome"></div>
         <div th:replace="search :: search"></div>
-
     </div>
 </div>
-<div th:replace="content :: content"></div>
 
+<div th:replace="content :: content"></div>
 </body>
 </html>
