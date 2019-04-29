@@ -7,7 +7,6 @@ import java.io.Serializable;
 /**
  * This class describes the Persons in the application.
  */
-
 @MappedSuperclass
 public class Person implements Serializable {
 
@@ -24,11 +23,14 @@ public class Person implements Serializable {
     private String lastName;
 
     @Column(name = "address")
-    @NotEmpty
     private String address;
 
     @Column(name = "phone_number")
     private Integer phoneNumber;
+
+    @Column(name = "email")
+    private String email;
+
 
     public Integer getId() {
         return id;
@@ -64,5 +66,13 @@ public class Person implements Serializable {
 
     public void setPhoneNumber(Integer phoneNumber) {
         this.phoneNumber = phoneNumber;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
     }
 }

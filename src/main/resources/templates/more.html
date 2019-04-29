@@ -109,19 +109,51 @@
         </div>
         <div class="col-md-10 offset-md-2">
             <p>
-                <a aria-controls="collapseExample" aria-expanded="false" class="btn btn-primary" data-toggle="collapse"
-                   href="#collapseExample" role="button">
-                    Link with href
-                </a>
                 <button aria-controls="collapseExample" aria-expanded="false" class="btn btn-primary"
                         data-target="#collapseExample" data-toggle="collapse" type="button">
-                    Button with data-target
+                    Zainteresowany?
                 </button>
             </p>
             <div class="collapse" id="collapseExample">
                 <div class="card card-body">
-                    Anim pariatur cliche reprehenderit, enim eiusmod high life accusamus terry richardson ad squid.
-                    Nihil anim keffiyeh helvetica, craft beer labore wes anderson cred nesciunt sapiente ea proident.
+                    <form th:action="@{/addCustomer}" th:method="post" th:object="${customerDto}">
+                        <div class="form-row">
+                            <p>Wypełnij poniższy formularz i prześlij go do AutoKomis.pl,
+                                a skonaktujemy się z Tobą celem umówienia na jazdę próbną.</p>
+
+                        </div>
+
+                        <div class="form-row">
+                            <div class="form-group col-md-3">
+                                <input class="form-control" id="email" name="email" placeholder="Email" type="email">
+                            </div>
+                            <div class="form-group col-md-3">
+                                <input class="form-control" id="name" name="firstName" placeholder="Imię" type="text">
+                            </div>
+                            <div class="form-group col-md-3">
+                                <input class="form-control" id="surname" name="lastName" placeholder="Nazwisko"
+                                       type="text">
+                            </div>
+                            <div class="form-group col-md-3">
+                                <input class="form-control" id="phone" name="phoneNumber" placeholder="Telefon"
+                                       type="tel">
+                            </div>
+                        </div>
+                        <div class="form-row">
+                            <div class="form-group col-md-12">
+                                <textarea class="form-control" placeholder="Treść wiadomości" rows="4"></textarea>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <div class="form-check">
+                                <input class="form-check-input" id="gridCheck" type="checkbox">
+                                <label class="form-check-label" for="gridCheck">
+                                    Zapoznałem się z treścią regulaminu.
+                                </label>
+                            </div>
+                        </div>
+                        <button class="btn btn-primary" type="submit">Prześlij</button>
+                    </form>
                 </div>
             </div>
         </div>

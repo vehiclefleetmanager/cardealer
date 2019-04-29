@@ -3,8 +3,10 @@ package com.example.cardealer.controller;
 import com.example.cardealer.model.Car;
 import com.example.cardealer.model.Owner;
 import com.example.cardealer.model.dtos.CarDto;
+import com.example.cardealer.model.dtos.CustomerDto;
 import com.example.cardealer.model.dtos.OwnerDto;
 import com.example.cardealer.service.CarService;
+import com.example.cardealer.service.CustomerService;
 import com.example.cardealer.service.OwnerService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -12,6 +14,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import java.math.BigDecimal;
+import java.util.Date;
 
 /*Kontroler którego zadaniem jest porzedstawienie
 oferty komisu na stronie głownej*/
@@ -20,12 +23,15 @@ public class IndexController {
 
     private final CarService carService;
     private final OwnerService ownerService;
+    private final CustomerService customerService;
 
     @Autowired
     public IndexController(CarService carService,
-                           OwnerService ownerService) {
+                           OwnerService ownerService,
+                           CustomerService customerService) {
         this.carService = carService;
         this.ownerService = ownerService;
+        this.customerService = customerService;
     }
 
     /*Main page methods part*/
@@ -69,8 +75,16 @@ public class IndexController {
 
     @GetMapping("/{carId}/more")
     public String getPageWhereDisplayDetailsCar(@PathVariable Integer carId, Model model) {
+        model.addAttribute("customerDto", new CustomerDto());
         model.addAttribute("carDto", carService.getCar(carId));
         return "more";
+    }
+
+    @PostMapping("/addCustomer")
+    public String doAddNewCustomer(@ModelAttribute("customerDto") CustomerDto customerDto) {
+        customerService.addCustomer(customerDto);
+        customerDto.setTestingDate(new Date());
+        return "redirect:/";
     }
 
     @PostMapping("/addPerson")
@@ -83,7 +97,7 @@ public class IndexController {
 
     @GetMapping("/{ownerId}/add-car")
     public String getPageForRegisterNewCarView(@PathVariable Integer ownerId, Model model) {
-        model.addAttribute("car", new CarDto());
+        model.addAttribute("carDto", new CarDto());
         model.addAttribute("owner", ownerService.getOwnerById(ownerId));
         return "add-car";
     }

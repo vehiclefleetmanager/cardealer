@@ -20,4 +20,5 @@ public class CustomerDto {
     private String pesel;
     private Integer phoneNumber;
     private Date testingDate;
+    private String email;
 }

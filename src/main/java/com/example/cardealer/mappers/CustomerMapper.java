@@ -21,7 +21,11 @@ public class CustomerMapper implements Mapper<Customer, CustomerDto> {
 
     @Override
     public Customer reverse(CustomerDto to) {
-        return Customer.builder()
-                .build();
+        Customer customer = new Customer();
+        customer.setFirstName(to.getFirstName());
+        customer.setLastName(to.getLastName());
+        customer.setPhoneNumber(to.getPhoneNumber());
+        customer.setEmail(to.getEmail());
+        return customer;
     }
 }
