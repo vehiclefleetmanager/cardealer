@@ -32,9 +32,7 @@ public class IndexController {
     @GetMapping("/")
     public String getMainApplicationPageView(Model model) {
         model.addAttribute("cars", carService.getAvailableCars());
-        model.addAttribute("markList", carService.findMark());
-        model.addAttribute("modelList", carService.findModel());
-        model.addAttribute("years", carService.findProductionYear());
+        prepareSearchFormFields(model);
         return "index";
     }
 
@@ -67,6 +65,12 @@ public class IndexController {
     public String getPageForRegisterNewOwnerView(Model model) {
         model.addAttribute("person", new OwnerDto());
         return "person-add";
+    }
+
+    @GetMapping("/{carId}/more")
+    public String getPageWhereDisplayDetailsCar(@PathVariable Integer carId, Model model) {
+        model.addAttribute("carDto", carService.getCar(carId));
+        return "more";
     }
 
     @PostMapping("/addPerson")
@@ -103,9 +107,16 @@ public class IndexController {
                           @RequestParam(value = "priceTo", required = false) @PathVariable BigDecimal priceTo,
                           Model model) {
         model.addAttribute("cars",
-                carService.getCarsFromSearchButton(Car.Status.AVAILABLE, carMark, carModel, productionYearFrom, productionYearTo,
-                        priceFrom, priceTo));
+                carService.getCarsFromSearchButton(carMark, carModel, productionYearFrom, productionYearTo,
+                        priceFrom, priceTo, Car.Status.AVAILABLE));
+        prepareSearchFormFields(model);
         return "result";
+    }
+
+    private void prepareSearchFormFields(Model model) {
+        model.addAttribute("markList", carService.findMark());
+        model.addAttribute("modelList", carService.findModel());
+        model.addAttribute("years", carService.findProductionYear());
     }
     /*?mark="+carMark+"&model="+carModel+"&productionYear="+productionYear+"&productionYear="
             +productionYear+"&price="+price+"&price="+price;*/

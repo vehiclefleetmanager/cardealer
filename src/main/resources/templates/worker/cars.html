@@ -1,17 +1,24 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymleaf.org">
-<head th:replace="header :: head">
+<head th:replace="fragments/header :: header">
 </head>
 <body>
-<div th:replace="top-nav :: nav"></div>
-<div th:replace="sidebar :: sidebar"></div>
+<div th:replace="fragments/top-nav :: top-nav"></div>
+<div th:replace="fragments/sidebar :: sidebar"></div>
 <br>
 <br>
 <br>
 <div class="container">
     <div class="row">
         <div class="col-md-12 text-center">
-            <h3>AutoKomis - lista wszystkich samochodów</h3>
+            <h3>AutoKomis - pojazdy o statusie</h3>
+            <select name="checkList">
+                <option selected="selected" value="">Wszystkie</option>
+                <option th:each="type : ${T(com.example.cardealer.model.enums.Status).values()}"
+                        th:text="${type.getStatus()}"
+                        th:value="${type}"
+                        value=""></option>
+            </select>
             <div class="offset-md-1">
                 <div th:replace="all-cars-list :: all-cars-list"></div>
             </div>

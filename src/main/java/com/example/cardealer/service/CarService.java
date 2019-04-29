@@ -41,11 +41,11 @@ public class CarService {
                 .collect(Collectors.toList());
     }
 
-    public List<CarDto> getCarsFromSearchButton(Car.Status status, String carMark, String carModel,
+    public List<CarDto> getCarsFromSearchButton(String carMark, String carModel,
                                                 Integer fromYear, Integer toYear,
-                                                BigDecimal fromPrice, BigDecimal toPrice) {
-        return carRepository.findCarsFromSearchButton(status, carMark,
-                carModel, fromYear, toYear, fromPrice, toPrice)
+                                                BigDecimal fromPrice, BigDecimal toPrice, Car.Status status) {
+        return carRepository.findCarsFromSearchButton(carMark,
+                carModel, fromYear, toYear, fromPrice, toPrice, status)
                 .stream()
                 .map(carMapper::map)
                 .collect(Collectors.toList());
