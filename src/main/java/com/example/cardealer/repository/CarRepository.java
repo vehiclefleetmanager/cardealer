@@ -27,8 +27,7 @@ public interface CarRepository extends JpaRepository<Car, Integer> {
     @Query("select c from Car c where c.ownerId =?1")
     List<Car> findCarsByOwnerId(Integer ownerId);
 
-    @Query("select c from Car c where c.mark=?1 or c.model =?2 " +
-            "or c.productionYear between ?3 and ?4 or c.price between ?5 and ?6 and c.status=?7")
+    @Query("select c from Car c where c.mark=?1 or c.model =?2 or c.productionYear between ?3 and ?4 or c.price between ?5 and ?6 and c.status=?7")
     List<Car> findCarsFromSearchButton(String carMark, String carModel,
                                        Integer fromYear, Integer toYear,
                                        BigDecimal fromPrice, BigDecimal toPrice, Car.Status status);

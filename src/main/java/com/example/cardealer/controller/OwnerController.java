@@ -37,7 +37,7 @@ public class OwnerController {
 
     @GetMapping("/owner/{carId}/details")
     public String getPageWhereIsDetailsCar(Model model, @PathVariable Integer carId) {
-        model.addAttribute("car", carService.getCar(carId));
+        model.addAttribute("carDto", carService.getCar(carId));
         return "details";
     }
 
