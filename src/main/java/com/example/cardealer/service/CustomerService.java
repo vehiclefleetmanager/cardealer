@@ -50,8 +50,9 @@ public class CustomerService {
     }
 
     public void updateCustomer(CustomerDto customerDto) {
-        customerRepository.findCustomerByPeselNumber(customerDto.getPesel())
+        customerRepository.findById(customerDto.getId())
                 .ifPresent(c -> {
+                    c.setId(customerDto.getId());
                     c.setPesel(customerDto.getPesel());
                     c.setTin(customerDto.getTin());
                     c.setAddress(customerDto.getAddress());

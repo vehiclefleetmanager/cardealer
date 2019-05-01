@@ -95,6 +95,12 @@ public class IndexController {
         return "redirect:/" + ownerId + "/add-car";
     }
 
+    @PutMapping("/updatePerson")
+    public String doUpdatePerson(@ModelAttribute("person") CustomerDto person, Model model) {
+        customerService.updateCustomer(person);
+        return "redirect:/worker/customers";
+    }
+
     @GetMapping("/{ownerId}/add-car")
     public String getPageForRegisterNewCarView(@PathVariable Integer ownerId, Model model) {
         model.addAttribute("carDto", new CarDto());
@@ -126,6 +132,15 @@ public class IndexController {
         prepareSearchFormFields(model);
         return "result";
     }
+
+    @PostMapping("/filters")
+    public String doFilterCarsByCarStatus(@ModelAttribute(value = "carDto") CarDto carDto,
+                                          @RequestParam(value = "status", required = false) @PathVariable Car.Status status,
+                                          Model model) {
+        model.addAttribute("cars", carService.findCarsByStatus(status));
+        return "worker/cars";
+    }
+
 
     private void prepareSearchFormFields(Model model) {
         model.addAttribute("markList", carService.findMark());

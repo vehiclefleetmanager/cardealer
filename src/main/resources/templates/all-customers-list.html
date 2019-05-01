@@ -25,12 +25,12 @@
                         <td style="font-size: 18px; " th:text="${c.getPhoneNumber()}"></td>
 
                         <td>
-                            <a class="nav-link" th:href="@{'/worker/'+*{customerNumber}+'/customer-edit'}">
+                            <a class="nav-link" th:href="@{'/worker/'+${c.getId()}+'/person-update'}">
                                 <button class="btn btn-outline-info" type="button">EDYTUJ</button>
                             </a>
                         </td>
                         <td>
-                            <a class="nav-link" th:href="@{'/worker/'+*{customerNumber}+'/customer-delete'}">
+                            <a class="nav-link" th:href="@{'/worker/'+${c.getId()}+'/customer-delete'}">
                                 <button class="btn btn-outline-danger" type="button">USUŃ</button>
                             </a>
                         </td>

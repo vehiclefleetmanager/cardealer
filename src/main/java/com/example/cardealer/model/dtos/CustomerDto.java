@@ -16,7 +16,7 @@ public class CustomerDto {
     private String lastName;
     private String firstName;
     private String address;
-    private Integer tin;
+    private String tin;
     private String pesel;
     private Integer phoneNumber;
     private Date testingDate;

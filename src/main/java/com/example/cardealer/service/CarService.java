@@ -183,4 +183,8 @@ public class CarService {
     public void updateTestDrive(Car car) {
         car.setTestDrive(car.getTestDrive() + 1);
     }
+
+    public List<Car> findCarsByStatus(Car.Status status) {
+        return carRepository.findCarsByStatus(status);
+    }
 }

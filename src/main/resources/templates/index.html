@@ -2,7 +2,8 @@
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head th:replace="fragments/header :: header"></head>
 <body>
-<div th:replace="fragments/top-nav :: top-nav"></div>
+
+<div class="col-xl-12" th:replace="fragments/top-nav :: top-nav"></div>
 
 <div class="container-fluid">
     <div class="row">
@@ -11,9 +12,9 @@
         <div th:replace="fragments/welcome :: welcome"></div>
         <div th:replace="fragments/search :: search"></div>
 
+        <div th:replace="fragments/content :: content"></div>
     </div>
 </div>
-<div th:replace="fragments/content :: content"></div>
 
 </body>
 </html>

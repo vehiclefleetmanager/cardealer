@@ -19,7 +19,7 @@ import java.util.Set;
 public class Customer extends Person {
 
     @Column(name = "tin", unique = true)
-    private Integer tin;
+    private String tin;
 
     @Column(name = "pesel", unique = true)
     private String pesel;

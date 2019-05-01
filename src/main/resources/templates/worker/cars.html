@@ -11,14 +11,24 @@
 <div class="container">
     <div class="row">
         <div class="col-md-12 text-center">
-            <h3>AutoKomis - pojazdy o statusie</h3>
-            <select name="checkList">
-                <option selected="selected" value="">Wszystkie</option>
-                <option th:each="type : ${T(com.example.cardealer.model.enums.Status).values()}"
-                        th:text="${type.getStatus()}"
-                        th:value="${type}"
-                        value=""></option>
-            </select>
+            <h3>AutoKomis - lista pojazdów</h3>
+            <form th:action="@{'/filters'}" th:method="post">
+                <div class="input-group col-md-4 offset-md-4">
+                    <div class="input-group-prepend">
+                        <label class="input-group-text" for="carStatus">Status pojazdu</label>
+                    </div>
+                    <select class="custom-select" id="carStatus" name="status">
+                        <option selected value=""></option>
+                        <option th:each="status:${T(com.example.cardealer.model.enums.Status).values()}"
+                                th:text="${status.getStatus()}"
+                                th:value="${status}"></option>
+                    </select>
+                    <div class="input-group-prepend">
+                        <button class="btn btn-outline-secondary" id="button-addon2" type="submit">Filtruj
+                        </button>
+                    </div>
+                </div>
+            </form>
             <div class="offset-md-1">
                 <div th:replace="all-cars-list :: all-cars-list"></div>
             </div>

@@ -57,11 +57,10 @@ public class WorkerController {
         return "/worker/customers-list";
     }
 
-    @GetMapping("/{id}/customer-edit")
-    public String editCustomer(@PathVariable("id") Integer id, Model model) {
-        Customer databaseCustomer = customerService.getCustomer(id);
-        model.addAttribute("customer", databaseCustomer);
-        return "/worker/customer-edit";
+    @GetMapping("/{id}/person-update")
+    public String getPageForUpdateCustomer(@PathVariable("id") Integer id, Model model) {
+        model.addAttribute("person", customerService.getCustomer(id));
+        return "person-update";
     }
 
     @GetMapping("/customer-add")
@@ -75,6 +74,8 @@ public class WorkerController {
         customerService.save(customer);
         return "redirect:/worker/customers-list";
     }
+
+
 
     /*@GetMapping("/{id}/delete-customer")
     public String deleteCustomer(@PathVariable("id") Integer id, Customer customer) {
