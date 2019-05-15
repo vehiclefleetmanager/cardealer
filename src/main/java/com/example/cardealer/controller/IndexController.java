@@ -48,25 +48,6 @@ public class IndexController {
     }
 
 
-    /*Owner methods part*/
-    @GetMapping("/owner")
-    public String getOwnerPageView(Model model) {
-        model.addAttribute("owner", ownerService.getOwnerById(19));
-        return "owner";
-    }
-
-    @GetMapping("/owner/{ownerId}/owner-update")
-    public String getPageViewToUpdateOwner(@PathVariable Integer ownerId, Model model) {
-        model.addAttribute("owner", ownerService.getOwnerById(ownerId));
-        return "owner-update";
-    }
-
-    @PutMapping("/updateOwner")
-    public String doOwnerUpdate(@ModelAttribute("ownerDto") OwnerDto ownerDto) {
-        ownerService.updateOwner(ownerDto);
-        return "redirect:/owner";
-    }
-
     @GetMapping("/sale")
     public String getPageForRegisterNewOwnerView(Model model) {
         model.addAttribute("person", new OwnerDto());
@@ -95,12 +76,6 @@ public class IndexController {
         return "redirect:/" + ownerId + "/add-car";
     }
 
-    @PutMapping("/updatePerson")
-    public String doUpdatePerson(@ModelAttribute("person") CustomerDto person, Model model) {
-        customerService.updateCustomer(person);
-        return "redirect:/worker/customers";
-    }
-
     @GetMapping("/{ownerId}/add-car")
     public String getPageForRegisterNewCarView(@PathVariable Integer ownerId, Model model) {
         model.addAttribute("carDto", new CarDto());
@@ -110,6 +85,7 @@ public class IndexController {
 
     @PostMapping("/{ownerId}/addCar")
     public String doAddNewCar(@ModelAttribute("carDto") CarDto carDto, @PathVariable Integer ownerId) {
+        OwnerDto databaseOwner = ownerService.getOwnerById(ownerId);
         carDto.setStatus(Car.Status.WAIT);
         carDto.setOwnerId(ownerId);
         carDto.setTestDrive(0);
@@ -117,15 +93,21 @@ public class IndexController {
         return "redirect:/";
     }
 
+    @PutMapping("/updatePerson")
+    public String doUpdatePerson(@ModelAttribute("person") CustomerDto person, Model model) {
+        customerService.updateCustomer(person);
+        return "redirect:/worker/customers";
+    }
+
     @PostMapping("/search")
-    public String filters(@ModelAttribute(value = "carDto") CarDto carDto,
-                          @RequestParam(value = "mark", required = false) @PathVariable String carMark,
-                          @RequestParam(value = "model", required = false) @PathVariable String carModel,
-                          @RequestParam(value = "productionYearFrom", required = false) @PathVariable Integer productionYearFrom,
-                          @RequestParam(value = "productionYearTo", required = false) @PathVariable Integer productionYearTo,
-                          @RequestParam(value = "priceFrom", required = false) @PathVariable BigDecimal priceFrom,
-                          @RequestParam(value = "priceTo", required = false) @PathVariable BigDecimal priceTo,
-                          Model model) {
+    public String doFilterOnMainPage(@ModelAttribute(value = "carDto") CarDto carDto,
+                                     @RequestParam(value = "mark", required = false) @PathVariable String carMark,
+                                     @RequestParam(value = "model", required = false) @PathVariable String carModel,
+                                     @RequestParam(value = "productionYearFrom", required = false) @PathVariable Integer productionYearFrom,
+                                     @RequestParam(value = "productionYearTo", required = false) @PathVariable Integer productionYearTo,
+                                     @RequestParam(value = "priceFrom", required = false) @PathVariable BigDecimal priceFrom,
+                                     @RequestParam(value = "priceTo", required = false) @PathVariable BigDecimal priceTo,
+                                     Model model) {
         model.addAttribute("cars",
                 carService.getCarsFromSearchButton(carMark, carModel, productionYearFrom, productionYearTo,
                         priceFrom, priceTo, Car.Status.AVAILABLE));
@@ -147,8 +129,7 @@ public class IndexController {
         model.addAttribute("modelList", carService.findModel());
         model.addAttribute("years", carService.findProductionYear());
     }
-    /*?mark="+carMark+"&model="+carModel+"&productionYear="+productionYear+"&productionYear="
-            +productionYear+"&price="+price+"&price="+price;*/
+
 
 
 

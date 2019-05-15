@@ -11,6 +11,7 @@
                         <th>Status pojazdu</th>
                         <th>Jazdy testowe</th>
                         <th></th>
+                        <th></th>
                     </tr>
                     </thead>
                     <tbody>
@@ -20,6 +21,11 @@
                         <td style="font-size: 18px;" th:text="${car.getModel()}"></td>
                         <td style="font-size: 18px;" th:text="${car.getStatus().getStatus()}"></td>
                         <td style="font-size: 18px;" th:text="${car.getTestDrive()}"></td>
+                        <td>
+                            <a class="nav-link" th:href="@{'/owner/'+ ${car.getId()} + '/update-car'}">
+                                <button class="btn btn-outline-info" type="button">EDYTUJ</button>
+                            </a>
+                        </td>
                         <td>
                             <a class="nav-link" th:href="@{'/owner/'+ ${car.getId()} + '/details'}">
                                 <button class="btn btn-outline-info" type="button">SZCZEGÓŁY</button>

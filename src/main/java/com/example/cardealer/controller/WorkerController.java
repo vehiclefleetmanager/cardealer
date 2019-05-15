@@ -5,16 +5,15 @@ import com.example.cardealer.model.Customer;
 import com.example.cardealer.model.Event;
 import com.example.cardealer.model.dtos.CarDto;
 import com.example.cardealer.model.dtos.EventDto;
+import com.example.cardealer.model.dtos.OwnerDto;
 import com.example.cardealer.model.enums.Transaction;
-import com.example.cardealer.service.AgreementService;
-import com.example.cardealer.service.CarService;
-import com.example.cardealer.service.CustomerService;
-import com.example.cardealer.service.EventService;
+import com.example.cardealer.service.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Controller
@@ -25,52 +24,59 @@ public class WorkerController {
     private final CarService carService;
     private final EventService eventService;
     private final AgreementService agreementService;
+    private final OwnerService ownerService;
 
     @Autowired
     public WorkerController(CustomerService customerService,
                             CarService carService,
                             EventService eventService,
-                            AgreementService agreementService) {
+                            AgreementService agreementService,
+                            OwnerService ownerService) {
         this.customerService = customerService;
         this.carService = carService;
         this.eventService = eventService;
         this.agreementService = agreementService;
+        this.ownerService = ownerService;
     }
 
 
     @GetMapping("/cars")
-    public String allCarsAdminPage(Model model) {
-        model.addAttribute("cars", carService.findAll());
+    public String getAllCarsInWorkerPanel(Model model) {
+        model.addAttribute("cars", getCarsAndOwnersName());
         return "worker/cars";
     }
 
+    private List<CarDto> getCarsAndOwnersName() {
+        List<CarDto> databaseCarsDto = carService.getCarsDto();
+        for (CarDto carDto : databaseCarsDto) {
+            Integer ownerId = carDto.getOwnerId();
+            OwnerDto databaseOwnerDto = ownerService.getOwnerById(ownerId);
+            carDto.setFirstName(databaseOwnerDto.getFirstName());
+            carDto.setLastName(databaseOwnerDto.getLastName());
+        }
+        return databaseCarsDto;
+    }
+
     @GetMapping("/customers")
-    public String allCustomersAdminPage(Model model) {
-        model.addAttribute("customers", customerService.findAll());
+    public String getAllCustomersInWorkerPanel(Model model) {
+        model.addAttribute("customers", customerService.getCustomersDto());
         return "worker/customers";
     }
 
-    @GetMapping("/customers-list")
-    public String showCustomers(Model model) {
-        List<Customer> customers = customerService.findAll();
-        model.addAttribute("customers", customers);
-        return "/worker/customers-list";
-    }
-
     @GetMapping("/{id}/person-update")
-    public String getPageForUpdateCustomer(@PathVariable("id") Integer id, Model model) {
+    public String getFormToUpdateCustomer(@PathVariable("id") Integer id, Model model) {
         model.addAttribute("person", customerService.getCustomer(id));
         return "person-update";
     }
 
     @GetMapping("/customer-add")
-    public String addCustomer(Model model) {
+    public String getFormToAddCustomer(Model model) {
         model.addAttribute("customer", new Customer());
         return "/worker/customer-edit";
     }
 
     @PostMapping("/customer-save")
-    public String saveCustomer(@ModelAttribute("customer") Customer customer) {
+    public String doAddCustomer(@ModelAttribute("customer") Customer customer) {
         customerService.save(customer);
         return "redirect:/worker/customers-list";
     }
@@ -85,12 +91,12 @@ public class WorkerController {
     }*/
 
 
-    @GetMapping("/cars-list")
+    /*@GetMapping("/cars-list")
     public String showCars(@ModelAttribute("carDto") CarDto carDto, Model model) {
         List<Car> cars = carService.findAll();
         model.addAttribute("cars", cars);
         return "/worker/cars-list";
-    }
+    }*/
 
     /*Filtrowanie list po typie transakcji pojazdu*/
     /*@GetMapping("/cars-list-filter")
@@ -126,10 +132,10 @@ public class WorkerController {
         return "redirect:/worker/cars-list";
     }
 
-    @GetMapping("{id}/car-details")
+    @GetMapping("{id}/details")
     public String showDetailsCar(@PathVariable("id") Integer id, Model model) {
-        model.addAttribute("car", carService.getCar(id));
-        return "/worker/car-details";
+        model.addAttribute("carDto", carService.getCar(id));
+        return "details";
     }
 
 

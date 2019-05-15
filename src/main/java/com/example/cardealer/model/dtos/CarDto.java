@@ -34,8 +34,6 @@ public class CarDto {
     private BigDecimal price;
     private Integer ownerId;
 
-
-    private Integer customerId;
     private String lastName;
     private String firstName;
     private String address;

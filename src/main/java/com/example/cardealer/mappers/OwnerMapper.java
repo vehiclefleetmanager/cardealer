@@ -33,6 +33,7 @@ public class OwnerMapper implements Mapper<Owner, OwnerDto> {
                 .tin(to.getTin())
                 .email(to.getEmail())
                 .status(to.getStatus())
+
                 .build();
     }
 }

@@ -4,6 +4,7 @@ import com.example.cardealer.mappers.CarMapper;
 import com.example.cardealer.mappers.OwnerMapper;
 import com.example.cardealer.model.Car;
 import com.example.cardealer.model.dtos.CarDto;
+import com.example.cardealer.model.dtos.OwnerDto;
 import com.example.cardealer.repository.CarRepository;
 import lombok.Data;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -33,7 +34,7 @@ public class CarService {
         this.ownerMapper = ownerMapper;
     }
 
-    public List<CarDto> getCars() {
+    public List<CarDto> getCarsDto() {
         return carRepository
                 .findAll()
                 .stream()
@@ -102,6 +103,7 @@ public class CarService {
     public void updateCar(CarDto carDto) {
         carRepository.findCarByRegNumber(carDto.getRegNumber())
                 .ifPresent(car -> {
+                    car.setId(carDto.getId());
                     car.setModel(carDto.getModel());
                     car.setMark(carDto.getMark());
                     car.setBodyNumber(carDto.getBodyNumber());
@@ -130,11 +132,13 @@ public class CarService {
         return carRepository.findAll();
     }
 
-
     public Car getCar(Integer id) {
         return carRepository.findById(id).get();
     }
 
+    public Integer getOwnerIdByCarId(Integer carId) {
+        return carRepository.findOwnerIdByCarId(carId);
+    }
    /* public List<Car> findCarByTransactionLike(Transaction transaction) {
         return eventRepository.findByTransaction(transaction);
     }
@@ -187,4 +191,6 @@ public class CarService {
     public List<Car> findCarsByStatus(Car.Status status) {
         return carRepository.findCarsByStatus(status);
     }
+
+
 }

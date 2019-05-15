@@ -21,6 +21,24 @@ public class OwnerController {
         this.carService = carService;
     }
 
+    @GetMapping("/owner")
+    public String getOwnerPageView(Model model) {
+        model.addAttribute("owner", ownerService.getOwnerById(1));
+        return "owner";
+    }
+
+    @GetMapping("/owner/{ownerId}/owner-update")
+    public String getPageViewToUpdateOwner(@PathVariable Integer ownerId, Model model) {
+        model.addAttribute("owner", ownerService.getOwnerById(ownerId));
+        return "owner-update";
+    }
+
+    @PutMapping("/updateOwner")
+    public String doOwnerUpdate(@ModelAttribute("ownerDto") OwnerDto ownerDto) {
+        ownerService.updateOwner(ownerDto);
+        return "redirect:/owner";
+    }
+
 
     @PutMapping("/owner")
     public void updateOwner(@RequestBody OwnerDto ownerDto) {
@@ -39,6 +57,20 @@ public class OwnerController {
     public String getPageWhereIsDetailsCar(Model model, @PathVariable Integer carId) {
         model.addAttribute("carDto", carService.getCar(carId));
         return "details";
+    }
+
+    @GetMapping("owner/{carId}/update-car")
+    public String getPageWhereIsFormToUpdateCar(@PathVariable Integer carId, Model model){
+        model.addAttribute("carDto", carService.getCar(carId));
+        return "update-car";
+    }
+
+    @PutMapping("owner/{carId}/updateCar")
+    public String doUpdateCar(@PathVariable Integer carId, @ModelAttribute("catDto") CarDto carDto){
+        OwnerDto databaseOwner = ownerService.getOwnerById(carService.getOwnerIdByCarId(carId));
+        Integer ownerId = databaseOwner.getOwnerId();
+        carService.updateCar(carDto);
+        return "redirect:/owner/"+ownerId+"/cars";
     }
 
     @GetMapping("/owner/{ownerId}/add-car")

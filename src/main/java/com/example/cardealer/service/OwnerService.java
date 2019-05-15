@@ -6,6 +6,9 @@ import com.example.cardealer.model.dtos.OwnerDto;
 import com.example.cardealer.repository.OwnerRepository;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+import java.util.stream.Collectors;
+
 @Service
 public class OwnerService {
     private OwnerRepository ownerRepository;
@@ -39,5 +42,13 @@ public class OwnerService {
                     o.setTin(ownerDto.getTin());
                     ownerRepository.save(o);
                 });
+    }
+
+    public List<OwnerDto> getOwnersDto() {
+        return ownerRepository
+                .findAll()
+                .stream()
+                .map(ownerMapper::map)
+                .collect(Collectors.toList());
     }
 }

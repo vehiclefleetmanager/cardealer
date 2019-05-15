@@ -9,69 +9,85 @@
 <br>
 <div class="container">
     <div class="row">
-        <div class="col-md-6 offset-md-6">
-            <table class="table">
-                <tbody th:object="${carDto}">
-                <tr>
-                    <td>Status</td>
-                    <td th:text="${carDto.getStatus().getStatus()}"></td>
-                </tr>
-                <tr>
-                    <td>Marka</td>
-                    <td th:text="${carDto.getMark()}"></td>
-                </tr>
-                <tr>
-                    <td>Model</td>
-                    <td th:text="${carDto.getModel()}"></td>
-                </tr>
-                <tr>
-                    <td>Rok produkcji</td>
-                    <td th:text="${carDto.getProductionYear()}"></td>
-                </tr>
-                <tr>
-                    <td>Przebieg</td>
-                    <td th:text="${carDto.getDistance()}"></td>
-                </tr>
-                <tr>
-                    <td>Typ Nadwozia</td>
-                    <td th:text="${carDto.getBodyType().getBodyType()}"></td>
-                </tr>
-                <tr>
-                    <td>Skrzynia Biegów</td>
-                    <td th:text="${carDto.getTransmission().getType()}"></td>
-                </tr>
-                <tr>
-                    <td>Moc [KM]</td>
-                    <td th:text="${carDto.getPowerEngine()}"></td>
-                </tr>
-                <tr>
-                    <td>Pojemność silnika[ccm]</td>
-                    <td th:text="${carDto.getCapacityEngine()}"></td>
-                </tr>
-                <tr>
-                    <td>Rodaj paliwa</td>
-                    <td th:text="${carDto.getFuelType().getType()}"></td>
-                </tr>
-                <tr>
-                    <td>VIN</td>
-                    <td th:text="${carDto.getBodyNumber()}"></td>
-                </tr>
-                <tr>
-                    <td>Cena [pln]</td>
-                    <td th:text="${carDto.getPrice()}"></td>
-                </tr>
-                <tr>
-                    <td>Jazdy testowe</td>
-                    <td th:text="${carDto.getTestDrive()}"></td>
-                </tr>
-                <tr>
-                    <td>Opis samochodu</td>
-                    <td th:text="${carDto.getDescription()}"></td>
-                </tr>
-                </tbody>
-            </table>
+        <div class="col-md-10 offset-md-2">
+            <div class="row">
+                <div class="col-md-6">
+                    <table class="table">
+                        <tbody th:object="${carDto}">
+                        <tr>
+                            <td>Status</td>
+                            <td th:text="${carDto.getStatus().getStatus()}"></td>
+                        </tr>
+                        <tr>
+                            <td>Marka</td>
+                            <td th:text="${carDto.getMark()}"></td>
+                        </tr>
+                        <tr>
+                            <td>Model</td>
+                            <td th:text="${carDto.getModel()}"></td>
+                        </tr>
+                        <tr>
+                            <td>Rok produkcji</td>
+                            <td th:text="${carDto.getProductionYear()}"></td>
+                        </tr>
+                        <tr>
+                            <td>Przebieg</td>
+                            <td th:text="${carDto.getDistance()}"></td>
+                        </tr>
+                        <tr>
+                            <td>Typ Nadwozia</td>
+                            <td th:text="${carDto.getBodyType().getBodyType()}"></td>
+                        </tr>
+                        <tr>
+                            <td>Skrzynia Biegów</td>
+                            <td th:text="${carDto.getTransmission().getType()}"></td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <div class="col-md-6">
+                    <table class="table">
+                        <tbody>
+                        <tr>
+                            <td>Moc [KM]</td>
+                            <td th:text="${carDto.getPowerEngine()}"></td>
+                        </tr>
+                        <tr>
+                            <td>Pojemność silnika[ccm]</td>
+                            <td th:text="${carDto.getCapacityEngine()}"></td>
+                        </tr>
+                        <tr>
+                            <td>Rodaj paliwa</td>
+                            <td th:text="${carDto.getFuelType().getType()}"></td>
+                        </tr>
+                        <tr>
+                            <td>VIN</td>
+                            <td th:text="${carDto.getBodyNumber()}"></td>
+                        </tr>
+                        <tr>
+                            <td>Jazdy testowe</td>
+                            <td th:text="${carDto.getTestDrive()}"></td>
+                        </tr>
+                        <tr>
+                            <td>Cena [pln]</td>
+                            <td th:text="${carDto.getPrice()}"></td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <div class="col-md-12">
+                    <table class="table">
+                        <tbody>
+                        <tr>
+                            <td>Opis samochodu</td>
+                            <td th:text="${carDto.getDescription()}"></td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
         </div>
-        </div>
+    </div>
 </div>
 </body>
 </html>

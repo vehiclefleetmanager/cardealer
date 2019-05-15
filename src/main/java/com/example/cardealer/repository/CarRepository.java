@@ -1,6 +1,8 @@
 package com.example.cardealer.repository;
 
 import com.example.cardealer.model.Car;
+import com.example.cardealer.model.dtos.CarDto;
+import com.example.cardealer.model.dtos.OwnerDto;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
@@ -13,6 +15,9 @@ import java.util.Optional;
 
 @Repository
 public interface CarRepository extends JpaRepository<Car, Integer> {
+
+    @Query("select c.ownerId from Car c where c.id = ?1")
+    Integer findOwnerIdByCarId(Integer carId);
 
     List<Car> findCarsByMark(String mark);
 

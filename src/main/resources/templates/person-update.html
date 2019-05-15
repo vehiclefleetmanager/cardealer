@@ -13,7 +13,7 @@
             <h4 class="mb-3">Informacje o właścicielu</h4>
             <form class="needs-validation" novalidate th:action="@{'/updatePerson'}"
                   th:method="put" th:object="${person}">
-                <input hidden readonly th:value="${person.getId()}" type="number">
+                <input hidden readonly th:value="${person.getId()}" type="number" name="id">
                 <div class="row">
                     <div class="col-md-6 mb-3">
                         <label for="firstName"></label>
