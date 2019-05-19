@@ -3,9 +3,7 @@ package com.example.cardealer.controller;
 import com.example.cardealer.model.Car;
 import com.example.cardealer.model.Customer;
 import com.example.cardealer.model.Event;
-import com.example.cardealer.model.dtos.CarDto;
 import com.example.cardealer.model.dtos.EventDto;
-import com.example.cardealer.model.dtos.OwnerDto;
 import com.example.cardealer.model.enums.Transaction;
 import com.example.cardealer.service.*;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,7 +11,6 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.ArrayList;
 import java.util.List;
 
 @Controller
@@ -42,19 +39,8 @@ public class WorkerController {
 
     @GetMapping("/cars")
     public String getAllCarsInWorkerPanel(Model model) {
-        model.addAttribute("cars", getCarsAndOwnersName());
+        model.addAttribute("cars", carService.getCarsAndOwnersName());
         return "worker/cars";
-    }
-
-    private List<CarDto> getCarsAndOwnersName() {
-        List<CarDto> databaseCarsDto = carService.getCarsDto();
-        for (CarDto carDto : databaseCarsDto) {
-            Integer ownerId = carDto.getOwnerId();
-            OwnerDto databaseOwnerDto = ownerService.getOwnerById(ownerId);
-            carDto.setFirstName(databaseOwnerDto.getFirstName());
-            carDto.setLastName(databaseOwnerDto.getLastName());
-        }
-        return databaseCarsDto;
     }
 
     @GetMapping("/customers")
@@ -80,31 +66,6 @@ public class WorkerController {
         customerService.save(customer);
         return "redirect:/worker/customers-list";
     }
-
-
-
-    /*@GetMapping("/{id}/delete-customer")
-    public String deleteCustomer(@PathVariable("id") Integer id, Customer customer) {
-        id = customer.getCustomerNumber();
-        customerService.deleteById(id);
-        return "redirect:/worker/customers-list";
-    }*/
-
-
-    /*@GetMapping("/cars-list")
-    public String showCars(@ModelAttribute("carDto") CarDto carDto, Model model) {
-        List<Car> cars = carService.findAll();
-        model.addAttribute("cars", cars);
-        return "/worker/cars-list";
-    }*/
-
-    /*Filtrowanie list po typie transakcji pojazdu*/
-    /*@GetMapping("/cars-list-filter")
-    public String showCarsFilter(@ModelAttribute("carDto") CarDto carDto, @RequestParam("transaction") Transaction transaction, Model model) {
-        List<Car> carByTransactionLike = carService.findCarByTransactionLike(transaction);
-        model.addAttribute("cars", carByTransactionLike);
-        return "/worker/cars-list";
-    }*/
 
     @GetMapping("{id}/car-edit")
     public String editCar(@PathVariable("id") Integer id, Model model) {
@@ -138,6 +99,25 @@ public class WorkerController {
         return "details";
     }
 
+    @GetMapping("/orders-list")
+    public String showOrders(Model eventModel,
+                             Model carModel,
+                             Model customerModel) {
+        List<Event> events = eventService.findEventByTesting(Transaction.TESTING);
+        eventModel.addAttribute("events", events);
+        carModel.addAttribute("car");
+        customerModel.addAttribute("customer");
+        return "/worker/orders-list";
+    }
+
+    @GetMapping("{id}/orders")
+    public String showOrders(@PathVariable("id") Integer id,
+                             @ModelAttribute("eventDto") EventDto eventDto,
+                             Model model) {
+        Event databaseEvent = eventService.getEvent(id);
+        model.addAttribute("eventDto", databaseEvent);
+        return "orders-list";
+    }
 
     /*@GetMapping("/show/car?transaction=WAITING")
     public String showCarsWaiting(@ModelAttribute("carDto") CarDto carDto, @RequestParam("transaction") Transaction transaction, Model model) {
@@ -146,6 +126,28 @@ public class WorkerController {
     }
 */
 
+    /*@GetMapping("/{id}/delete-customer")
+    public String deleteCustomer(@PathVariable("id") Integer id, Customer customer) {
+        id = customer.getCustomerNumber();
+        customerService.deleteById(id);
+        return "redirect:/worker/customers-list";
+    }*/
+
+
+    /*@GetMapping("/cars-list")
+    public String showCars(@ModelAttribute("carDto") CarDto carDto, Model model) {
+        List<Car> cars = carService.findAll();
+        model.addAttribute("cars", cars);
+        return "/worker/cars-list";
+    }*/
+
+    /*Filtrowanie list po typie transakcji pojazdu*/
+    /*@GetMapping("/cars-list-filter")
+    public String showCarsFilter(@ModelAttribute("carDto") CarDto carDto, @RequestParam("transaction") Transaction transaction, Model model) {
+        List<Car> carByTransactionLike = carService.findCarByTransactionLike(transaction);
+        model.addAttribute("cars", carByTransactionLike);
+        return "/worker/cars-list";
+    }*/
 
 
 
@@ -190,24 +192,6 @@ public class WorkerController {
         agreementService.save(agreement);
         return "redirect:/worker/cars-list";
     }*/
-    @GetMapping("/orders-list")
-    public String showOrders(Model eventModel,
-                             Model carModel,
-                             Model customerModel) {
-        List<Event> events = eventService.findEventByTesting(Transaction.TESTING);
-        eventModel.addAttribute("events", events);
-        carModel.addAttribute("car");
-        customerModel.addAttribute("customer");
-        return "/worker/orders-list";
-    }
 
-    @GetMapping("{id}/orders")
-    public String showOrders(@PathVariable("id") Integer id,
-                             @ModelAttribute("eventDto") EventDto eventDto,
-                             Model model) {
-        Event databaseEvent = eventService.getEvent(id);
-        model.addAttribute("eventDto", databaseEvent);
-        return "orders-list";
-    }
 
 }

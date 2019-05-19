@@ -6,6 +6,7 @@ import com.example.cardealer.model.Car;
 import com.example.cardealer.model.dtos.CarDto;
 import com.example.cardealer.model.dtos.OwnerDto;
 import com.example.cardealer.repository.CarRepository;
+import com.example.cardealer.repository.OwnerRepository;
 import lombok.Data;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -18,18 +19,18 @@ import java.util.stream.Collectors;
 @Data
 @Service
 public class CarService {
-    private CarRepository carRepository;
-    /* private final EventRepository eventRepository;*/
+    private final CarRepository carRepository;
+    private final OwnerRepository ownerRepository;
     private CarMapper carMapper;
     private OwnerMapper ownerMapper;
 
     @Autowired
     public CarService(CarRepository carRepository,
-            /*EventRepository eventRepository,*/
+            OwnerRepository ownerRepository,
                       CarMapper carMapper,
                       OwnerMapper ownerMapper) {
         this.carRepository = carRepository;
-        /* this.eventRepository = eventRepository;*/
+        this.ownerRepository = ownerRepository;
         this.carMapper = carMapper;
         this.ownerMapper = ownerMapper;
     }
@@ -82,6 +83,38 @@ public class CarService {
                 .stream()
                 .map(carMapper::map)
                 .collect(Collectors.toList());
+    }
+
+    public List<CarDto> getCarsAndOwnersName() {
+        List<CarDto> databaseCarsDto = carRepository
+                .findAll()
+                .stream()
+                .map(carMapper::map)
+                .collect(Collectors.toList());
+        addFirstAndLastNameByOwner(databaseCarsDto);
+        return databaseCarsDto;
+    }
+
+    public List<CarDto> findCarsByStatus(Car.Status status) {
+        List<CarDto> databaseCarsDto = carRepository
+                .findCarsByStatus(status)
+                .stream()
+                .map(carMapper::map)
+                .collect(Collectors.toList());
+        addFirstAndLastNameByOwner(databaseCarsDto);
+        return databaseCarsDto;
+    }
+
+    private void addFirstAndLastNameByOwner(List<CarDto> databaseCarsDto) {
+        for (CarDto carDto : databaseCarsDto) {
+            Integer ownerId = carDto.getOwnerId();
+            OwnerDto databaseOwnerDto = ownerRepository
+                    .getOwnerById(ownerId)
+                    .map(ownerMapper::map)
+                    .get();
+            carDto.setFirstName(databaseOwnerDto.getFirstName());
+            carDto.setLastName(databaseOwnerDto.getLastName());
+        }
     }
 
     public CarDto getCarFindByRegNumber(String regNumber) {
@@ -188,9 +221,7 @@ public class CarService {
         car.setTestDrive(car.getTestDrive() + 1);
     }
 
-    public List<Car> findCarsByStatus(Car.Status status) {
-        return carRepository.findCarsByStatus(status);
-    }
+
 
 
 }
