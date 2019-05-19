@@ -24,9 +24,9 @@ public class Customer extends Person {
     @Column(name = "pesel", unique = true)
     private String pesel;
 
-    /*@JsonIgnore
+
     @ManyToMany(mappedBy = "customers", cascade = CascadeType.ALL)
-    private Set<Car> cars;*/
+    private Set<Car> cars;
 
     @OneToMany(mappedBy = "customer", cascade = CascadeType.ALL)
     private Set<Agreement> agreements;
@@ -35,12 +35,12 @@ public class Customer extends Person {
     private Set<Event> events;
 
 
-    /*public void addCar(Car car) {
+    public void addCar(Car car) {
         if (cars == null) {
             cars = new HashSet<>();
         }
         cars.add(car);
-    }*/
+    }
 
     public void addEvent(Event event) {
         if (events == null) {

@@ -72,7 +72,7 @@ public class Owner {
     }
 
     public void addCar(Car car) {
-        getCars().add(car);
         car.setOwnerId(this.getOwnerId());
+        getCars().add(car);
     }
 }

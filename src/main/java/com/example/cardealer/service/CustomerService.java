@@ -1,26 +1,35 @@
 package com.example.cardealer.service;
 
+import com.example.cardealer.mappers.CarMapper;
 import com.example.cardealer.mappers.CustomerMapper;
 import com.example.cardealer.model.Customer;
+import com.example.cardealer.model.dtos.CarDto;
 import com.example.cardealer.model.dtos.CustomerDto;
+import com.example.cardealer.repository.CarRepository;
 import com.example.cardealer.repository.CustomerRepository;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 @Service
 public class CustomerService {
-    private CustomerRepository customerRepository;
+    private final CustomerRepository customerRepository;
     private CustomerMapper customerMapper;
+    private final CarRepository carRepository;
+    private final CarMapper carMapper;
 
-    @Autowired
+
     public CustomerService(CustomerRepository customerRepository,
-                           CustomerMapper customerMapper) {
+                           CustomerMapper customerMapper,
+                           CarRepository carRepository,
+                           CarMapper carMapper) {
         this.customerRepository = customerRepository;
         this.customerMapper = customerMapper;
+        this.carRepository = carRepository;
+        this.carMapper = carMapper;
     }
 
     public List<CustomerDto> getCustomersDto() {
@@ -29,6 +38,33 @@ public class CustomerService {
                 .stream()
                 .map(customerMapper::map)
                 .collect(Collectors.toList());
+    }
+
+    public List<CustomerDto> getCustomerDtoBodyNumberMarkAndModelOfCheckedCar() {
+        List<CustomerDto> databaseCustomerDto = customerRepository.findAll()
+                .stream()
+                .map(customerMapper::map)
+                .collect(Collectors.toList());
+        addBodyNumberCarModelAndMarkToResultList(databaseCustomerDto);
+        return databaseCustomerDto;
+    }
+
+    private void addBodyNumberCarModelAndMarkToResultList(List<CustomerDto> databaseCollection) {
+        Set<CarDto> databaseCarsDto;
+        for (CustomerDto customerDto : databaseCollection) {
+            Integer customerId = customerDto.getId();
+            databaseCarsDto = carRepository
+                    .findCarsByCustomerId(customerId)
+                    .stream()
+                    .map(carMapper::map)
+                    .collect(Collectors.toSet());
+            //customerDto.setCars(databaseCarsDto);
+            if (databaseCarsDto.iterator().hasNext()) {
+                customerDto.setBodyNumber(databaseCarsDto.iterator().next().getBodyNumber());
+                customerDto.setCarMark(databaseCarsDto.iterator().next().getMark());
+                customerDto.setCarModel(databaseCarsDto.iterator().next().getModel());
+            }
+        }
     }
 
     public CustomerDto getCustomerDtoByTinNumber(Integer tinNumber) {

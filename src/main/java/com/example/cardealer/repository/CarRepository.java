@@ -1,8 +1,6 @@
 package com.example.cardealer.repository;
 
 import com.example.cardealer.model.Car;
-import com.example.cardealer.model.dtos.CarDto;
-import com.example.cardealer.model.dtos.OwnerDto;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
@@ -48,6 +46,10 @@ public interface CarRepository extends JpaRepository<Car, Integer> {
 
     @Query("select c from Car c where c.regNumber = ?1")
     Optional<Car> findCarByRegNumber(String regNumber);
+
+    @Query("select c from Car c join Customer cc on cc.id = ?1")
+    List<Car> findCarsByCustomerId(Integer customerId);
+
 
     @Query("select c from Car c where c.bodyNumber = ?1")
     Optional<Car> findCarByBodyNumber(String bodyNumber);

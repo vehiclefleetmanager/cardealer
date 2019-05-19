@@ -85,7 +85,7 @@ public class CarService {
                 .collect(Collectors.toList());
     }
 
-    public List<CarDto> getCarsAndOwnersName() {
+    public List<CarDto> getCarsDtoAndOwnersName() {
         List<CarDto> databaseCarsDto = carRepository
                 .findAll()
                 .stream()
@@ -105,8 +105,8 @@ public class CarService {
         return databaseCarsDto;
     }
 
-    private void addFirstAndLastNameByOwner(List<CarDto> databaseCarsDto) {
-        for (CarDto carDto : databaseCarsDto) {
+    private void addFirstAndLastNameByOwner(List<CarDto> databaseCollection) {
+        for (CarDto carDto : databaseCollection) {
             Integer ownerId = carDto.getOwnerId();
             OwnerDto databaseOwnerDto = ownerRepository
                     .getOwnerById(ownerId)

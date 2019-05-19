@@ -39,13 +39,13 @@ public class WorkerController {
 
     @GetMapping("/cars")
     public String getAllCarsInWorkerPanel(Model model) {
-        model.addAttribute("cars", carService.getCarsAndOwnersName());
+        model.addAttribute("cars", carService.getCarsDtoAndOwnersName());
         return "worker/cars";
     }
 
     @GetMapping("/customers")
     public String getAllCustomersInWorkerPanel(Model model) {
-        model.addAttribute("customers", customerService.getCustomersDto());
+        model.addAttribute("customers", customerService.getCustomerDtoBodyNumberMarkAndModelOfCheckedCar());
         return "worker/customers";
     }
 

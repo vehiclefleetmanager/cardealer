@@ -6,6 +6,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.util.Date;
+import java.util.Set;
 
 @Data
 @Builder
@@ -21,4 +22,8 @@ public class CustomerDto {
     private Integer phoneNumber;
     private Date testingDate;
     private String email;
+    private Set<CarDto> cars;
+    private String bodyNumber;
+    private String carModel;
+    private String carMark;
 }

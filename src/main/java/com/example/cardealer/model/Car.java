@@ -84,6 +84,14 @@ public class Car implements Serializable {
     @JoinColumn(name = "owner_id")
     private Integer ownerId;
 
+
+    @ManyToMany
+    @JoinTable(name = "cars_customers", joinColumns = {
+            @JoinColumn(name = "car_id")},
+            inverseJoinColumns = {@JoinColumn(name = "customer_id")})
+    private Set<Customer> customers;
+
+
     @OneToMany(mappedBy = "car", cascade = CascadeType.ALL)
     private Set<Event> events;
 
