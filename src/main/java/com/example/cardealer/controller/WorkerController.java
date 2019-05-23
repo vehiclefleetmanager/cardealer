@@ -36,6 +36,48 @@ public class WorkerController {
         this.ownerService = ownerService;
     }
 
+    @GetMapping("/transactions")
+    public String getPageToSetTransactionInWorkerPanel(Model model) {
+        model.addAttribute("title", "wybierz transkacje do wykonania");
+        return "worker/transactions";
+    }
+
+    @GetMapping("/sellCar")
+    public String getAllCarsToSellInWorkerPanel(Model model) {
+        model.addAttribute("title", "dokonaj sprzedaży pojazdu");
+        model.addAttribute("cars", carService.getAvailableCarsWithOwnerPersonalData());
+        return "worker/sellCar";
+    }
+
+    /*@GetMapping("/{id}/sellCar")
+    public String doSellCar(@PathVariable Integer id, Model model){
+        Car databaseCar = carService.getCar(id);
+        databaseCar.setStatus(Car.Status.SOLD);
+        model.addAttribute("car", carService.getCar(id))
+    }*/
+
+    @GetMapping("/acceptCar")
+    public String getAllCarsToAcceptInWorkerPanel(Model model) {
+        model.addAttribute("title", "dokonaj przyjęcia auta do oferty komisu");
+        model.addAttribute("cars", carService.getWaitingCarsWithOwnerPersonalData());
+        return "worker/acceptCar";
+    }
+
+    @GetMapping("/{id}/acceptCar")
+    public String doAcceptCar(@PathVariable Integer id) {
+        Car databaseCar = carService.getCar(id);
+        databaseCar.setStatus(Car.Status.AVAILABLE);
+        carService.save(databaseCar);
+        return "redirect: /acceptCar";
+    }
+
+    @GetMapping("/{id}/rejectCar")
+    public String doRejectCar(@PathVariable Integer id) {
+        Car databaseCar = carService.getCar(id);
+        databaseCar.setStatus(Car.Status.REJECTED);
+        carService.save(databaseCar);
+        return "redirect: /acceptCar";
+    }
 
     @GetMapping("/cars")
     public String getAllCarsInWorkerPanel(Model model) {

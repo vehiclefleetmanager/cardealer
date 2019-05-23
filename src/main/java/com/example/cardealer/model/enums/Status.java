@@ -4,7 +4,8 @@ public enum Status {
     WAIT("Oczekujący"),
     AVAILABLE("Dostępny"),
     SOLD("Sprzedany"),
-    BOUGHT("Kupiony");
+    BOUGHT("Kupiony"),
+    REJECTED("Odrzucony");
 
     private String status;
 

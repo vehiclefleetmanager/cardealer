@@ -134,7 +134,8 @@ public class Car implements Serializable {
         WAIT("Oczekujący"),
         AVAILABLE("Dostępny"),
         SOLD("Sprzedany"),
-        BOUGHT("Kupiony");
+        BOUGHT("Kupiony"),
+        REJECTED("Odrzucony");
 
         private String status;
 

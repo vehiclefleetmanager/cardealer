@@ -55,10 +55,30 @@ public class CarService {
 
     public List<CarDto> getAvailableCars() {
         return carRepository
-                .findCarsByStatusIsAvailable(Car.Status.AVAILABLE)
+                .findCarsByStatus(Car.Status.AVAILABLE)
                 .stream()
                 .map(carMapper::map)
                 .collect(Collectors.toList());
+    }
+
+    public List<CarDto> getAvailableCarsWithOwnerPersonalData() {
+        List<CarDto> databaseCars = carRepository
+                .findCarsByStatus(Car.Status.AVAILABLE)
+                .stream()
+                .map(carMapper::map)
+                .collect(Collectors.toList());
+        addFirstAndLastNameByOwner(databaseCars);
+        return databaseCars;
+    }
+
+    public List<CarDto> getWaitingCarsWithOwnerPersonalData() {
+        List<CarDto> databaseCars = carRepository
+                .findCarsByStatus(Car.Status.WAIT)
+                .stream()
+                .map(carMapper::map)
+                .collect(Collectors.toList());
+        addFirstAndLastNameByOwner(databaseCars);
+        return databaseCars;
     }
 
     public List<CarDto> getCarsDtoByMark(String mark) {
@@ -220,7 +240,6 @@ public class CarService {
     public void updateTestDrive(Car car) {
         car.setTestDrive(car.getTestDrive() + 1);
     }
-
 
 
 

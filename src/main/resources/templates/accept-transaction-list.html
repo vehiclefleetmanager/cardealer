@@ -1,0 +1,40 @@
+<div class="container" th:fragment="accept-transaction-list" xmlns:th="http://www.thymeleaf.org">
+    <div class="row">
+        <div class="col-sm-12 text-center">
+            <div class="table-responsive ">
+                <table class="table table-striped table-sm text-center">
+                    <thead>
+                    <tr>
+                        <th>Numer nadwozia</th>
+                        <th>Marka</th>
+                        <th>Model</th>
+                        <th>Status</th>
+                        <th>Właściciel</th>
+                        <th></th>
+                        <th></th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr th:each="car : ${cars}">
+                        <td style="font-size: 18px;" th:text="${car.getBodyNumber()}"></td>
+                        <td style="font-size: 18px;" th:text="${car.getMark()}"></td>
+                        <td style="font-size: 18px;" th:text="${car.getModel()}"></td>
+                        <td style="font-size: 18px;" th:text="${car.getStatus().getStatus()}"></td>
+                        <td style="font-size: 18px;" th:text="${car.getFirstName()}+' '+${car.getLastName()}"></td>
+                        <td>
+                            <a class="nav-link" th:href="@{'/'+ ${car.getId()} + '/acceptCar'}">
+                                <button class="btn btn-outline-info" type="button">PRZYJMIJ</button>
+                            </a>
+                        </td>
+                        <td>
+                            <a class="nav-link" th:href="@{'/'+ ${car.getId()} + '/rejectCar'}">
+                                <button class="btn btn-outline-danger" type="button">ODRZUĆ</button>
+                            </a>
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>

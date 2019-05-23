@@ -41,9 +41,6 @@ public interface CarRepository extends JpaRepository<Car, Integer> {
     @Query("select distinct c.productionYear from Car c order by c.productionYear asc")
     List<Integer> findProductionYear();
 
-    @Query("select c from Car c where c.status = ?1")
-    List<Car> findCarsByStatusIsAvailable(Car.Status status);
-
     @Query("select c from Car c where c.regNumber = ?1")
     Optional<Car> findCarByRegNumber(String regNumber);
 
