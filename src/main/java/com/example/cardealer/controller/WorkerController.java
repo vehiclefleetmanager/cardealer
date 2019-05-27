@@ -3,7 +3,9 @@ package com.example.cardealer.controller;
 import com.example.cardealer.model.Car;
 import com.example.cardealer.model.Customer;
 import com.example.cardealer.model.Event;
+import com.example.cardealer.model.Owner;
 import com.example.cardealer.model.dtos.EventDto;
+import com.example.cardealer.model.dtos.OwnerDto;
 import com.example.cardealer.model.enums.Transaction;
 import com.example.cardealer.service.*;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -36,6 +38,13 @@ public class WorkerController {
         this.ownerService = ownerService;
     }
 
+    @GetMapping("/agreements")
+    public String getPageToShowAgreementsInWorkerPanel(Model model) {
+        model.addAttribute("title", "lista zawartych umów przekazania do serwisu");
+        model.addAttribute("agreements", agreementService.getAgreementsDto());
+        return "worker/agreements";
+    }
+
     @GetMapping("/transactions")
     public String getPageToSetTransactionInWorkerPanel(Model model) {
         model.addAttribute("title", "wybierz transkacje do wykonania");
@@ -49,12 +58,30 @@ public class WorkerController {
         return "worker/sellCar";
     }
 
-    /*@GetMapping("/{id}/sellCar")
-    public String doSellCar(@PathVariable Integer id, Model model){
-        Car databaseCar = carService.getCar(id);
-        databaseCar.setStatus(Car.Status.SOLD);
-        model.addAttribute("car", carService.getCar(id))
-    }*/
+    @GetMapping("/sellCar/{id}")
+    public String getFormToChangeOwner(@PathVariable Integer id, Model model) {
+        model.addAttribute("car", carService.getCar(id));
+        model.addAttribute("person", new Owner());
+        return "new-owner-add";
+    }
+
+    @PostMapping("/addNewOwner")
+    public String doChangeOwnerInConnectionSell(@ModelAttribute("ownerDto") OwnerDto ownerDto) {
+        ownerDto.setStatus(Owner.Status.PRESENT);
+        Owner owner = ownerService.addOwner(ownerDto);
+       /* Set<Car> cars = owner.getCars();
+        for(Car car : cars){
+            System.out.println(car);
+        }*/
+        Integer ownerId = owner.getOwnerId();
+        return "redirect:/update-car/" + ownerId;
+    }
+
+    @GetMapping("/update-car/{ownerId}")
+    public String getFormToUpdatePriceCar(@PathVariable Integer ownerId, Model model) {
+        Car carByOwnerId = carService.getCarByOwnerId(ownerId);
+        return "/";
+    }
 
     @GetMapping("/acceptCar")
     public String getAllCarsToAcceptInWorkerPanel(Model model) {
@@ -63,20 +90,24 @@ public class WorkerController {
         return "worker/acceptCar";
     }
 
-    @GetMapping("/{id}/acceptCar")
-    public String doAcceptCar(@PathVariable Integer id) {
-        Car databaseCar = carService.getCar(id);
-        databaseCar.setStatus(Car.Status.AVAILABLE);
-        carService.save(databaseCar);
-        return "redirect: /acceptCar";
+    @GetMapping("/details/{id}")
+    public String showDetailsCarBeforeAccept(@PathVariable Integer id, Model model) {
+        model.addAttribute("carDto", carService.getCar(id));
+        return "details";
     }
 
-    @GetMapping("/{id}/rejectCar")
+    @GetMapping("/acceptCar/{id}")
+    public String doAcceptCar(@PathVariable Integer id) {
+        carService.addingCarToOfferCommission(id);
+        return "redirect:/worker/acceptCar";
+    }
+
+    @GetMapping("/rejectCar/{id}")
     public String doRejectCar(@PathVariable Integer id) {
         Car databaseCar = carService.getCar(id);
         databaseCar.setStatus(Car.Status.REJECTED);
         carService.save(databaseCar);
-        return "redirect: /acceptCar";
+        return "redirect:/worker/acceptCar";
     }
 
     @GetMapping("/cars")

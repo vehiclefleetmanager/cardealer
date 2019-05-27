@@ -85,7 +85,7 @@ public class IndexController {
 
     @PostMapping("/{ownerId}/addCar")
     public String doAddNewCar(@ModelAttribute("carDto") CarDto carDto, @PathVariable Integer ownerId) {
-        OwnerDto databaseOwner = ownerService.getOwnerById(ownerId);
+        /*  OwnerDto databaseOwner = ownerService.getOwnerById(ownerId);*/
         carDto.setStatus(Car.Status.WAIT);
         carDto.setOwnerId(ownerId);
         carDto.setTestDrive(0);

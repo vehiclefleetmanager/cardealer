@@ -1,3 +1,4 @@
+<!--
 <!doctype html>
 <html xmlns:th="http://www.w3.org/1999/xhtml" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
       lang="en"
@@ -24,9 +25,9 @@
                                 th:value="${type}"
                                 th:text="${type.getType()}"></option>
                     </select>
-                    <!--<div class="input-group-prepend">-->
+                    &lt;!&ndash;<div class="input-group-prepend">&ndash;&gt;
                     <button class="btn btn-outline-secondary" type="submit" id="button-addon2">Wyświetl</button>
-                    <!--</div>-->
+                    &lt;!&ndash;</div>&ndash;&gt;
                 </div>
             </form>
         </div>
@@ -74,10 +75,10 @@
                 <td th:style="${#httpServletRequest.getRequestURI().startsWith('/worker/show/car?transaction=RENOUNCEMENT') ? 'display:none':''}">
                     <a class="nav-link" th:href="@{'/worker/'+${car.id}+'/car-accept'}">
                         <button class="btn btn-outline-success" type="button">DODAJ <br/>DO OFERTY</button>
-                        <!--trzy butony i zależnie od tego co przyjdzie z adresu, wyświetla
-                        odpowiednią treść-->
+                        &lt;!&ndash;trzy butony i zależnie od tego co przyjdzie z adresu, wyświetla
+                        odpowiednią treść&ndash;&gt;
                     </a>
-                    <!--<a class="nav-link" th:href="@{'/worker/'+${car.id}+'/car-sale'}" >
+                    &lt;!&ndash;<a class="nav-link" th:href="@{'/worker/'+${car.id}+'/car-sale'}" >
                         <button class="btn btn-outline-success" type="button">DODAJ <br/>DO OFERTY</button>
                         &lt;!&ndash;trzy butony i zależnie od tego co przyjdzie z adresu, wyświetla
                         odpowiednią treść&ndash;&gt;
@@ -86,7 +87,7 @@
                         <button class="btn btn-outline-success" type="button">DODAJ <br/>DO OFERTY</button>
                         &lt;!&ndash;trzy butony i zależnie od tego co przyjdzie z adresu, wyświetla
                         odpowiednią treść&ndash;&gt;
-                    </a>-->
+                    </a>&ndash;&gt;
                 </td>
                 <td>
                     <a class="nav-link" th:href="@{'/worker/'+${car.id}+'/car-delete'}">
@@ -102,3 +103,4 @@
 
 </body>
 </html>
+-->

@@ -17,6 +17,12 @@ public interface CarRepository extends JpaRepository<Car, Integer> {
     @Query("select c.ownerId from Car c where c.id = ?1")
     Integer findOwnerIdByCarId(Integer carId);
 
+
+    Car findCarByOwnerId(Integer ownerId);
+
+    @Query("select c from Car c where c.id =?1")
+    Car findCarById(Integer id);
+
     List<Car> findCarsByMark(String mark);
 
     List<Car> findCarsByModel(String model);

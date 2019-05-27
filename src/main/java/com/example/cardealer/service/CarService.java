@@ -1,11 +1,18 @@
 package com.example.cardealer.service;
 
 import com.example.cardealer.mappers.CarMapper;
+import com.example.cardealer.mappers.CustomerMapper;
 import com.example.cardealer.mappers.OwnerMapper;
+import com.example.cardealer.model.Agreement;
 import com.example.cardealer.model.Car;
+import com.example.cardealer.model.Owner;
 import com.example.cardealer.model.dtos.CarDto;
+import com.example.cardealer.model.dtos.CustomerDto;
 import com.example.cardealer.model.dtos.OwnerDto;
+import com.example.cardealer.model.enums.Transaction;
+import com.example.cardealer.repository.AgreementRepository;
 import com.example.cardealer.repository.CarRepository;
+import com.example.cardealer.repository.CustomerRepository;
 import com.example.cardealer.repository.OwnerRepository;
 import lombok.Data;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,18 +28,27 @@ import java.util.stream.Collectors;
 public class CarService {
     private final CarRepository carRepository;
     private final OwnerRepository ownerRepository;
+    private final CustomerRepository customerRepository;
     private CarMapper carMapper;
     private OwnerMapper ownerMapper;
+    private CustomerMapper customerMapper;
+    private AgreementRepository agreementRepository;
 
     @Autowired
     public CarService(CarRepository carRepository,
-            OwnerRepository ownerRepository,
+                      OwnerRepository ownerRepository,
+                      CustomerRepository customerRepository,
+                      AgreementRepository agreementRepository,
                       CarMapper carMapper,
-                      OwnerMapper ownerMapper) {
+                      OwnerMapper ownerMapper,
+                      CustomerMapper customerMapper) {
         this.carRepository = carRepository;
         this.ownerRepository = ownerRepository;
+        this.customerRepository = customerRepository;
+        this.agreementRepository = agreementRepository;
         this.carMapper = carMapper;
         this.ownerMapper = ownerMapper;
+        this.customerMapper = customerMapper;
     }
 
     public List<CarDto> getCarsDto() {
@@ -51,6 +67,30 @@ public class CarService {
                 .stream()
                 .map(carMapper::map)
                 .collect(Collectors.toList());
+    }
+
+    public void addingCarToOfferCommission(Integer id) {
+        Car databaseCar = carRepository.findCarById(id);
+        databaseCar.setStatus(Car.Status.AVAILABLE);
+
+        Optional<Owner> databaseOwner = ownerRepository.getOwnerById(databaseCar.getOwnerId());
+        CustomerDto customerDto = new CustomerDto();
+        if (databaseOwner.isPresent()) {
+            customerDto.setLastName(databaseOwner.get().getLastName());
+            customerDto.setFirstName(databaseOwner.get().getFirstName());
+            customerDto.setAddress(databaseOwner.get().getAddress());
+            customerDto.setPesel(String.valueOf(databaseOwner.get().getPesel().longValue()));
+            customerDto.setTin(String.valueOf(databaseOwner.get().getTin()));
+            customerRepository.save(customerMapper.reverse(customerDto));
+        }
+        Agreement agreement = new Agreement();
+        agreement.setCar(databaseCar);
+        agreement.setCustomer(customerMapper.reverse(customerDto));
+        agreement.setContent("Umowa odstąpienie pojazdu do komisu");
+        agreement.setTransaction(Transaction.RENOUNCEMENT);
+        agreementRepository.save(agreement);
+        carRepository.save(databaseCar);
+
     }
 
     public List<CarDto> getAvailableCars() {
@@ -79,6 +119,11 @@ public class CarService {
                 .collect(Collectors.toList());
         addFirstAndLastNameByOwner(databaseCars);
         return databaseCars;
+    }
+
+    public Car getCarByOwnerId(Integer ownerId) {
+        return carRepository.findCarByOwnerId(ownerId);
+
     }
 
     public List<CarDto> getCarsDtoByMark(String mark) {
@@ -192,6 +237,7 @@ public class CarService {
     public Integer getOwnerIdByCarId(Integer carId) {
         return carRepository.findOwnerIdByCarId(carId);
     }
+
    /* public List<Car> findCarByTransactionLike(Transaction transaction) {
         return eventRepository.findByTransaction(transaction);
     }
@@ -240,7 +286,4 @@ public class CarService {
     public void updateTestDrive(Car car) {
         car.setTestDrive(car.getTestDrive() + 1);
     }
-
-
-
 }

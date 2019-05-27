@@ -43,7 +43,7 @@ public class Agreement {
     private Set<Invoice> invoices;
 
 
-    public Set<Invoice> getIvoices() {
+    public Set<Invoice> getInvoices() {
         if (invoices == null) {
             invoices = new HashSet<>();
         }

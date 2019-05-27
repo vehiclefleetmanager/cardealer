@@ -21,7 +21,7 @@
                         <td style="font-size: 18px;" th:text="${car.getStatus().getStatus()}"></td>
                         <td style="font-size: 18px;" th:text="${car.getFirstName()}+' '+${car.getLastName()}"></td>
                         <td>
-                            <a class="nav-link" th:href="@{${car.getId()} + '/sellCar'}">
+                            <a class="nav-link" th:href="@{'/worker/sellCar/' + ${car.getId()}}">
                                 <button class="btn btn-outline-info" type="button">SPRZEDAJ</button>
                             </a>
                         </td>

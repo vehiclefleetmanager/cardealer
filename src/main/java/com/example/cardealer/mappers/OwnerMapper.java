@@ -14,8 +14,8 @@ public class OwnerMapper implements Mapper<Owner, OwnerDto> {
                 .firstName(from.getFirstName())
                 .lastName(from.getLastName())
                 .phoneNumber(from.getPhoneNumber())
-                .pesel(from.getPesel())
-                .tin(from.getTin())
+                .pesel(String.valueOf(from.getPesel()))
+                .tin(String.valueOf(from.getTin()))
                 .email(from.getEmail())
                 .status(from.getStatus())
                 .build();
@@ -29,11 +29,10 @@ public class OwnerMapper implements Mapper<Owner, OwnerDto> {
                 .address(to.getAddress())
                 .phoneNumber(to.getPhoneNumber())
                 .lastName(to.getLastName())
-                .pesel(to.getPesel())
-                .tin(to.getTin())
+                .pesel(Long.valueOf(to.getPesel()))
+                .tin(Long.valueOf(to.getTin()))
                 .email(to.getEmail())
                 .status(to.getStatus())
-
                 .build();
     }
 }

@@ -19,8 +19,8 @@ public class OwnerDto {
     private String lastName;
     private String firstName;
     private String address;
-    private Long tin;
-    private Long pesel;
+    private String tin;
+    private String pesel;
     private String phoneNumber;
     private String email;
     private List<Car> cars;

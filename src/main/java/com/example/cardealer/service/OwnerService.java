@@ -37,9 +37,9 @@ public class OwnerService {
                     o.setAddress(ownerDto.getAddress());
                     o.setFirstName(ownerDto.getFirstName());
                     o.setLastName(ownerDto.getLastName());
-                    o.setPesel(ownerDto.getPesel());
+                    o.setPesel(Long.valueOf(ownerDto.getPesel()));
                     o.setPhoneNumber(ownerDto.getPhoneNumber());
-                    o.setTin(ownerDto.getTin());
+                    o.setTin(Long.valueOf(ownerDto.getTin()));
                     ownerRepository.save(o);
                 });
     }

@@ -22,12 +22,17 @@
                         <td style="font-size: 18px;" th:text="${car.getStatus().getStatus()}"></td>
                         <td style="font-size: 18px;" th:text="${car.getFirstName()}+' '+${car.getLastName()}"></td>
                         <td>
-                            <a class="nav-link" th:href="@{'/'+ ${car.getId()} + '/acceptCar'}">
-                                <button class="btn btn-outline-info" type="button">PRZYJMIJ</button>
+                            <a class="nav-link" th:href="@{'/worker/details/' + ${car.getId()}}">
+                                <button class="btn btn-outline-info" type="button">PODGLĄD AUTA</button>
                             </a>
                         </td>
                         <td>
-                            <a class="nav-link" th:href="@{'/'+ ${car.getId()} + '/rejectCar'}">
+                            <a class="nav-link" th:href="@{'/worker/acceptCar/' + ${car.getId()}}">
+                                <button class="btn btn-outline-success" type="button">PRZYJMIJ</button>
+                            </a>
+                        </td>
+                        <td>
+                            <a class="nav-link" th:href="@{'/worker/rejectCar/'+ ${car.getId()}}">
                                 <button class="btn btn-outline-danger" type="button">ODRZUĆ</button>
                             </a>
                         </td>
