@@ -12,6 +12,7 @@
                         <th>Właściciel</th>
                         <th></th>
                         <th></th>
+                        <th></th>
                     </tr>
                     </thead>
                     <tbody>
@@ -23,7 +24,7 @@
                         <td style="font-size: 18px;" th:text="${car.getFirstName()}+' '+${car.getLastName()}"></td>
                         <td>
                             <a class="nav-link" th:href="@{'/worker/details/' + ${car.getId()}}">
-                                <button class="btn btn-outline-info" type="button">PODGLĄD AUTA</button>
+                                <button class="btn btn-outline-info" type="button">PODGLĄD</button>
                             </a>
                         </td>
                         <td>

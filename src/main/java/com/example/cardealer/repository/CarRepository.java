@@ -61,4 +61,5 @@ public interface CarRepository extends JpaRepository<Car, Integer> {
     @Modifying
     @Query("delete from Car c where c.regNumber = ?1")
     void deleteByRegNumber(String regNumber);
+
 }

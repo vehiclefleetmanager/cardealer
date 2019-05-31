@@ -7,6 +7,7 @@ import com.example.cardealer.model.Agreement;
 import com.example.cardealer.model.dtos.AgreementDto;
 import com.example.cardealer.model.dtos.CarDto;
 import com.example.cardealer.model.dtos.CustomerDto;
+import com.example.cardealer.model.enums.Transaction;
 import com.example.cardealer.repository.AgreementRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -46,7 +47,27 @@ public class AgreementService {
         return databaseAgreement;
     }
 
-    private void addPersonalDataCustomerAndBasicCarInfo(List<AgreementDto> databaseCollection) {
+    public List<AgreementDto> getAgreementsDtoByRenouncement() {
+        List<AgreementDto> databaseAgreement = agreementRepository
+                .findAgreementByTransaction(Transaction.RENOUNCEMENT)
+                .stream()
+                .map(agreementMapper::map)
+                .collect(Collectors.toList());
+        addPersonalDataCustomerAndBasicCarInfo(databaseAgreement);
+        return databaseAgreement;
+    }
+
+    public List<AgreementDto> getAgreementsDtoBySell() {
+        List<AgreementDto> databaseAgreement = agreementRepository
+                .findAgreementByTransaction(Transaction.SALE)
+                .stream()
+                .map(agreementMapper::map)
+                .collect(Collectors.toList());
+        addPersonalDataCustomerAndBasicCarInfo(databaseAgreement);
+        return databaseAgreement;
+    }
+
+    private void  addPersonalDataCustomerAndBasicCarInfo(List<AgreementDto> databaseCollection) {
         for (AgreementDto agreementDto : databaseCollection) {
             CarDto carDto = carMapper.map(agreementDto.getCar());
             agreementDto.setCarBodyNumber(carDto.getBodyNumber());

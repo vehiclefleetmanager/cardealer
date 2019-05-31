@@ -1,11 +1,15 @@
 package com.example.cardealer.model;
 
+import com.example.cardealer.model.enums.Transaction;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
+import java.math.BigDecimal;
 import java.time.LocalDate;
+import java.util.Date;
 
 /**
  * This class describes the Invoices in the application.
@@ -13,12 +17,11 @@ import java.time.LocalDate;
 
 @Builder
 @AllArgsConstructor
+@NoArgsConstructor
 @Data
 @Entity
 @Table(name = "invoices")
 public class Invoice {
-
-    private static Integer number = 1;
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -27,21 +30,33 @@ public class Invoice {
     @Column(unique = true)
     private String invoiceNumber;
 
-    @ManyToOne
-    @JoinColumn(name = "agreement_id")
+    @Column(name = "price")
+    private BigDecimal price;
+
+    @Column(name = "place_of_issue")
+    private String placeOfIssue;
+
+    @Column(name = "date_of_issue")
+    private Date dateOfIssue;
+
+    @Enumerated(EnumType.STRING)
+    private Transaction transaction;
+
+    @ManyToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "agreement_id", referencedColumnName = "id")
     private Agreement agreements;
 
-    @ManyToOne
-    @JoinColumn(name = "worker_id")
+    @ManyToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "worker_id", referencedColumnName = "id")
     private Worker worker;
 
 
-    public Invoice() {
+    /*public Invoice() {
+        int invoiceNumber = id;
         String actualYear = String.valueOf(LocalDate.now().getYear());
-        String actualMonth = String.valueOf(LocalDate.now().getMonth());
-        this.invoiceNumber = number.toString() +
+        String actualMonth = String.valueOf(LocalDate.now().getMonth().ordinal()+1);
+        this.invoiceNumber = invoiceNumber +
                 "/" + actualMonth + "/" + actualYear;
-        number++;
-    }
+    }*/
 
 }

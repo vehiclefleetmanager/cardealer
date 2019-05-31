@@ -19,7 +19,7 @@ public class CustomerDto {
     private String address;
     private String tin;
     private String pesel;
-    private Integer phoneNumber;
+    private String phoneNumber;
     private Date testingDate;
     private String email;
     private Set<CarDto> cars;

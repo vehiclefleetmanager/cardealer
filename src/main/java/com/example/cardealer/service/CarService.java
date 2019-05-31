@@ -3,17 +3,12 @@ package com.example.cardealer.service;
 import com.example.cardealer.mappers.CarMapper;
 import com.example.cardealer.mappers.CustomerMapper;
 import com.example.cardealer.mappers.OwnerMapper;
-import com.example.cardealer.model.Agreement;
-import com.example.cardealer.model.Car;
-import com.example.cardealer.model.Owner;
+import com.example.cardealer.model.*;
 import com.example.cardealer.model.dtos.CarDto;
 import com.example.cardealer.model.dtos.CustomerDto;
 import com.example.cardealer.model.dtos.OwnerDto;
 import com.example.cardealer.model.enums.Transaction;
-import com.example.cardealer.repository.AgreementRepository;
-import com.example.cardealer.repository.CarRepository;
-import com.example.cardealer.repository.CustomerRepository;
-import com.example.cardealer.repository.OwnerRepository;
+import com.example.cardealer.repository.*;
 import lombok.Data;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -29,6 +24,7 @@ public class CarService {
     private final CarRepository carRepository;
     private final OwnerRepository ownerRepository;
     private final CustomerRepository customerRepository;
+    private final InvoiceRepository invoiceRepository;
     private CarMapper carMapper;
     private OwnerMapper ownerMapper;
     private CustomerMapper customerMapper;
@@ -39,6 +35,7 @@ public class CarService {
                       OwnerRepository ownerRepository,
                       CustomerRepository customerRepository,
                       AgreementRepository agreementRepository,
+                      InvoiceRepository invoiceRepository,
                       CarMapper carMapper,
                       OwnerMapper ownerMapper,
                       CustomerMapper customerMapper) {
@@ -46,6 +43,7 @@ public class CarService {
         this.ownerRepository = ownerRepository;
         this.customerRepository = customerRepository;
         this.agreementRepository = agreementRepository;
+        this.invoiceRepository = invoiceRepository;
         this.carMapper = carMapper;
         this.ownerMapper = ownerMapper;
         this.customerMapper = customerMapper;
@@ -69,10 +67,55 @@ public class CarService {
                 .collect(Collectors.toList());
     }
 
+    public void sellingCar(Owner owner, Car car) {
+        CarDto carDto = carMapper.map(car);
+        owner.setStatus(Owner.Status.PRESENT);
+        Owner saveOwnerDto = ownerRepository.save(owner);
+        saveOwnerDto.getOwnerId();
+
+        carDto.setId(car.getId());
+        carDto.setStatus(Car.Status.SOLD);
+        carDto.setPrice(car.getPrice());
+        carDto.setFirstName(saveOwnerDto.getFirstName());
+        carDto.setLastName(saveOwnerDto.getLastName());
+        carDto.setAddress(saveOwnerDto.getAddress());
+        carDto.setPesel(saveOwnerDto.getPesel());
+        carDto.setTin(saveOwnerDto.getTin());
+        carDto.setEmail(saveOwnerDto.getEmail());
+        carDto.setPhoneNumber(saveOwnerDto.getPhoneNumber());
+        carDto.setTransaction(Transaction.SALE);
+        Car updateCar = carRepository.save(carMapper.reverse(carDto));
+
+        Customer customer = new Customer();
+        customer.setFirstName(owner.getFirstName());
+        customer.setLastName(owner.getLastName());
+        customer.setAddress(owner.getAddress());
+        customer.setPesel(String.valueOf(owner.getPesel()));
+        customer.setTin(String.valueOf(owner.getTin()));
+        customer.setEmail(owner.getEmail());
+        customer.setPhoneNumber(owner.getPhoneNumber());
+        Customer saveNewCustomer = customerRepository.save(customer);
+
+        Agreement agreement = new Agreement();
+        agreement.setCar(updateCar);
+        agreement.setCustomer(saveNewCustomer);
+        agreement.setContent("Umowa sprzedaży samochodu. "
+                +updateCar.getMark()+" "
+                +updateCar.getModel()+" "
+                +updateCar.getBodyNumber()+" "
+                +updateCar.getRegNumber());
+        agreement.setTransaction(Transaction.SALE);
+        Agreement saveNewAgreement = agreementRepository.save(agreement);
+
+        Invoice invoice = new Invoice();
+        invoice.setAgreements(saveNewAgreement);
+        invoiceRepository.save(invoice);
+
+    }
+
     public void addingCarToOfferCommission(Integer id) {
         Car databaseCar = carRepository.findCarById(id);
         databaseCar.setStatus(Car.Status.AVAILABLE);
-
         Optional<Owner> databaseOwner = ownerRepository.getOwnerById(databaseCar.getOwnerId());
         CustomerDto customerDto = new CustomerDto();
         if (databaseOwner.isPresent()) {
@@ -90,7 +133,6 @@ public class CarService {
         agreement.setTransaction(Transaction.RENOUNCEMENT);
         agreementRepository.save(agreement);
         carRepository.save(databaseCar);
-
     }
 
     public List<CarDto> getAvailableCars() {
@@ -232,6 +274,10 @@ public class CarService {
 
     public Car getCar(Integer id) {
         return carRepository.findById(id).get();
+    }
+
+    public CarDto getCarDto(Integer id){
+        return carMapper.map(carRepository.findCarById(id));
     }
 
     public Integer getOwnerIdByCarId(Integer carId) {

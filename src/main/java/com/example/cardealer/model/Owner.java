@@ -46,7 +46,7 @@ public class Owner {
     @Column(name = "e_mail", unique = true)
     private String email;
 
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "ownerId")
+    @OneToMany(mappedBy = "ownerId", cascade = CascadeType.ALL)
     private Set<Car> cars;
 
     public enum Status {

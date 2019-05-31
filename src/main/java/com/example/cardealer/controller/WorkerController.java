@@ -4,6 +4,7 @@ import com.example.cardealer.model.Car;
 import com.example.cardealer.model.Customer;
 import com.example.cardealer.model.Event;
 import com.example.cardealer.model.Owner;
+import com.example.cardealer.model.dtos.CarDto;
 import com.example.cardealer.model.dtos.EventDto;
 import com.example.cardealer.model.dtos.OwnerDto;
 import com.example.cardealer.model.enums.Transaction;
@@ -24,25 +25,61 @@ public class WorkerController {
     private final EventService eventService;
     private final AgreementService agreementService;
     private final OwnerService ownerService;
+    private final InvoiceService invoiceService;
 
     @Autowired
     public WorkerController(CustomerService customerService,
                             CarService carService,
                             EventService eventService,
                             AgreementService agreementService,
-                            OwnerService ownerService) {
+                            OwnerService ownerService,
+                            InvoiceService invoiceService) {
         this.customerService = customerService;
         this.carService = carService;
         this.eventService = eventService;
         this.agreementService = agreementService;
         this.ownerService = ownerService;
+        this.invoiceService = invoiceService;
     }
 
     @GetMapping("/agreements")
     public String getPageToShowAgreementsInWorkerPanel(Model model) {
+        model.addAttribute("title", "wybierz rodzaj umowy");
+        return "worker/agreement";
+    }
+
+    @GetMapping("/cession")
+    public String getPageToShowCessionsAgreements(Model model){
         model.addAttribute("title", "lista zawartych umów przekazania do serwisu");
-        model.addAttribute("agreements", agreementService.getAgreementsDto());
+        model.addAttribute("agreements", agreementService.getAgreementsDtoByRenouncement());
         return "worker/agreements";
+    }
+
+    @GetMapping("/sell")
+    public String getPageToShowSellAgreements(Model model){
+        model.addAttribute("title", "lista zawartych umów sprzedaży");
+        model.addAttribute("agreements", agreementService.getAgreementsDtoBySell());
+        return "worker/agreements";
+    }
+
+    @GetMapping("/invoices")
+    public String getPageToShowInvoices(Model model){
+        model.addAttribute("title", "wybierz rodzaj faktury");
+        return "worker/invoice";
+    }
+
+    @GetMapping("/selling")
+    public String getPageToShowSalesInvoice(Model model){
+        model.addAttribute("title", "lista faktur sprzedaży");
+        model.addAttribute("invoices", invoiceService.getInvoiceDtoBySold());
+        return "worker/invoices";
+    }
+
+    @GetMapping("/buying")
+    public String getPageToShowPurchaseInvoice(Model model){
+        model.addAttribute("title", "lista faktur zakupu");
+        model.addAttribute("invoices", invoiceService.getInvoiceDtoByBought());
+        return "worker/invoices";
     }
 
     @GetMapping("/transactions")
@@ -60,27 +97,48 @@ public class WorkerController {
 
     @GetMapping("/sellCar/{id}")
     public String getFormToChangeOwner(@PathVariable Integer id, Model model) {
-        model.addAttribute("car", carService.getCar(id));
+        model.addAttribute("carDto", carService.getCarDto(id));
         model.addAttribute("person", new Owner());
         return "new-owner-add";
     }
 
-    @PostMapping("/addNewOwner")
-    public String doChangeOwnerInConnectionSell(@ModelAttribute("ownerDto") OwnerDto ownerDto) {
-        ownerDto.setStatus(Owner.Status.PRESENT);
-        Owner owner = ownerService.addOwner(ownerDto);
-       /* Set<Car> cars = owner.getCars();
-        for(Car car : cars){
-            System.out.println(car);
-        }*/
-        Integer ownerId = owner.getOwnerId();
-        return "redirect:/update-car/" + ownerId;
+    @PostMapping("/sell/{id}")
+    public String doSellCar(
+            @PathVariable Integer id,
+            @ModelAttribute("person") Owner owner,
+            @ModelAttribute("carDto") Car car) {
+        carService.sellingCar(owner, carService.getCar(id));
+        return "redirect:/worker/sellCar";
     }
 
-    @GetMapping("/update-car/{ownerId}")
-    public String getFormToUpdatePriceCar(@PathVariable Integer ownerId, Model model) {
-        Car carByOwnerId = carService.getCarByOwnerId(ownerId);
-        return "/";
+    @GetMapping("/buyCar")
+    public String getFormToAddCar(Model model){
+        model.addAttribute("person", new OwnerDto());
+        return "person-add";
+    }
+
+    @PostMapping("/addPerson")
+    public String doAddNewOwner(@ModelAttribute("ownerDto") OwnerDto ownerDto) {
+        ownerDto.setStatus(Owner.Status.PRESENT);
+        Owner owner = ownerService.addOwner(ownerDto);
+        Integer ownerId = owner.getOwnerId();
+        return "redirect:/" + ownerId + "/add-car";
+    }
+
+    @GetMapping("/{ownerId}/add-car")
+    public String getPageForRegisterNewCarView(@PathVariable Integer ownerId, Model model) {
+        model.addAttribute("carDto", new CarDto());
+        model.addAttribute("owner", ownerService.getOwnerById(ownerId));
+        return "add-car";
+    }
+
+    @PostMapping("/{ownerId}/addCar")
+    public String doAddNewCar(@ModelAttribute("carDto") CarDto carDto, @PathVariable Integer ownerId) {
+        carDto.setStatus(Car.Status.BOUGHT);
+        carDto.setOwnerId(ownerId);
+        carDto.setTestDrive(0);
+        carService.addCar(carDto);
+        return "redirect:/worker/transactions";
     }
 
     @GetMapping("/acceptCar")
@@ -88,12 +146,6 @@ public class WorkerController {
         model.addAttribute("title", "dokonaj przyjęcia auta do oferty komisu");
         model.addAttribute("cars", carService.getWaitingCarsWithOwnerPersonalData());
         return "worker/acceptCar";
-    }
-
-    @GetMapping("/details/{id}")
-    public String showDetailsCarBeforeAccept(@PathVariable Integer id, Model model) {
-        model.addAttribute("carDto", carService.getCar(id));
-        return "details";
     }
 
     @GetMapping("/acceptCar/{id}")
@@ -108,6 +160,12 @@ public class WorkerController {
         databaseCar.setStatus(Car.Status.REJECTED);
         carService.save(databaseCar);
         return "redirect:/worker/acceptCar";
+    }
+
+    @GetMapping("/details/{id}")
+    public String showDetailsCarBeforeAccept(@PathVariable Integer id, Model model) {
+        model.addAttribute("carDto", carService.getCar(id));
+        return "details";
     }
 
     @GetMapping("/cars")

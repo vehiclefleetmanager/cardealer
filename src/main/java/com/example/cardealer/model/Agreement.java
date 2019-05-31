@@ -39,11 +39,11 @@ public class Agreement {
     @Enumerated(EnumType.STRING)
     private Transaction transaction;
 
-    @OneToMany(mappedBy = "agreements")
+    @OneToMany(mappedBy = "agreements", cascade = CascadeType.ALL)
     private Set<Invoice> invoices;
 
 
-    public Set<Invoice> getInvoices() {
+    private Set<Invoice> getInvoices() {
         if (invoices == null) {
             invoices = new HashSet<>();
         }

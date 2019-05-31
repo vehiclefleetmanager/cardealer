@@ -54,20 +54,6 @@ public class IndexController {
         return "person-add";
     }
 
-    @GetMapping("/{carId}/more")
-    public String getPageWhereDisplayDetailsCar(@PathVariable Integer carId, Model model) {
-        model.addAttribute("customerDto", new CustomerDto());
-        model.addAttribute("carDto", carService.getCar(carId));
-        return "more";
-    }
-
-    @PostMapping("/addCustomer")
-    public String doAddNewCustomer(@ModelAttribute("customerDto") CustomerDto customerDto) {
-        customerService.addCustomer(customerDto);
-        customerDto.setTestingDate(new Date());
-        return "redirect:/";
-    }
-
     @PostMapping("/addPerson")
     public String doAddNewOwner(@ModelAttribute("ownerDto") OwnerDto ownerDto) {
         ownerDto.setStatus(Owner.Status.PRESENT);
@@ -90,6 +76,20 @@ public class IndexController {
         carDto.setOwnerId(ownerId);
         carDto.setTestDrive(0);
         carService.addCar(carDto);
+        return "redirect:/";
+    }
+
+    @GetMapping("/{carId}/more")
+    public String getPageWhereDisplayDetailsCar(@PathVariable Integer carId, Model model) {
+        model.addAttribute("customerDto", new CustomerDto());
+        model.addAttribute("carDto", carService.getCar(carId));
+        return "more";
+    }
+
+    @PostMapping("/addCustomer")
+    public String doAddNewCustomer(@ModelAttribute("customerDto") CustomerDto customerDto) {
+        customerService.addCustomer(customerDto);
+        customerDto.setTestingDate(new Date());
         return "redirect:/";
     }
 

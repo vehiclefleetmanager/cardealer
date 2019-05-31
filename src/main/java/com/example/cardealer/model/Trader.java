@@ -15,9 +15,7 @@ import javax.persistence.Table;
 @Table(name = "traders")
 public class Trader extends Worker {
 
-    private static Integer traderNumber = 0;
 
-    public Trader() {
-        traderNumber++;
-    }
+    public Trader(){}
+
 }

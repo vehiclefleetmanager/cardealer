@@ -17,7 +17,7 @@ public class AgreementMapper implements Mapper<Agreement, AgreementDto> {
                 .customer(from.getCustomer())
                 .car(from.getCar())
                 .transaction(from.getTransaction())
-                .invoiceList(new ArrayList<>(from.getInvoices()))
+                //.invoiceList(new ArrayList<>(from.getInvoices()))
                 .build();
     }
 
@@ -29,7 +29,7 @@ public class AgreementMapper implements Mapper<Agreement, AgreementDto> {
                 .customer(to.getCustomer())
                 .car(to.getCar())
                 .transaction(to.getTransaction())
-                .invoices(new HashSet<>(to.getInvoiceList()))
+                //.invoices(new HashSet<>(to.getInvoiceList()))
                 .build();
     }
 }

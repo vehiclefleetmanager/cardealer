@@ -85,7 +85,7 @@ public class Car implements Serializable {
     private Integer ownerId;
 
 
-    @ManyToMany
+    @ManyToMany(cascade = CascadeType.ALL)
     @JoinTable(name = "cars_customers", joinColumns = {
             @JoinColumn(name = "car_id")},
             inverseJoinColumns = {@JoinColumn(name = "customer_id")})

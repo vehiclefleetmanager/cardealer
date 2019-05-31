@@ -40,7 +40,7 @@ public class CarDto {
     private Long tin;
     private Long pesel;
     private String phoneNumber;
-
+    private String email;
     private String eventDate;
 
     private Transaction transaction;

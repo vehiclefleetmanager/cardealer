@@ -10,6 +10,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.util.List;
+import java.util.Set;
 
 @Builder
 @NoArgsConstructor
@@ -21,7 +22,7 @@ public class AgreementDto {
     private Customer customer;
     private Car car;
     private Transaction transaction;
-    private List<Invoice> invoiceList;
+    private Set<Invoice> invoiceList;
     private String carMark;
     private String carModel;
     private String carBodyNumber;

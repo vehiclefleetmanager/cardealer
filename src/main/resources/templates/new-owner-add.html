@@ -10,10 +10,11 @@
 <div class="container">
     <div class="row">
         <div class="col-md-10 text-center offset-md-2">
-            <h4 class="mb-3">Informacje o właścicielu</h4>
-            <form class="needs-validation" novalidate th:action="@{'/addNewOwner'}"
+            <h4 class="mb-3">Podaj informacje o sprzedawanym samochodzie</h4>
+            <form class="needs-validation" novalidate th:action="@{'/worker/sell/'+${carDto.getId()}}"
                   th:method="post" th:object="${person}">
-                <input hidden name="ownerId" th:object="${car}" th:value="${car.setOwnerId(person.getOwnerId())}">
+                <input hidden name="ownerId" th:object="${carDto}" th:value="${carDto.setOwnerId(person.getOwnerId())}">
+                <h5>Nowy właściciel pojazdu</h5>
                 <div class="row">
                     <div class="col-md-6 mb-3">
                         <label for="firstName"></label>
@@ -82,9 +83,21 @@
                         </div>
                     </div>
                 </div>
+                <h5>Kwota za jaką pojazd zostaje sprzedany</h5>
+                <div class="row">
+                    <div class="col-md-4 mb-3">
+                        <label for="price"></label>
+                        <input class="form-control" id="price" name="price" placeholder="Cena pojazdu" required
+                               th:value="${carDto.getPrice()}"
+                               type="text">
+                        <div class="invalid-feedback">
+                            Valid pesel is required.
+                        </div>
+                    </div>
+                </div>
                 <div class="col-md-6 mb-3 offset-sm-3">
                     <label for="send"></label>
-                    <button class="btn btn-secondary btn-lg btn-block" id="send" type="submit">Dodaj właściciela
+                    <button class="btn btn-secondary btn-lg btn-block" id="send" type="submit">Sprzedaj
                     </button>
                 </div>
                 <hr class="mb-4">
