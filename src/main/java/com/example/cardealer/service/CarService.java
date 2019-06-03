@@ -14,6 +14,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
+import java.time.LocalDate;
+import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -69,9 +71,14 @@ public class CarService {
 
     public void sellingCar(Owner owner, Car car) {
         CarDto carDto = carMapper.map(car);
+
+        Integer presentOwnerId = carDto.getOwnerId();
+        Optional<Owner> presentOwner = ownerRepository.getOwnerById(presentOwnerId);
+        presentOwner.ifPresent(o -> o.setStatus(Owner.Status.ABSENT));
+        presentOwner.ifPresent(ownerRepository::save);
+
         owner.setStatus(Owner.Status.PRESENT);
         Owner saveOwnerDto = ownerRepository.save(owner);
-        saveOwnerDto.getOwnerId();
 
         carDto.setId(car.getId());
         carDto.setStatus(Car.Status.SOLD);
@@ -108,9 +115,27 @@ public class CarService {
         Agreement saveNewAgreement = agreementRepository.save(agreement);
 
         Invoice invoice = new Invoice();
+        invoice.setDateOfIssue(new Date());
+        invoice.setPrice(updateCar.getPrice());
+        invoice.setPlaceOfIssue("Nazwa miasta");
+        invoice.setTransaction(Transaction.SALE);
         invoice.setAgreements(saveNewAgreement);
-        invoiceRepository.save(invoice);
+        Invoice invoiceDatabase = invoiceRepository.save(invoice);
+        invoice.setInvoiceNumber(getInvoiceNumber(invoiceDatabase));
+        invoiceRepository.save(invoiceDatabase);
+    }
 
+    private String getInvoiceNumber(Invoice invoiceDatabase) {
+        String getActualMonth = String.valueOf(LocalDate.now().getMonth().ordinal() + 1);
+        String getActualYear = String.valueOf(LocalDate.now().getYear());
+        String getActualTransaction = String.valueOf(invoiceDatabase.getTransaction());
+        return invoiceDatabase.getId().toString()
+                .concat("/")
+                .concat(getActualMonth)
+                .concat("/")
+                .concat(getActualYear)
+                .concat("/")
+                .concat(getActualTransaction);
     }
 
     public void addingCarToOfferCommission(Integer id) {
