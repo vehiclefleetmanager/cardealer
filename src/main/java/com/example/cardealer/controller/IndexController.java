@@ -1,6 +1,7 @@
 package com.example.cardealer.controller;
 
 import com.example.cardealer.model.Car;
+import com.example.cardealer.model.Customer;
 import com.example.cardealer.model.Owner;
 import com.example.cardealer.model.dtos.CarDto;
 import com.example.cardealer.model.dtos.CustomerDto;
@@ -14,7 +15,6 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import java.math.BigDecimal;
-import java.util.Date;
 
 /*Kontroler którego zadaniem jest porzedstawienie
 oferty komisu na stronie głownej*/
@@ -86,10 +86,15 @@ public class IndexController {
         return "more";
     }
 
-    @PostMapping("/addCustomer")
-    public String doAddNewCustomer(@ModelAttribute("customerDto") CustomerDto customerDto) {
-        customerService.addCustomer(customerDto);
-        customerDto.setTestingDate(new Date());
+    @PostMapping("/addCustomer/{carId}")
+    public String doAddNewCustomer(@PathVariable Integer carId, @ModelAttribute("customerDto") CustomerDto customerDto) {
+        Customer databaseCustomer = customerService.addCustomer(customerDto);
+        customerService.addInterestedCustomer(databaseCustomer, carId);
+
+       /* Car car = carService.getCar(carId);
+        databaseCustomer.addCar(car);
+        car.addCustomer(databaseCustomer);
+        //customerDto.setTestingDate(new Date());*/
         return "redirect:/";
     }
 

@@ -17,7 +17,6 @@ public interface CarRepository extends JpaRepository<Car, Integer> {
     @Query("select c.ownerId from Car c where c.id = ?1")
     Integer findOwnerIdByCarId(Integer carId);
 
-
     Car findCarByOwnerId(Integer ownerId);
 
     @Query("select c from Car c where c.id =?1")
@@ -50,8 +49,16 @@ public interface CarRepository extends JpaRepository<Car, Integer> {
     @Query("select c from Car c where c.regNumber = ?1")
     Optional<Car> findCarByRegNumber(String regNumber);
 
-    @Query("select c from Car c join Customer cc on cc.id = ?1")
-    List<Car> findCarsByCustomerId(Integer customerId);
+    @Query("select c from Car c inner join Customer cc on c.id = cc.id")
+    List<Car> findCarsByCustomerId();
+
+    @Query("select car from " +
+            "Car car, Customer cust " +
+            "join car.customers cu " +
+            "join cust.cars ca " +
+            "where ca.id = car.id " +
+            "and cu.id = ?1")
+    Optional<Car> findCarByInterestedCustomer(Integer id);
 
 
     @Query("select c from Car c where c.bodyNumber = ?1")
@@ -61,5 +68,4 @@ public interface CarRepository extends JpaRepository<Car, Integer> {
     @Modifying
     @Query("delete from Car c where c.regNumber = ?1")
     void deleteByRegNumber(String regNumber);
-
 }

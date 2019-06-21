@@ -72,10 +72,7 @@ public class CarService {
     public void sellingCar(Owner owner, Car car) {
         CarDto carDto = carMapper.map(car);
 
-        Integer presentOwnerId = carDto.getOwnerId();
-        Optional<Owner> presentOwner = ownerRepository.getOwnerById(presentOwnerId);
-        presentOwner.ifPresent(o -> o.setStatus(Owner.Status.ABSENT));
-        presentOwner.ifPresent(ownerRepository::save);
+        changeOwnerStatus(carDto);
 
         owner.setStatus(Owner.Status.PRESENT);
         Owner saveOwnerDto = ownerRepository.save(owner);
@@ -114,15 +111,26 @@ public class CarService {
         agreement.setTransaction(Transaction.SALE);
         Agreement saveNewAgreement = agreementRepository.save(agreement);
 
+        createAndSaveNewInvoice(updateCar, saveNewAgreement);
+    }
+
+    private void createAndSaveNewInvoice(Car updateCar, Agreement saveNewAgreement) {
         Invoice invoice = new Invoice();
         invoice.setDateOfIssue(new Date());
         invoice.setPrice(updateCar.getPrice());
-        invoice.setPlaceOfIssue("Nazwa miasta");
+        invoice.setPlaceOfIssue("San Escobar");
         invoice.setTransaction(Transaction.SALE);
         invoice.setAgreements(saveNewAgreement);
         Invoice invoiceDatabase = invoiceRepository.save(invoice);
         invoice.setInvoiceNumber(getInvoiceNumber(invoiceDatabase));
         invoiceRepository.save(invoiceDatabase);
+    }
+
+    private void changeOwnerStatus(CarDto carDto) {
+        Integer presentOwnerId = carDto.getOwnerId();
+        Optional<Owner> presentOwner = ownerRepository.getOwnerById(presentOwnerId);
+        presentOwner.ifPresent(o -> o.setStatus(Owner.Status.ABSENT));
+        presentOwner.ifPresent(ownerRepository::save);
     }
 
     private String getInvoiceNumber(Invoice invoiceDatabase) {
@@ -154,7 +162,7 @@ public class CarService {
         Agreement agreement = new Agreement();
         agreement.setCar(databaseCar);
         agreement.setCustomer(customerMapper.reverse(customerDto));
-        agreement.setContent("Umowa odstąpienie pojazdu do komisu");
+        agreement.setContent("Umowa odstąpienia pojazdu do komisu");
         agreement.setTransaction(Transaction.RENOUNCEMENT);
         agreementRepository.save(agreement);
         carRepository.save(databaseCar);

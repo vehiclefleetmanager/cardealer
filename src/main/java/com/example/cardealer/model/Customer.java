@@ -11,7 +11,8 @@ import java.util.Set;
  */
 @EqualsAndHashCode(callSuper = true)
 @Builder
-@Data
+@Getter
+@Setter
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
@@ -34,12 +35,15 @@ public class Customer extends Person {
     @OneToMany(mappedBy = "customer", cascade = CascadeType.ALL)
     private Set<Event> events;
 
+    public Set<Car> getCars() {
+        if (this.cars == null) {
+            this.cars = new HashSet<>();
+        }
+        return this.cars;
+    }
 
     public void addCar(Car car) {
-        if (cars == null) {
-            cars = new HashSet<>();
-        }
-        cars.add(car);
+        getCars().add(car);
     }
 
     public void addEvent(Event event) {
@@ -54,5 +58,13 @@ public class Customer extends Person {
             agreements = new HashSet<>();
         }
         agreements.add(agreement);
+    }
+
+    @Override
+    public String toString() {
+        return "Customer{" +
+                "tin='" + tin + '\'' +
+                ", pesel='" + pesel + '\'' +
+                '}';
     }
 }

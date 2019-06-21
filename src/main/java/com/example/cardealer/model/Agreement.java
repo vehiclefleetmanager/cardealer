@@ -1,10 +1,7 @@
 package com.example.cardealer.model;
 
 import com.example.cardealer.model.enums.Transaction;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import javax.persistence.*;
 import java.util.HashSet;
@@ -16,7 +13,8 @@ import java.util.Set;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-@Data
+@Getter
+@Setter
 @Entity
 @Table(name = "agreements")
 public class Agreement {
@@ -55,4 +53,14 @@ public class Agreement {
         invoice.setId(this.getId());
     }
 
+    @Override
+    public String toString() {
+        return "Agreement{" +
+                "id=" + id +
+                ", content='" + content + '\'' +
+                ", customer=" + customer +
+                ", car=" + car +
+                ", transaction=" + transaction +
+                '}';
+    }
 }

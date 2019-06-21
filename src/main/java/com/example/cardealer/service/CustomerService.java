@@ -2,6 +2,7 @@ package com.example.cardealer.service;
 
 import com.example.cardealer.mappers.CarMapper;
 import com.example.cardealer.mappers.CustomerMapper;
+import com.example.cardealer.model.Car;
 import com.example.cardealer.model.Customer;
 import com.example.cardealer.model.dtos.CarDto;
 import com.example.cardealer.model.dtos.CustomerDto;
@@ -11,7 +12,6 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
-import java.util.Set;
 import java.util.stream.Collectors;
 
 @Service
@@ -41,7 +41,7 @@ public class CustomerService {
     }
 
     public List<CustomerDto> getCustomerDtoBodyNumberMarkAndModelOfCheckedCar() {
-        List<CustomerDto> databaseCustomerDto = customerRepository.findAll()
+        List<CustomerDto> databaseCustomerDto = customerRepository.findCustomersByInterestedCar()
                 .stream()
                 .map(customerMapper::map)
                 .collect(Collectors.toList());
@@ -50,20 +50,15 @@ public class CustomerService {
     }
 
     private void addBodyNumberCarModelAndMarkToResultList(List<CustomerDto> databaseCollection) {
-        Set<CarDto> databaseCarsDto;
         for (CustomerDto customerDto : databaseCollection) {
             Integer customerId = customerDto.getId();
-            databaseCarsDto = carRepository
-                    .findCarsByCustomerId(customerId)
-                    .stream()
+            CarDto databaseCarDto = carRepository
+                    .findCarByInterestedCustomer(customerId)
                     .map(carMapper::map)
-                    .collect(Collectors.toSet());
-            //customerDto.setCars(databaseCarsDto);
-            if (databaseCarsDto.iterator().hasNext()) {
-                customerDto.setBodyNumber(databaseCarsDto.iterator().next().getBodyNumber());
-                customerDto.setCarMark(databaseCarsDto.iterator().next().getMark());
-                customerDto.setCarModel(databaseCarsDto.iterator().next().getModel());
-            }
+                    .get();
+            customerDto.setBodyNumber(databaseCarDto.getBodyNumber());
+            customerDto.setCarMark(databaseCarDto.getMark());
+            customerDto.setCarModel(databaseCarDto.getModel());
         }
     }
 
@@ -124,4 +119,10 @@ public class CustomerService {
         }
     }
 
+    public void addInterestedCustomer(Customer databaseCustomer, Integer carId) {
+        Car databaseCar = carRepository.findCarById(carId);
+        databaseCustomer.addCar(databaseCar);
+        databaseCar.addCustomer(databaseCustomer);
+        customerRepository.save(databaseCustomer);
+    }
 }

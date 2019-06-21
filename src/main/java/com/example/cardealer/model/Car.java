@@ -1,9 +1,6 @@
 package com.example.cardealer.model;
 
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import javax.persistence.*;
 import java.io.Serializable;
@@ -16,7 +13,8 @@ import java.util.Set;
  */
 
 @Builder
-@Data
+@Getter
+@Setter
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
@@ -94,6 +92,17 @@ public class Car implements Serializable {
 
     @OneToMany(mappedBy = "car", cascade = CascadeType.ALL)
     private Set<Event> events;
+
+    public Set<Customer> getCustomers() {
+        if (customers == null) {
+            customers = new HashSet<>();
+        }
+        return customers;
+    }
+
+    public void addCustomer(Customer customer) {
+        getCustomers().add(customer);
+    }
 
 
     public enum Transmission {
@@ -180,5 +189,28 @@ public class Car implements Serializable {
             events = new HashSet<>();
         }
         events.add(event);
+    }
+
+    @Override
+    public String toString() {
+        return "Car{" +
+                "id=" + id +
+                ", bodyNumber='" + bodyNumber + '\'' +
+                ", productionYear=" + productionYear +
+                ", mark='" + mark + '\'' +
+                ", model='" + model + '\'' +
+                ", ocNumber='" + ocNumber + '\'' +
+                ", regNumber='" + regNumber + '\'' +
+                ", fuelType=" + fuelType +
+                ", status=" + status +
+                ", distance=" + distance +
+                ", bodyType=" + bodyType +
+                ", capacityEngine=" + capacityEngine +
+                ", powerEngine=" + powerEngine +
+                ", transmission=" + transmission +
+                ", description='" + description + '\'' +
+                ", testDrive=" + testDrive +
+                ", price=" + price +
+                '}';
     }
 }

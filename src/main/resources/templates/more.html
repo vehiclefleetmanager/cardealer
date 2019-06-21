@@ -116,7 +116,8 @@
             </p>
             <div class="collapse" id="collapseExample">
                 <div class="card card-body">
-                    <form th:action="@{/addCustomer}" th:method="post" th:object="${customerDto}">
+                    <form th:action="@{'/addCustomer/' + ${carDto.getId()}}" th:method="post"
+                          th:object="${customerDto}">
                         <div class="form-row">
                             <p>Wypełnij poniższy formularz i prześlij go do AutoKomis.pl,
                                 a skonaktujemy się z Tobą celem umówienia na jazdę próbną.</p>
