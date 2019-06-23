@@ -11,6 +11,7 @@ public class CustomerMapper implements Mapper<Customer, CustomerDto> {
         return CustomerDto.builder()
                 .id(from.getId())
                 .address(from.getAddress())
+                .email(from.getEmail())
                 .firstName(from.getFirstName())
                 .lastName(from.getLastName())
                 .pesel(from.getPesel())

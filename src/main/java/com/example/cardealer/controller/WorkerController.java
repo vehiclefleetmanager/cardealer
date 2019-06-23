@@ -175,9 +175,23 @@ public class WorkerController {
     }
 
     @GetMapping("/customers")
-    public String getAllCustomersInWorkerPanel(Model model) {
+    public String getPageToShowCustomers(Model model) {
+        model.addAttribute("title", "klienci komisu");
+        return "worker/customer";
+    }
+
+    @GetMapping("/all-customers")
+    public String getPageToShowAllCustomers(Model model) {
+        model.addAttribute("title", "lista wszystkich klientów komisu");
+        model.addAttribute("customers", customerService.getCustomersDto());
+        return "worker/all-customers";
+    }
+
+    @GetMapping("/interested-customers")
+    public String getPageToShowInterestedCustomers(Model model) {
+        model.addAttribute("title", "klienci zaintersowani ofertą komisu");
         model.addAttribute("customers", customerService.getCustomerDtoBodyNumberMarkAndModelOfCheckedCar());
-        return "worker/customers";
+        return "worker/int-customers";
     }
 
     @GetMapping("/{id}/person-update")

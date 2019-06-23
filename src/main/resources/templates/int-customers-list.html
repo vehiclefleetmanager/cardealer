@@ -1,4 +1,4 @@
-<div class="container" th:fragment="all-customers-list" xmlns:th="http://www.thymeleaf.org">
+<div class="container" th:fragment="int-customers-list" xmlns:th="http://www.thymeleaf.org">
     <div class="row">
         <div class="col-sm-12 text-center">
             <div class="table-responsive ">
@@ -9,9 +9,9 @@
                         <th>Nazwisko</th>
                         <th>E-mail</th>
                         <th>Telefon</th>
-                        <th>Pesel</th>
-                        <th>NIP</th>
-                        <th>Adres</th>
+                        <th>Numer nadwozia</th>
+                        <th>Marka</th>
+                        <th>Model</th>
                         <th></th>
                         <th></th>
                     </tr>
@@ -22,9 +22,9 @@
                         <td style="font-size: 18px;" th:text="${c.getLastName()}"></td>
                         <td style="font-size: 18px;" th:text="${c.getEmail()}"></td>
                         <td style="font-size: 18px;" th:text="${c.getPhoneNumber()}"></td>
-                        <td style="font-size: 18px;" th:text="${c.getPesel()}"></td>
-                        <td style="font-size: 18px;" th:text="${c.getTin()}"></td>
-                        <td style="font-size: 18px;" th:text="${c.getAddress()}"></td>
+                        <td style="font-size: 18px;" th:text="${c.getBodyNumber()}"></td>
+                        <td style="font-size: 18px;" th:text="${c.getCarMark()}"></td>
+                        <td style="font-size: 18px;" th:text="${c.getCarModel()}"></td>
                         <td>
                             <a class="nav-link" th:href="@{'/worker/'+${c.getId()}+'/person-update'}">
                                 <button class="btn btn-outline-info" type="button">EDYTUJ</button>
