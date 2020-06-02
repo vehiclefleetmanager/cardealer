@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="fragments/header :: header"></head>
+<body>
+<div th:replace="fragments/top-nav :: top-nav"></div>
+<div class="container">
+    <div class="row">
+        <div class="col-md-12">
+            <div style="width: 200px; margin: 15% auto">
+                <div class="login-form">
+                    <form th:action="@{/register}" th:enctype="utf8" th:method="post" th:object="${newUser}">
+                        <div class="form-group">
+                            <div class="input-group">
+                                <input class="form-control" placeholder="Imię" required="required"
+                                       th:field="*{firstName}"/>
+                                <p th:each="error: ${#fields.errors('firstName')}"
+                                   th:text="${error}">Validation error</p>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <div class="input-group">
+                                <input class="form-control" placeholder="Nazwisko" required="required"
+                                       th:field="*{lastName}"/>
+                                <p th:each="error : ${#fields.errors('lastName')}"
+                                   th:text="${error}">Validation error</p>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <input class="form-control" placeholder="E-mail" required="required" th:field="*{email}"
+                                   type="email"/>
+                            <p th:each="error : ${#fields.errors('email')}"
+                               th:text="${error}">Validation error</p>
+                        </div>
+                        <div class="form-group">
+                            <input class="form-control" placeholder="Telefon" required="required"
+                                   th:field="*{phoneNumber}"
+                                   type="phone"/>
+                            <p th:each="error : ${#fields.errors('phoneNumber')}"
+                               th:text="${error}">Validation error</p>
+                        </div>
+                        <div class="form-group">
+                            <input class="form-control" placeholder="Hasło" required="required" th:field="*{password}"
+                                   type="password"/>
+                            <p th:each="error : ${#fields.errors('password')}"
+                               th:text="${error}">Validation error</p>
+                        </div>
+                        <div class="form-group">
+                            <input class="form-control" placeholder="Powtórz hasło" required="required"
+                                   th:field="*{confPass}"
+                                   type="password"/>
+                        </div>
+                        <div>
+                            <button class="btn btn-info" type="submit">Zarejestruj mnie</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+</body>
+</html>

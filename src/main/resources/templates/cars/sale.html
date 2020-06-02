@@ -1,0 +1,64 @@
+<!doctype html>
+<html lang="en" xmlns:sec="http://www.thymeleaf.org/extras/spring-security" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="fragments/header :: header"></head>
+<body>
+<div th:object="${currentUser}" th:replace="fragments/top-nav :: top-nav"></div>
+<div th:replace="fragments/sidebar :: sidebar"></div>
+<br>
+<br>
+<br>
+<div class="container">
+    <br>
+    <div class="col-md-10 offset-md-2" sec:authorize="hasAnyRole('ROLE_ADMIN', 'ROLE_WORKER')">
+        <form method="post" th:action="@{/cars/sale/}" th:object="${newSale}">
+            <div th:object="${customers}" th:replace="customers/sale-customers-list :: sale-customers-list"></div>
+            <br>
+            <div class="form-row">
+                <div class="form-group col-xl-3">
+                    <input class="form-control" hidden id="id" name="carId"
+                           th:value="${car.id} " type="number">
+                    <input class="form-control" id="mark" name="mark" placeholder="Marka pojazdu" readonly
+                           th:field="${car.mark}" type="text">
+                </div>
+                <div class="form-group col-xl-3">
+                    <input class="form-control" id="model" name="model" placeholder="Model pojazdu"
+                           readonly
+                           th:field="${car.model}" type="text">
+                </div>
+                <div class="form-group col-xl-3">
+                    <input class="form-control" id="productionYear" name="productionYear"
+                           placeholder="Rok produkcji"
+                           readonly
+                           th:field="${car.productionYear}" type="number">
+                </div>
+                <div class="form-group col-xl-3">
+                    <input class="form-control" id="bodyNumber" name="bodyNumber" placeholder="Numer nadwozia"
+                           readonly
+                           th:field="${car.bodyNumber}" type="text">
+                </div>
+            </div>
+            <div class="form-row">
+                <div class="form-group col-xl-3">
+                    <input class="form-control" id="price" min="5000" name="price"
+                           placeholder="Cena pojazdu" required th:field="${car.price}" type="number">
+                </div>
+            </div>
+            <br>
+
+            <button class="btn btn-success float-right m-1" onclick="return confirm('Potwierdź sprzedaż samochodu!')"
+                    type="submit">Generuj sprzedaż
+            </button>
+
+            <div class="float-right m-1 float-none" sec:authorize="hasAnyRole('ROLE_ADMIN','ROLE_WORKER')">
+                <a th:href="@{/customers}">
+                    <button class="btn btn-info float-right" type="button">
+                        Dodaj klienta
+                    </button>
+                </a>
+            </div>
+
+        </form>
+    </div>
+</div>
+</body>
+</html>

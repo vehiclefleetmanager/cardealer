@@ -17,7 +17,7 @@
     <div class="row">
         <div class="col-md-11 order-md-1">
             <h4 class="mb-3">Informacje o pojeździe</h4>
-            <form class="needs-validation" novalidate th:action="@{/worker/car-save}" method="post"
+            <form class="needs-validation" method="post" novalidate th:action="@{/employee/car-save}"
                   th:object="${car}">
                 <div class="row">
                     <div class="col-md-12 mb-3">
@@ -87,7 +87,7 @@
                         <label for="fuelType">Rodzaj paliwa</label>
                         <select id="fuelType" class="form-control" th:field="*{fuelType}">
                             <option selected="selected" value=" ">Wybierz...</option>
-                            <option th:each="type:${T(com.example.cardealer.model.enums.FuelType).values()}"
+                            <option th:each="type:${T(com.example.cardealer.utils.enums.FuelType).values()}"
                                     th:value="${type}"
                                     th:text="${type.getType()}"></option>
                         </select>
@@ -130,7 +130,7 @@
                         <label for="transmission">Rodzaj skrzyni biegów</label>
                         <select id="transmission" class="form-control" th:field="*{transmission}">
                             <option selected="selected" value=" ">Wybierz...</option>
-                            <option th:each="type:${T(com.example.cardealer.model.enums.Transmission).values()}"
+                            <option th:each="type:${T(com.example.cardealer.utils.enums.Transmission).values()}"
                                     th:value="${type}"
                                     th:text="${type.getType()}"></option>
                         </select>

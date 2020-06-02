@@ -1,0 +1,83 @@
+<!doctype html>
+<html lang="en" xmlns:sec="http://www.thymeleaf.org/extras/spring-security" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="fragments/header :: header"></head>
+<body>
+<div th:object="${currentUser}" th:replace="fragments/top-nav :: top-nav"></div>
+<div th:replace="fragments/sidebar :: sidebar"></div>
+<br>
+<br>
+<br>
+<div class="container">
+    <div class="col-md-10 offset-md-2">
+        <nav aria-label="breadcrumb">
+            <ol class="breadcrumb bg-white">
+                <li class="breadcrumb-item"><a th:href="@{/}"><i class="fas fa-warehouse"></i></a></li>
+                <li aria-current="page" class="breadcrumb-item active">Pracownicy</li>
+            </ol>
+        </nav>
+    </div>
+    <div class="col-md-10 offset-md-2" sec:authorize="hasAnyRole('ROLE_CLIENT')">
+        Ta część aplikacji wymaga podwyższonych uprawnień!
+    </div>
+    <div class="col-md-10 offset-md-2" sec:authorize="hasAnyRole('ROLE_ADMIN', 'ROLE_BOSS')">
+        <button class="btn btn-success" data-target="#addNewEmployee" data-toggle="modal" type="button">
+            Dodaj pracownika
+        </button>
+        <div class="modal fade-in" id="addNewEmployee">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title">Dodawanie pracownika komisu</h5>
+                    </div>
+                    <div class="modal-body">
+                        <form method="post" th:action="@{/employees}" th:object="${newEmployee}">
+                            <div class="form-row">
+                                <div class="form-group col-xl-4">
+                                    <input class="form-control" id="firstName" name="firstName" placeholder="Imię"
+                                           required type="text">
+                                </div>
+                                <div class="form-group col-xl-4">
+                                    <input class="form-control" id="lastName" name="lastName" placeholder="Nazwisko"
+                                           required type="text">
+                                </div>
+                                <div class="form-group col-xl-4">
+                                    <input class="form-control" id="phoneNumber" name="phoneNumber"
+                                           placeholder="Telefon"
+                                           required type="text">
+                                </div>
+                            </div>
+                            <div class="form-row">
+                                <div class="form-group col-xl-6">
+                                    <input class="form-control" id="email" name="email" placeholder="Email"
+                                           required type="email">
+                                </div>
+                                <div class="form-group col-xl-6">
+                                    <select class="form-control" id="roles" multiple name="roles" required>
+                                        <option th:value="WORKER">Pracownik</option>
+                                        <option th:value="MECHANIC">Mechanik</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <br>
+                            <div class="modal-footer">
+                                <button class="btn btn-outline-danger" data-dismiss="modal"
+                                        type="button">Zamknij
+                                </button>
+                                <button class="btn btn-outline-success" type="submit">Potwierdź
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <br>
+    <div class="offset-md-2" sec:authorize="hasAnyRole('ROLE_ADMIN','ROLE_BOSS')">
+        <div th:object="${employees}" th:replace="employees/employees-list :: employees-list"></div>
+    </div>
+</div>
+</div>
+</body>
+</html>

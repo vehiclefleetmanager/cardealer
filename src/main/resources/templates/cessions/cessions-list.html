@@ -1,0 +1,53 @@
+<div class="container" th:fragment="cessions-list" xmlns:th="http://www.thymeleaf.org">
+    <div class="row">
+        <div class="col-sm-12 text-center">
+            <div class="table-responsive ">
+                <table class="table table-striped table-sm text-center">
+                    <thead>
+                    <tr>
+                        <th>#</th>
+                        <th>Data</th>
+                        <th>Numer umowy</th>
+                        <th>Klient</th>
+                        <th>Samochód</th>
+                        <th>Podgląd</th>
+                        <th>Rodzaj</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr th:each="c : ${cessions}">
+                        <td style="font-size: 18px;" th:text="${c.getId()}"></td>
+                        <td style="font-size: 18px;" th:text="${c.getCreatedAt()}"></td>
+                        <td style="font-size: 18px;" th:text="${c.getAgreementNumber()}"></td>
+                        <td style="font-size: 18px;"
+                            th:text="${c.getCustomerFirstName()} + ' ' + ${c.getCustomerLastName()}"></td>
+                        <td style="font-size: 18px;" th:text="${c.getCarBodyNumber()}"></td>
+                        <td>
+                            <a>
+                                <button class="btn btn-outline-info" type="button">
+                                    <i class="far fa-eye"></i>
+                                </button>
+                            </a>
+                        </td>
+                        <td th:if="${c.getTransaction() eq 'CESSION'}">
+                            <span class="badge badge-pill badge-info">CESJA</span>
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+    <ul class="pagination justify-content-center" th:if="${pages.totalPages gt 1}">
+        <li class="page-item" th:if="${pages.hasPrevious()}">
+            <a class="page-link" th:href="@{/cessions(page=${pages.number-1})}">Poprzednia</a>
+        </li>
+        <li class="page-item" th:classappend="${currentPage} == ${i} ? 'active':''"
+            th:each="i: ${#numbers.sequence(0, pages.totalPages - 1)}">
+            <a class="page-link" th:href="@{/cessions(page=${i})}" th:text="${i+1}"></a>
+        </li>
+        <li class="page-item" th:if="${pages.hasNext()}">
+            <a class="page-link" th:href="@{/cessions(page=${pages.number+1})}">Następna</a>
+        </li>
+    </ul>
+</div>

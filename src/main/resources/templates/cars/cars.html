@@ -1,0 +1,200 @@
+<!doctype html>
+<html lang="en" xmlns:sec="http://www.thymeleaf.org/extras/spring-security"
+      xmlns:th="http://www.thymeleaf.org">
+<head th:replace="fragments/header :: header"></head>
+<body>
+<div th:object="${currentUser}" th:replace="fragments/top-nav :: top-nav"></div>
+<div th:replace="fragments/sidebar :: sidebar"></div>
+<br>
+<br>
+<br>
+<div class="container">
+    <div class="col-md-10 offset-md-2">
+        <nav aria-label="breadcrumb">
+            <ol class="breadcrumb bg-white">
+                <li class="breadcrumb-item"><a th:href="@{/}"><i class="fas fa-warehouse"></i></a></li>
+                <li aria-current="page" class="breadcrumb-item active">Samochody</li>
+            </ol>
+        </nav>
+    </div>
+    <div class="col-md-10 offset-md-2" sec:authorize="hasAnyRole('ROLE_CLIENT')">
+        Ta część aplikacji wymaga podwyższonych uprawnień!
+    </div>
+    <div class="col-md-10 offset-md-2" sec:authorize="hasAnyRole('ROLE_ADMIN', 'ROLE_WORKER')">
+        <button class="btn btn-success" data-target="#addNewCar" data-toggle="modal" type="button">
+            Dodaj samochód
+        </button>
+        <div class="modal fade-in" id="addNewCar">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title">Dodawanie samochodu do systemu</h5>
+                    </div>
+                    <div class="modal-body">
+                        <form th:action="@{/cars}"
+                              th:method="post"
+                              th:object="${newCessionEvent}">
+                            <!--Car-->
+                            <h6 class="modal-title">Dane samochodu</h6>
+                            <div class="form-row">
+                                <div class="form-group col-xl-6">
+                                    <input class="form-control" id="mark" name="mark" placeholder="Marka pojazdu"
+                                           required type="text">
+                                </div>
+                                <div class="form-group col-xl-6">
+                                    <input class="form-control" id="model" name="model" placeholder="Model pojazdu"
+                                           required type="text">
+                                </div>
+                                <div class="form-group col-xl-6">
+                                    <input class="form-control" id="bodyNumber" name="bodyNumber"
+                                           placeholder="Numer nadwozia"
+                                           required type="text">
+                                </div>
+                                <div class="form-group col-xl-6">
+                                    <input class="form-control" id="ocNumber" name="ocNumber" placeholder="Numer polisy"
+                                           required type="text">
+                                </div>
+                            </div>
+                            <div class="form-row">
+                                <div class="form-group col-xl-6">
+                                    <input class="form-control" id="distance" name="distance" placeholder="Przebieg"
+                                           required type="number">
+                                </div>
+
+                                <div class="form-group col-xl-6">
+                                    <input class="form-control" id="price" name="price" placeholder="Cena"
+                                           required type="number">
+                                </div>
+                                <div class="form-group col-xl-4">
+                                    <input class="form-control" id="productionYear" name="productionYear"
+                                           placeholder="Rok produkcji"
+                                           required type="number">
+                                </div>
+                                <div class="form-group col-xl-4">
+                                    <input class="form-control" id="capacityEngine" name="capacityEngine"
+                                           placeholder="Pojemność silnika"
+                                           required type="number">
+                                </div>
+                                <div class="form-group col-xl-4">
+                                    <input class="form-control" id="powerEngine" name="powerEngine"
+                                           placeholder="Moc silnika"
+                                           required type="number">
+                                </div>
+                            </div>
+                            <div class="form-row">
+                                <div class="form-group col-xl-4">
+                                    <select class="custom-select" id="fuelType" name="fuelType" required>
+                                        <option selected="selected" value=" ">Paliwo...</option>
+                                        <option th:each="type:${T(com.example.cardealer.utils.enums.FuelType).values()}"
+                                                th:text="${type.getType()}"
+                                                th:value="${type.name()}"></option>
+                                    </select>
+                                </div>
+                                <div class="form-group col-xl-4">
+                                    <select class="custom-select" id="bodyType" name="bodyType" required>
+                                        <option selected="selected" value=" ">Rodzaj nadwozia...</option>
+                                        <option th:each="type:${T(com.example.cardealer.utils.enums.BodyType).values()}"
+                                                th:text="${type.getType()}"
+                                                th:value="${type.name()}"></option>
+                                    </select>
+                                </div>
+                                <div class="form-group col-xl-4">
+                                    <select class="custom-select" id="transmission" name="transmission" required>
+                                        <option selected="selected" value=" ">Skrzynia biegów...</option>
+                                        <option th:each="type:${T(com.example.cardealer.utils.enums.Transmission).values()}"
+                                                th:text="${type.getType()}"
+                                                th:value="${type.name()}"></option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="form-row">
+                                <label for="description"></label>
+                                <textarea class="form-control" id="description" name="description" placeholder=""
+                                          required
+                                          rows="3"
+                                          type="text"></textarea>
+                            </div>
+                            <h6 class="modal-title">Dane właściciela</h6>
+                            <!--Owner Car-->
+                            <div class="form-row">
+                                <div class="form-group col-xl-4">
+                                    <input class="form-control" id="firstName" name="firstName" placeholder="Imię"
+                                           required type="text">
+                                </div>
+                                <div class="form-group col-xl-4">
+                                    <input class="form-control" id="lastName" name="lastName" placeholder="Nazwisko"
+                                           required type="text">
+                                </div>
+                                <div class="form-group col-xl-4">
+                                    <input class="form-control" id="phoneNumber" name="phoneNumber"
+                                           placeholder="Telefon"
+                                           required type="text">
+                                </div>
+                                <div class="form-group col-xl-12">
+                                    <input class="form-control" id="address" name="address"
+                                           placeholder="Adres"
+                                           required type="text">
+                                </div>
+                            </div>
+                            <div class="form-row">
+                                <div class="form-group col-xl-4">
+                                    <input class="form-control" id="tin" name="tin" placeholder="NIP"
+                                           required type="number">
+                                </div>
+                                <div class="form-group col-xl-4">
+                                    <input class="form-control" id="pesel" name="pesel" placeholder="Pesel"
+                                           required type="number">
+                                </div>
+                                <div class="form-group col-xl-4">
+                                    <input class="form-control" id="idNumber" name="idNumber"
+                                           placeholder="Dowód osobisty"
+                                           required type="text">
+                                </div>
+                                <div class="form-group col-xl-12">
+                                    <input class="form-control" id="email" name="email" placeholder="Email"
+                                           required type="email">
+                                </div>
+                            </div>
+                            <div class="modal-footer">
+                                <button class="btn btn-outline-danger" data-dismiss="modal" type="button">
+                                    Zamknij
+                                </button>
+                                <button class="btn btn-outline-success" type="submit">Potwierdź</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <br>
+    <div class="col-md-10 offset-md-2" sec:authorize="hasAnyRole('ROLE_ADMIN', 'ROLE_WORKER')">
+        <form th:action="@{/cars/search}" th:method="post">
+            <div class="input-group">
+                <div class="input-group-prepend">
+                    <select class="custom-select overflow-hidden" id="carMark" name="mark" type="text">
+                        <option selected value="">Marka</option>
+                        <option th:each="type:${markList}"
+                                th:text="${type}"
+                                th:value="${type}"></option>
+                    </select>
+                </div>
+                <div class="input-group-prepend">
+                    <input class="form-control" name="maxYear" placeholder="Rocznik maksymalny" type="text">
+                </div>
+                <div class="input-group-prepend">
+                    <input class="form-control" name="maxPrice" placeholder="Cena maksymalna" type="text">
+                </div>
+                <div class="input-group-prepend">
+                    <button class="btn btn-outline-secondary" id="button-addon2" type="submit">Filtruj
+                    </button>
+                </div>
+            </div>
+        </form>
+    </div>
+    <div class="offset-md-2" sec:authorize="hasAnyRole('ROLE_ADMIN', 'ROLE_WORKER')">
+        <div th:object="${cars}" th:replace="cars/cars-list :: cars-list"></div>
+    </div>
+</div>
+</body>
+</html>

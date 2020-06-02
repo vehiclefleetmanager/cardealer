@@ -8,24 +8,24 @@
   margin-bottom: 1.25rem;
   border: 1px solid #eee;
   border-left-width: .25rem;
-  border-radius: .25rem;
-}
+  @include border-radius();
 
-.bd-callout h4 {
-  margin-top: 0;
-  margin-bottom: .25rem;
-}
+  h4 {
+    margin-top: 0;
+    margin-bottom: .25rem;
+  }
 
-.bd-callout p:last-child {
-  margin-bottom: 0;
-}
+  p:last-child {
+    margin-bottom: 0;
+  }
 
-.bd-callout code {
-  border-radius: .25rem;
-}
+  code {
+    @include border-radius();
+  }
 
-.bd-callout + .bd-callout {
-  margin-top: -.25rem;
+  + .bd-callout {
+    margin-top: -.25rem;
+  }
 }
 
 // Variations

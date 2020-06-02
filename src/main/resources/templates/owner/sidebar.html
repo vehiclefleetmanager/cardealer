@@ -1,0 +1,143 @@
+<!--
+<nav class="col-md-2 d-none d-md-block bg-light sidebar" th:fragment="sidebar" xmlns:th="http://www.thymleaf.org"
+     xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+    <div class="sidebar-sticky">
+        <ul class="nav flex-column" sec:authorize="hasRole('ROLE_ADMIN')">
+            <h4 class="sidebar-heading d-flex justify-content-between align-items-center px-3 mt-4 mb-1 text-muted">
+                <span>Panel Administratora</span>
+                <a class="d-flex align-items-center text-muted" href="#">
+                    <span data-feather="plus-circle"></span>
+                </a>
+            </h4>
+        </ul>
+        <ul class="nav flex-column" sec:authorize="hasRole('ROLE_BOSS')">
+            <h4 class="sidebar-heading d-flex justify-content-between align-items-center px-3 mt-4 mb-1 text-muted">
+                <span>Panel Szefa</span>
+                <a class="d-flex align-items-center text-muted" href="#">
+                    <span data-feather="plus-circle"></span>
+                </a>
+            </h4>
+            <li class="nav-item ">
+                <a class="nav-link" th:href="@{'/invoices'}">
+                    <span data-feather="file"></span>
+                    Faktury
+                </a>
+            </li>
+            <li class="nav-item ">
+                <a class="nav-link" th:href="@{'/reports'}">
+                    <span data-feather="file"></span>
+                    Raporty
+                </a>
+            </li>
+            <li class="nav-item ">
+                <a class="nav-link" th:href="@{'/workers'}">
+                    <span data-feather="file"></span>
+                    Pracownicy
+                </a>
+            </li>
+
+        </ul>
+        <ul class="nav flex-column" sec:authorize="hasRole('ROLE_WORKER')">
+            <h4 class="sidebar-heading d-flex justify-content-between align-items-center px-3 mt-4 mb-1 text-muted">
+                <span>Panel Pracownika</span>
+                <a class="d-flex align-items-center text-muted" href="#">
+                    <span data-feather="plus-circle"></span>
+                </a>
+            </h4>
+            <li class="nav-item ">
+                <a class="nav-link" th:href="@{'/worker/agreements'}">
+                    <span data-feather="file"></span>
+                    Umowy
+                </a>
+            </li>
+            <li class="nav-item ">
+                <a class="nav-link" th:href="@{'/'}">
+                    <span data-feather="file"></span>
+
+                </a>
+            </li>
+            <li class="nav-item ">
+                <a class="nav-link" th:href="@{'/'}">
+                    <span data-feather="file"></span>
+                    Faktury
+                </a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" th:href="@{'/'}">
+                    <span data-feather="shopping-cart"></span>
+                    Dodaj samochód
+                </a>
+            </li>
+        </ul>
+        <ul class="nav flex-column" sec:authorize="hasRole('ROLE_MECHANIC')">
+            <h4 class="sidebar-heading d-flex justify-content-between align-items-center px-3 mt-4 mb-1 text-muted">
+                <span>Panel Mechanika</span>
+                <a class="d-flex align-items-center text-muted" href="#">
+                    <span data-feather="plus-circle"></span>
+                </a>
+            </h4>
+            <li class="nav-item ">
+                <a class="nav-link" th:href="@{'/worker/agreements'}">
+                    <span data-feather="file"></span>
+                    Edycja danych
+                </a>
+            </li>
+            <li class="nav-item ">
+                <a class="nav-link" th:href="@{'/'}">
+                    <span data-feather="file"></span>
+                    Umowy
+                </a>
+            </li>
+            <li class="nav-item ">
+                <a class="nav-link" th:href="@{'/'}">
+                    <span data-feather="file"></span>
+                    Faktury
+                </a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" th:href="@{'/'}">
+                    <span data-feather="shopping-cart"></span>
+                    Dodaj samochód
+                </a>
+            </li>
+        </ul>
+        <ul class="nav flex-column" sec:authorize="hasRole('ROLE_CLIENT')">
+            <h4 class="sidebar-heading d-flex justify-content-between align-items-center px-3 mt-4 mb-1 text-muted">
+                <span>Panel Klienta</span>
+                <a class="d-flex align-items-center text-muted" href="#">
+                    <span data-feather="plus-circle"></span>
+                </a>
+            </h4>
+            <li class="nav-item ">
+                <a class="nav-link" th:href="@{/sale}">
+                    <span data-feather="file"></span>
+                    Sprzedaj samochód
+                </a>
+            </li>
+            <li class="nav-item ">
+                <a class="nav-link" th:href="@{'/'}">
+                    <span data-feather="file"></span>
+                    Edycja danych
+                </a>
+            </li>
+            <li class="nav-item ">
+                <a class="nav-link" th:href="@{'/'}">
+                    <span data-feather="file"></span>
+                    Umowy
+                </a>
+            </li>
+            <li class="nav-item ">
+                <a class="nav-link" th:href="@{'/'}">
+                    <span data-feather="file"></span>
+                    Faktury
+                </a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" th:href="@{'/'}">
+                    <span data-feather="shopping-cart"></span>
+                    Dodaj samochód
+                </a>
+            </li>
+        </ul>
+    </div>
+</nav>-->

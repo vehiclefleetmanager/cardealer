@@ -1,0 +1,18 @@
+package com.example.cardealer.utils.enums;
+
+public enum Transaction {
+    PURCHASE("ZAKUP"),
+    CESSION("ODSTĄPEINIE"),
+    SALE("SPRZEDAŻ"),
+    REPAIR("NAPRAWA");
+
+    private String typeName;
+
+    Transaction(String type) {
+        this.typeName = type;
+    }
+
+    public String getType() {
+        return typeName;
+    }
+}

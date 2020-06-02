@@ -1,0 +1,306 @@
+<div class="container" th:fragment="cars-list" xmlns:sec="http://www.thymeleaf.org/extras/spring-security"
+     xmlns:th="http://www.thymeleaf.org">
+    <div class="row">
+        <div class="col-md-12 text-center">
+            <div class="table-responsive ">
+                <p class="warning" th:text="${message}"></p>
+                <table class="table table-striped table-md text-center">
+                    <thead>
+                    <tr>
+                        <th>#</th>
+                        <th>Nr_nadwozia</th>
+                        <th sec:authorize="hasAnyRole('ROLE_ADMIN', 'ROLE_WORKER', 'ROLE_MECHANIC')">Podgląd</th>
+                        <th sec:authorize="hasAnyRole('ROLE_ADMIN', 'ROLE_WORKER')">Edycja</th>
+                        <th sec:authorize="hasAnyRole('ROLE_ADMIN', 'ROLE_MECHANIC')">Naprawa</th>
+                        <th sec:authorize="hasAnyRole('ROLE_ADMIN', 'ROLE_WORKER')">Sprzedaż</th>
+                        <th sec:authorize="hasAnyRole('ROLE_ADMIN', 'ROLE_WORKER')">Usuń</th>
+                        <th sec:authorize="hasAnyRole('ROLE_ADMIN', 'ROLE_WORKER', 'ROLE_MECHANIC')">Status</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr th:each="car : ${cars}">
+                        <td style="font-size: 18px;" th:text="${car.getId()}"></td>
+                        <td style="font-size: 18px;" th:text="${car.getBodyNumber()}"></td>
+                        <td sec:authorize="hasAnyRole('ROLE_ADMIN', 'ROLE_WORKER', 'ROLE_MECHANIC')">
+                            <a th:href="@{/../details/{id}(id=${car.getId()})}">
+                                <button class="btn btn-outline-info" type="button">
+                                    <i class="far fa-eye"></i>
+                                </button>
+                            </a>
+                        </td>
+                        <!--UPDATE CAR-->
+                        <td sec:authorize="hasAnyRole('ROLE_ADMIN', 'ROLE_WORKER')">
+                            <a data-target="#updateCar" data-toggle="modal"
+                               th:attr="data-target='#updateCar'+${car.getId() }">
+                                <button class="btn btn-outline-success" type="button">
+                                    <i class="fas fa-pencil-alt"></i>
+                                </button>
+                            </a>
+                            <div class="modal fade-in" th:id="'updateCar'+${car.getId() }">
+                                <div class="modal-dialog">
+                                    <div class="modal-content">
+                                        <div class="modal-header">
+                                            <h5 class="modal-title">Edycja samochodu</h5>
+                                        </div>
+                                        <div class="modal-body">
+                                            <form th:action="@{/cars/update/{id}(id=${car.getId()})}"
+                                                  th:method="put"
+                                                  th:object="${updateCar}">
+                                                <div class="form-row">
+                                                    <input class="form-control" hidden id="id"
+                                                           name="carId" th:value="${car.getId()}" type="number">
+                                                    <div class="form-group col-xl-6">
+                                                        <input class="form-control" id="mark" name="mark"
+                                                               placeholder="Marka pojazdu"
+                                                               required
+                                                               th:value="${car.getMark()}" type="text">
+                                                    </div>
+                                                    <div class="form-group col-xl-6">
+                                                        <input class="form-control" id="model" name="model"
+                                                               placeholder="Model pojazdu"
+                                                               required
+                                                               th:value="${car.getModel()}" type="text">
+                                                    </div>
+                                                    <div class="form-group col-xl-6">
+                                                        <input class="form-control" id="productionYear"
+                                                               name="productionYear"
+                                                               placeholder="Rok produkcji"
+                                                               required
+                                                               th:value="${car.getProductionYear()}" type="number">
+                                                    </div>
+                                                    <div class="form-group col-xl-6">
+                                                        <input class="form-control" id="bodyNumber"
+                                                               name="bodyNumber"
+                                                               placeholder="Numer nadwozia"
+                                                               required
+                                                               th:value="${car.getBodyNumber()}" type="text">
+                                                    </div>
+                                                </div>
+                                                <div class="form-row">
+                                                    <div class="form-group col-xl-6">
+                                                        <input class="form-control" id="ocNumber" name="ocNumber"
+                                                               placeholder="Numer polisy"
+                                                               required
+                                                               th:value="${car.getOcNumber()}" type="text">
+                                                    </div>
+                                                    <div class="form-group col-xl-6">
+                                                        <input class="form-control" id="distance" name="distance"
+                                                               placeholder="Przebieg"
+                                                               required
+                                                               th:value="${car.getDistance()}" type="number">
+                                                    </div>
+                                                    <div class="form-group col-xl-6">
+                                                        <input class="form-control" id="capacityEngine"
+                                                               name="capacityEngine"
+                                                               placeholder="Pojemność silnika"
+                                                               required
+                                                               th:value="${car.getCapacityEngine()}" type="number">
+                                                    </div>
+                                                    <div class="form-group col-xl-6">
+                                                        <input class="form-control" id="powerEngine"
+                                                               name="powerEngine"
+                                                               placeholder="Moc silnika"
+                                                               required
+                                                               th:value="${car.getPowerEngine()}" type="number">
+                                                    </div>
+                                                </div>
+                                                <div class="form-row">
+                                                    <div class="form-group col-xl-4">
+                                                        <select class="custom-select" id="fuelType" name="fuelType"
+                                                                required>
+                                                            <option selected="selected" th:text="${car.getFuelType()}">
+                                                            </option>
+                                                            <option th:each="type:${T(com.example.cardealer.utils.enums.FuelType).values()}"
+                                                                    th:text="${type.getType()}"
+                                                                    th:value="${type.name()}"></option>
+                                                        </select>
+                                                    </div>
+                                                    <div class="form-group col-xl-4">
+                                                        <select class="custom-select" id="bodyType" name="bodyType"
+                                                                required>
+                                                            <option selected="selected" th:text="${car.getBodyType()} ">
+                                                            </option>
+                                                            <option th:each="type:${T(com.example.cardealer.utils.enums.BodyType).values()}"
+                                                                    th:text="${type.getType()}"
+                                                                    th:value="${type.name()}"></option>
+                                                        </select>
+                                                    </div>
+                                                    <div class="form-group col-xl-4">
+                                                        <select class="custom-select" id="transmission"
+                                                                name="transmission"
+                                                                required>
+                                                            <option selected="selected"
+                                                                    th:text="${car.getTransmission()}"
+                                                                    th:value="${car.getTransmission()}">
+                                                            </option>
+                                                            <option th:each="type:${T(com.example.cardealer.utils.enums.Transmission).values()}"
+                                                                    th:text="${type.getType()}"
+                                                                    th:value="${type.name()}"
+                                                            ></option>
+                                                        </select>
+                                                    </div>
+                                                </div>
+                                                <div class="form-row">
+                                                    <textarea class="form-control" id="description" name="description"
+                                                              placeholder="" required rows="5"
+                                                              th:text="${car.getDescription()}"
+                                                              th:value="${car.getDescription()}"
+                                                              type="text"></textarea>
+                                                </div>
+
+                                                <br>
+                                                <div class="modal-footer">
+                                                    <button class="btn btn-outline-danger" data-dismiss="modal"
+                                                            type="button">Zamknij
+                                                    </button>
+                                                    <button class="btn btn-outline-success" type="submit">Potwierdź
+                                                    </button>
+                                                </div>
+                                            </form>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </td>
+                        <!--REPAIR CAR-->
+                        <td sec:authorize="hasAnyRole('ROLE_ADMIN', 'ROLE_MECHANIC')">
+                            <a data-target="#repairCar" data-toggle="modal"
+                               th:attr="data-target='#repairCar' +${car.getId()}">
+                                <button class="btn btn-outline-warning" type="button">
+                                    <i class="fas fa-tools"></i>
+                                </button>
+                            </a>
+                            <div class="modal fade-in" th:id="'repairCar'+${car.getId() }">
+                                <div class="modal-dialog">
+                                    <div class="modal-content">
+                                        <div class="modal-header">
+                                            <h5 class="modal-title">Naprawa samochodu</h5>
+                                        </div>
+                                        <div class="modal-body">
+                                            <form th:action="@{/cars/repair/{id}(id=${car.getId()})}"
+                                                  th:method="post"
+                                                  th:object="${newRepairEvent}">
+                                                <div class="form-row">
+                                                    <input class="form-control" hidden
+                                                           name="carId" th:value="${car.getId()}" type="number">
+                                                    <div class="form-group col-xl-6">
+                                                        <input class="form-control" name="mark"
+                                                               readonly
+                                                               th:value="${car.getMark()}" type="text">
+                                                    </div>
+                                                    <div class="form-group col-xl-6">
+                                                        <input class="form-control" name="model"
+                                                               readonly
+                                                               th:value="${car.getModel()}" type="text">
+                                                    </div>
+                                                    <div class="form-group col-xl-6">
+                                                        <input class="form-control" name="bodyNumber"
+                                                               readonly
+                                                               th:value="${car.getBodyNumber()}" type="text">
+                                                    </div>
+                                                    <div class="form-group col-xl-6">
+                                                        <input class="form-control" name="productionYear"
+                                                               readonly
+                                                               th:value="${car.getProductionYear()}" type="text">
+                                                    </div>
+                                                </div>
+                                                <div class="form-row">
+                                                    <div class="form-group col-xl-6">
+                                                        <input class="form-control" id="repairAmount"
+                                                               name="repairAmount"
+                                                               placeholder="Wartość naprawy"
+                                                               required type="text">
+                                                    </div>
+                                                    <div class="form-group col-xl-6">
+                                                        <textarea class="form-control" id="repairDescription"
+                                                                  name="repairDescription"
+                                                                  required
+                                                                  rows="3" type="text"></textarea>
+                                                    </div>
+                                                </div>
+                                                <br>
+                                                <div class="modal-footer">
+                                                    <button class="btn btn-outline-danger" data-dismiss="modal"
+                                                            type="button">Zamknij
+                                                    </button>
+                                                    <button class="btn btn-outline-success" type="submit">Potwierdź
+                                                    </button>
+                                                </div>
+                                            </form>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </td>
+                        <!--SALE CAR-->
+                        <td sec:authorize="hasAnyRole('ROLE_ADMIN', 'ROLE_WORKER')">
+                            <a th:href="@{/cars/sale/{id}(id=${car.getId()})}">
+                                <button class="btn btn-outline-success" type="button">
+                                    <i class="fas fa-euro-sign"></i>
+                                </button>
+                            </a>
+                        </td>
+                        <!--DELETE CAR-->
+                        <td sec:authorize="hasAnyRole('ROLE_ADMIN', 'ROLE_WORKER')">
+                            <a data-target="#deleteCar" data-toggle="modal"
+                               th:attr="data-target='#deleteCar'+${car.getId() }">
+                                <button class="btn btn-outline-danger" type="button">
+                                    <i class="far fa-trash-alt"></i>
+                                </button>
+                            </a>
+                            <div class="modal modal-warning fade in" th:id="deleteCar+${car.getId() }">
+                                <div class="modal-dialog">
+                                    <div class="modal-content">
+                                        <div class="modal-header">
+                                            <h5 class="modal-title">Potwierdź usunięcie samochodu</h5>
+                                        </div>
+                                        <div class="modal-body">
+                                            <h6>Czy napewno chcesz usunąć samochód
+                                                <span class="font-weight-bold"
+                                                      th:text="${car.getMark()} + ' ' + ${car.getModel()}"></span>
+                                                o numerze nadwozia
+                                                <span class="font-weight-bold" th:text="${car.getBodyNumber()}"></span>
+                                                ?</h6>
+                                        </div>
+                                        <div class="modal-footer">
+                                            <button class="btn btn-outline-success pull-left" data-dismiss="modal"
+                                                    type="button">Zamknij
+                                            </button>
+                                            <form method="post" th:action="@{/cars/delete/{id}(id=${car.getId()})}">
+                                                <button class="btn btn-outline-danger" type="submit">Potwierdź
+                                                </button>
+                                            </form>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </td>
+                        <!--STATUS OF CAR-->
+                        <td>
+                            <span class="badge badge-pill badge-warning"
+                                  th:if="${car.getStatus() eq 'WAIT'}">Oczekujący</span>
+                            <span class="badge badge-pill badge-success" th:if="${car.getStatus() eq 'ACCEPTED'}">Zatwierdzony</span>
+                            <span class="badge badge-pill badge-info"
+                                  th:if="${car.getStatus() eq 'AVAILABLE'}">Dostępny</span>
+                            <span class="badge badge-pill badge-success"
+                                  th:if="${car.getStatus() eq 'SOLD'}">Sprzedany</span>
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+    <ul class="pagination justify-content-center" th:if="${pages.totalPages gt 1}">
+        <li class="page-item" th:if="${pages.hasPrevious()}">
+            <a class="page-link" th:href="@{/cars(page=${pages.number-1})}">Poprzednia</a>
+        </li>
+        <li class="page-item" th:classappend="${currentPage} == ${i} ? 'active':''"
+            th:each="i: ${#numbers.sequence(0, pages.totalPages - 1)}">
+            <a class="page-link" th:href="@{/cars(page=${i})}" th:text="${i+1}"></a>
+        </li>
+        <li class="page-item" th:if="${pages.hasNext()}">
+            <a class="page-link" th:href="@{/cars(page=${pages.number+1})}">Następna</a>
+        </li>
+    </ul>
+</div>

@@ -1,0 +1,18 @@
+<!doctype html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="fragments/header :: header"></head>
+<body>
+<div th:object="${currentUser}" th:replace="fragments/top-nav :: top-nav"></div>
+<div th:replace="fragments/sidebar :: sidebar"></div>
+<br>
+<br>
+<br>
+<div class="container">
+    <br>
+    <div class="offset-md-2">
+        <div th:object="${cars}" th:replace="owner/user-cars-list :: user-cars-list"></div>
+    </div>
+</div>
+
+</body>
+</html>

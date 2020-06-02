@@ -21,7 +21,7 @@
                 <div class="input-group-prepend">
                     <label class="input-group-text" for="transaction">Wyświetl pojazdy według statusu:</label>
                     <select class="custom-select" id="transaction" th:field="*{transaction}">
-                        <option th:each="type:${T(com.example.cardealer.model.enums.Transaction).values()}"
+                        <option th:each="type:${T(com.example.cardealer.utils.enums.Transaction).values()}"
                                 th:value="${type}"
                                 th:text="${type.getType()}"></option>
                     </select>

@@ -1,0 +1,80 @@
+<!doctype html>
+<html lang="en" xmlns:sec="http://www.thymeleaf.org/extras/spring-security" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="fragments/header :: header"></head>
+<body>
+<div th:object="${currentUser}" th:replace="fragments/top-nav :: top-nav"></div>
+<div th:replace="fragments/sidebar :: sidebar"></div>
+<br>
+<br>
+<br>
+<div class="container">
+    <div class="col-md-10 offset-md-2">
+        <nav aria-label="breadcrumb">
+            <ol class="breadcrumb bg-white">
+                <li class="breadcrumb-item"><a th:href="@{/}"><i class="fas fa-warehouse"></i></a></li>
+                <li aria-current="page" class="breadcrumb-item active">Raporty</li>
+            </ol>
+        </nav>
+    </div>
+    <div class="col-md-10 offset-md-2" sec:authorize="hasAnyRole('ROLE_CLIENT')">
+        Ta część aplikacji wymaga podwyższonych uprawnień!
+    </div>
+    <div class="col-md-10 offset-md-2 " sec:authorize="hasAnyRole('ROLE_ADMIN', 'ROLE_BOSS')">
+        <form method="post" th:object="${dateScope}">
+            <div class="form-group row ">
+                <div class="col-md-3">
+                    <div class="input-group date">
+                        <input autocomplete="off" class="form-control" id="from" name="from" required type="date"/>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="input-group date">
+                        <input autocomplete="off" class="form-control" id="to" name="to" required type="date"/>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <button class=" btn btn-outline-primary" type="submit">Wyszukaj</button>
+                </div>
+            </div>
+        </form>
+    </div>
+
+    <div class="col-md-10 offset-md-2" sec:authorize="hasAnyRole('ROLE_ADMIN', 'ROLE_BOSS')">
+        <div class="row mb-2">
+            <div class="col-md-6">
+                <div class="row no-gutters border rounded overflow-hidden flex-md-row mb-4 shadow-sm h-md-250 position-relative">
+                    <div class="col p-4 d-flex flex-column position-static">
+                        <strong class="d-inline-block mb-2 text-info">Zakupy</strong>
+                        <h3 class="mb-0" th:text="${purchaseAmounts}+' PLN'">0,00 zł</h3>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="row no-gutters border rounded overflow-hidden flex-md-row mb-4 shadow-sm h-md-250 position-relative">
+                    <div class="col p-4 d-flex flex-column position-static">
+                        <strong class="d-inline-block mb-2 text-success">Sprzedaż</strong>
+                        <h3 class="mb-0" th:text="${saleAmounts}+' PLN'">0,00 zł</h3>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="row no-gutters border rounded overflow-hidden flex-md-row mb-4 shadow-sm h-md-250 position-relative">
+                    <div class="col p-4 d-flex flex-column position-static">
+                        <strong class="d-inline-block mb-2 text-danger">Podatek</strong>
+                        <h3 class="mb-0" th:text="${taxAmount}+' PLN'">0,00 zł</h3>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="row no-gutters border rounded overflow-hidden flex-md-row mb-4 shadow-sm h-md-250 position-relative">
+                    <div class="col p-4 d-flex flex-column position-static">
+                        <strong class="d-inline-block mb-2 text-success">Dochód</strong>
+                        <h3 class="mb-0" th:text="${profitAmount}+' PLN'">0,00 zł</h3>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+</html>

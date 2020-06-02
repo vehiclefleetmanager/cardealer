@@ -1,0 +1,43 @@
+<div class="container" th:fragment="sale-customers-list" xmlns:th="http://www.thymeleaf.org">
+    <div class="row">
+        <div class="col-sm-12 text-center">
+            <div class="table-responsive ">
+                <table class="table table-striped table-sm text-center">
+                    <thead>
+                    <tr>
+                        <th>Imię</th>
+                        <th>Nazwisko</th>
+                        <th>Pesel</th>
+                        <th>Nr_dowodu</th>
+                        <th>Wybierz</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr th:each="c :${customers}">
+                        <td style="font-size: 18px;" th:text="${c.getFirstName()}"></td>
+                        <td style="font-size: 18px;" th:text="${c.getLastName()}"></td>
+                        <td style="font-size: 18px;" th:text="${c.getPesel()}"></td>
+                        <td style="font-size: 18px;" th:text="${c.getIdNumber()}"></td>
+                        <td>
+                            <input name="newOwnerId" required th:value="${c.getId()}" type="radio">
+                        </td>
+
+                        <!--<td>
+                            <a th:href="@{'/'}">
+                                <button class="btn btn-outline-info" type="button">E</button>
+                            </a>
+                        </td>&lt;!&ndash;/{id}(id=${c.getId()})}
+                            @{/cars/details/{id}(id=${car.getId()})}
+                        &ndash;&gt;
+                        <td>
+                            <a th:href="${'/cars/sale/'+ {car.id}+'/customer/'+{c.getId()}}">
+                                <button class="btn btn-outline-success" type="button">S</button>
+                            </a>
+                        </td>-->
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>

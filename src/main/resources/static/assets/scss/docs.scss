@@ -1,10 +1,11 @@
 /*!
  * Bootstrap Docs (https://getbootstrap.com/)
- * Copyright 2011-2018 The Bootstrap Authors
- * Copyright 2011-2018 Twitter, Inc.
- * Licensed under the Creative Commons Attribution 3.0 Unported License. For
- * details, see https://creativecommons.org/licenses/by/3.0/.
+ * Copyright 2011-2019 The Bootstrap Authors
+ * Copyright 2011-2019 Twitter, Inc.
+ * Licensed under the Creative Commons Attribution 3.0 Unported License.
+ * For details, see https://creativecommons.org/licenses/by/3.0/.
  */
+
 // Dev notes
 //
 // Background information on nomenclature and architecture decisions here.
@@ -21,27 +22,30 @@
 //   and layout of the Bootstrap docs. They are not included in our builds.
 //
 // Happy Bootstrapping!
+
 // Load Bootstrap variables and mixins
 @import "../../../../../scss/functions";
 @import "../../../../../scss/variables";
 @import "../../../../../scss/mixins";
+
 // Load docs components
 @import "variables";
 @import "nav";
 @import "masthead";
 @import "ads";
 @import "content";
-@import "skiplink";
+@import "skippy";
 @import "sidebar";
 @import "footer";
 @import "component-examples";
 @import "buttons";
 @import "callouts";
-@import "examples";
 @import "browser-bugs";
 @import "brand";
 @import "colors";
 @import "clipboard-js";
+@import "placeholder-img";
+
 // Load docs dependencies
 @import "syntax";
 @import "anchor";

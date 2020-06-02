@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymleaf.org">
+<html lang="en" xmlns:sec="http://www.thymeleaf.org/extras/spring-security" xmlns:th="http://www.thymleaf.org">
 <head th:replace="fragments/header :: header"></head>
 
 
@@ -15,7 +15,7 @@
             <h3 class="offset-md-1" th:text=" 'AutoKomis - ' + ${title}"></h3>
             <div class="row offset-md-1">
                 <div class="col-md-6">
-                    <a class="nav-link" th:href="@{'/worker/all-customers'}">
+                    <a class="nav-link" th:href="@{'/employee/all-customers'}">
                         <div class="">
                             <div class="card">
                                 <div class="card-body text-center">
@@ -26,11 +26,23 @@
                     </a>
                 </div>
                 <div class="col-md-6">
-                    <a class="nav-link" th:href="@{'/worker/interested-customers'}">
+                    <a class="nav-link" th:href="@{'/employee/interested-customers'}">
                         <div class="">
                             <div class="card">
                                 <div class="card-body text-center">
                                     <h5 class="card-text">Zaintersowanie ofertą</h5>
+                                </div>
+                            </div>
+                        </div>
+                    </a>
+                </div>
+                <div class="col-md-6"
+                     sec:authorize="hasRole('ROLE_ADMIN')">
+                    <a class="nav-link" th:href="@{'/employee/service-users'}">
+                        <div class="">
+                            <div class="card">
+                                <div class="card-body text-center">
+                                    <h5 class="card-text">Autoryzowani użytkownicy</h5>
                                 </div>
                             </div>
                         </div>

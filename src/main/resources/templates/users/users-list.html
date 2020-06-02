@@ -1,0 +1,143 @@
+<div class="container" th:fragment="users-list" xmlns:th="http://www.thymeleaf.org">
+    <div class="row">
+        <div class="col-sm-12 text-center">
+            <div class="table-responsive ">
+                <table class="table table-striped table-sm text-center">
+                    <thead>
+                    <tr>
+                        <th>#</th>
+                        <th>Imię</th>
+                        <th>Nazwisko</th>
+                        <th>E-mail</th>
+                        <th>Reset hasła</th>
+                        <th>Usuń</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr th:each="u :${users}">
+                        <td style="font-size: 18px;" th:text="${u.getId()}"></td>
+                        <td style="font-size: 18px;" th:text="${u.getFirstName()}"></td>
+                        <td style="font-size: 18px;" th:text="${u.getLastName()}"></td>
+                        <td style="font-size: 18px;" th:text="${u.getEmail()}"></td>
+                        <!--Reset password-->
+                        <td>
+                            <a data-target="#resetPassword" data-toggle="modal"
+                               th:attr="data-target='#resetPassword'+${u.getId()}">
+                                <button class="btn btn-outline-info" type="button">
+                                    <i class="fas fa-key"></i>
+                                </button>
+                            </a>
+                            <div class="modal fade-in" th:id="'resetPassword'+${u.getId()}">
+                                <div class="modal-dialog">
+                                    <div class="modal-content">
+                                        <div class="modal-header">
+                                            <h5 class="modal-title">Resetowanie hasła</h5>
+                                        </div>
+                                        <div class="modal-body">
+                                            <form th:action="@{/users/update/{id}(id=${u.getId()})}" th:method="put"
+                                                  th:object="${updatePassword}">
+                                                <div class="form-row">
+                                                    <input class="form-control" hidden="hidden" id="id" name="id"
+                                                           th:value="${u.getId()}" type="text">
+                                                    <div class="form-group col-xl-6">
+                                                        <input class="form-control" id="name" name="firstName"
+                                                               placeholder="Imię"
+                                                               readonly required th:value="${u.getFirstName()}"
+                                                               type="text">
+                                                    </div>
+                                                    <div class="form-group col-xl-6">
+                                                        <input class="form-control" id="surname" name="lastName"
+                                                               placeholder="Nazwisko"
+                                                               readonly required th:value="${u.getLastName()}"
+                                                               type="text">
+                                                    </div>
+                                                    <div class="form-group col-xl-12">
+                                                        <input class="form-control" id="email" name="email"
+                                                               placeholder="Email"
+                                                               required th:value="${u.getEmail()}" type="email">
+                                                    </div>
+                                                </div>
+                                                <div class="form-row">
+                                                    <div class="form-group col-xl-6">
+                                                        <input class="form-control" id="pass" name="password"
+                                                               placeholder="Hasło"
+                                                               required type="password">
+                                                    </div>
+                                                    <div class="form-group col-xl-6">
+                                                        <input class="form-control" id="confPass" name="confPass"
+                                                               placeholder="Powtórz hasło"
+                                                               required type="password">
+                                                    </div>
+                                                </div>
+                                                <br>
+                                                <div class="modal-footer">
+                                                    <button class="btn btn-outline-danger" data-dismiss="modal"
+                                                            type="button">Zamknij
+                                                    </button>
+                                                    <button class="btn btn-outline-success" type="submit">Potwierdź
+                                                    </button>
+                                                </div>
+                                            </form>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </td>
+                        <!--Delete User-->
+                        <td>
+                            <a data-target="#deleteUser" data-toggle="modal"
+                               th:attr="data-target='#deleteUser'+${u.getId()}">
+                                <button class="btn btn-outline-danger" role="button"
+                                        th:classappend="${u.getId()} == ${currentUser.getId()} ? 'disabled':''"
+                                        type="button">
+                                    <i class="far fa-trash-alt"></i>
+                                </button>
+                            </a>
+                            <div class="modal modal-warning fade in" th:id="deleteUser+${u.getId() }">
+                                <div class="modal-dialog">
+                                    <div class="modal-content">
+                                        <div class="modal-header">
+                                            <h5 class="modal-title">Potwierdź usunięcie</h5>
+                                        </div>
+                                        <div class="modal-body" th:if="${u.getId()} == ${currentUser.getId()}">
+                                            <h6>Nie można usunąć zalogowanego użytkownika!</h6>
+                                        </div>
+                                        <div class="modal-body" th:unless="${u.getId()} == ${currentUser.getId()}">
+                                            <h6>Czy napewno chcesz usunąć użytkownika
+                                                <span class="font-weight-bold"
+                                                      th:text="${u.getFirstName()}+' '+ ${u.getLastName()}"></span>
+                                                ?</h6>
+                                        </div>
+                                        <div class="modal-footer">
+                                            <button class="btn btn-outline-success pull-left" data-dismiss="modal"
+                                                    type="button">Zamknij
+                                            </button>
+                                            <form method="post" th:action="@{/users/delete/{id}(id=${u.getId()})}"
+                                                  th:unless="${u.getId()} == ${currentUser.getId()}">
+                                                <button class="btn btn-outline-danger" type="submit">Potwierdź
+                                                </button>
+                                            </form>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+    <ul class="pagination justify-content-center" th:if="${pages.totalPages gt 1}">
+        <li class="page-item" th:if="${pages.hasPrevious()}">
+            <a class="page-link" th:href="@{/users(page=${pages.number-1})}">Poprzednia</a>
+        </li>
+        <li class="page-item" th:classappend="${currentPage} == ${i} ? 'active':''"
+            th:each="i: ${#numbers.sequence(0, pages.totalPages - 1)}">
+            <a class="page-link" th:href="@{/users(page=${i})}" th:text="${i+1}"></a>
+        </li>
+        <li class="page-item" th:if="${pages.hasNext()}">
+            <a class="page-link" th:href="@{/users(page=${pages.number+1})}">Następna</a>
+        </li>
+    </ul>
+</div>

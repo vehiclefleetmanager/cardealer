@@ -1,20 +1,19 @@
 <nav class="navbar navbar-dark fixed-top bg-dark flex-md-nowrap p-0 shadow" th:fragment="top-nav"
-     xmlns:th="http://www.thymleaf.org">
-    <a class="navbar-brand col-sm-3 col-md-2 nav-link" th:href="@{/}">AutoKomis.pl</a>
+     xmlns:sec="http://www.thymeleaf.org/extras/spring-security" xmlns:th="http://www.thymleaf.org">
+    <a class="navbar-brand col-sm-3 col-md-2 nav-link" sec:authorize="isAnonymous()" th:href="@{/}">AutoKomis.pl</a>
+    <!--<a class="navbar-brand col-sm-3 col-md-2 nav-link" sec:authorize="isAnonymous()" th:href="@{/owner}" th:text="${anonymusUser.getFirstName()}">Moje konto</a>-->
+    <a class="navbar-brand col-sm-3 col-md-2 nav-link" sec:authorize="isAuthenticated()" th:href="@{/}"
+       th:text="${currentUser.getFirstName()}">Moje konto</a>
     <p th:text="${message}"></p>
-    <a th:href="@{/sale}">
-        <button class="btn btn-light">Sprzedaj samochód</button>
-        <span data-feather="file-text"></span>
-    </a>
-    <a th:href="@{/owner}">
-        <button class="btn btn-light">Mój AutoKomis.pl</button>
-        <span data-feather="file-text"></span>
-
-    </a>
     <ul class="navbar-nav px-3">
-        <li class="nav-item text-nowrap">
+        <li class="nav-item text-nowrap" sec:authorize="isAnonymous()">
             <a class="nav-link" th:href="@{/login}">Zaloguj
-                <span data-feather="log-in"></span>
+                <i class="fas fa-lock"></i>
+            </a>
+        </li>
+        <li class="nav-item text-nowrap" sec:authorize="isAuthenticated()">
+            <a class="nav-link" th:href="@{/logout}">Wyloguj
+                <i class="fas fa-lock-open"></i>
             </a>
         </li>
     </ul>

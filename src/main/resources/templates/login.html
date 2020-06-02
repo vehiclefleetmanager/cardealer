@@ -5,15 +5,10 @@
 <div th:replace="fragments/top-nav :: top-nav"></div>
 <div class="container">
     <div class="row">
-        <div class="col-md-2">
-            <div th:replace="fragments/sidebar :: sidebar"></div>
-        </div>
-        <div class="col-md-10">
-            <div style="width: 200px">
+        <div class="col-md-12">
+            <div style="width: 200px; margin: 15% auto">
                 <div class="login-form">
-                    <form method="post" th:action="@{/signin}">
-                        <h2 class="text-center">Sign in</h2>
-                        <legend>Please Login</legend>
+                    <form method="post" th:action="@{/login}">
                         <div class="alert alert-error" th:if="${param.error}">
                             Invalid username and password.
                         </div>
@@ -22,21 +17,23 @@
                         </div>
                         <div class="form-group">
                             <div class="input-group">
-                                <span class="input-group-addon"><i class="fa fa-user"></i></span>
-                                <input class="form-control" name="username" placeholder="Username" required="required"
+                                <span class="input-group-addon"><i class="fas fa-at"></i></i></span>
+                                <input class="form-control" name="username" placeholder="E-mail" required="required"
                                        type="text"/>
                             </div>
                         </div>
                         <div class="form-group">
                             <div class="input-group">
                                 <span class="input-group-addon"><i class="fa fa-lock"></i></span>
-                                <input class="form-control" name="password" placeholder="Password" required="required"
+                                <input class="form-control" name="password" placeholder="Hasło" required="required"
                                        type="password"/>
                             </div>
                         </div>
                         <div class="form-group">
-                            <button class="btn btn-primary" type="submit">Sign in</button>
+                            <button class="btn btn-primary" type="submit">Zaloguj mnie</button>
                         </div>
+                        <a class="nav-link" th:href="@{/register}">Nie mam konta w serwisie</a>
+                        <a class="nav-link" th:href="@{/resetPassword}">Przypomnij mi hasło</a>
                     </form>
                 </div>
             </div>

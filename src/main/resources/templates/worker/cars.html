@@ -19,7 +19,7 @@
                     </div>
                     <select class="custom-select" id="carStatus" name="status">
                         <option selected value=""></option>
-                        <option th:each="status:${T(com.example.cardealer.model.enums.Status).values()}"
+                        <option th:each="status:${T(com.example.cardealer.utils.enums.Status).values()}"
                                 th:text="${status.getStatus()}"
                                 th:value="${status}"></option>
                     </select>

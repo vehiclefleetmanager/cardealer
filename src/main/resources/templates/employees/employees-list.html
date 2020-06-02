@@ -1,0 +1,170 @@
+<div class="container" th:fragment="employees-list" xmlns:th="http://www.thymeleaf.org">
+    <div class="row">
+        <div class="col-sm-12 text-center">
+            <div class="table-responsive ">
+                <table class="table table-striped table-sm text-center">
+                    <thead>
+                    <tr>
+                        <th>#</th>
+                        <th>Imię</th>
+                        <th>Nazwisko</th>
+                        <th>E-mail</th>
+                        <th>Edytuj</th>
+                        <th>Usuń</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr th:each="e :${employees}">
+                        <td style="font-size: 18px;" th:text="${e.getId()}"></td>
+                        <td style="font-size: 18px;" th:text="${e.getFirstName()}"></td>
+                        <td style="font-size: 18px;" th:text="${e.getLastName()}"></td>
+                        <td style="font-size: 18px;" th:text="${e.getEmail()}"></td>
+                        <!--Edit Employeer-->
+                        <td>
+                            <a data-target="#updateEmployee" data-toggle="modal"
+                               th:attr="data-target='#updateEmployee'+${e.getId()}">
+                                <button class="btn btn-outline-info" type="button">
+                                    <i class="fas fa-pencil-alt"></i>
+                                </button>
+                            </a>
+                            <div class="modal fade-in" th:id="'updateEmployee'+${e.getId()}">
+                                <div class="modal-dialog">
+                                    <div class="modal-content">
+                                        <div class="modal-header">
+                                            <h5 class="modal-title">Edycja pracownika</h5>
+                                        </div>
+                                        <div class="modal-body">
+                                            <form th:action="@{/emloyees/update/{id}(id=${e.getId()})}"
+                                                  th:method="put"
+                                                  th:object="${updateEmployee}">
+                                                <div class="form-row">
+                                                    <input class="form-control" hidden id="id"
+                                                           name="carId" th:value="${e.getId()}" type="number">
+                                                    <div class="form-group col-xl-6">
+                                                        <input class="form-control" id="firstName" name="firstName"
+                                                               placeholder="Imię"
+                                                               required
+                                                               th:value="${e.getFirstName()}" type="text">
+                                                    </div>
+                                                    <div class="form-group col-xl-6">
+                                                        <input class="form-control" id="lastName" name="lastName"
+                                                               placeholder="Nazwisko"
+                                                               required
+                                                               th:value="${e.getLastName()}" type="text">
+                                                    </div>
+                                                    <div class="form-group col-xl-6">
+                                                        <input class="form-control" id="email" name="email"
+                                                               placeholder="email@com.pl"
+                                                               required
+                                                               th:value="${e.getEmail()}" type="email">
+                                                    </div>
+                                                    <div class="form-group col-xl-6">
+                                                        <input class="form-control" id="phoneNumber"
+                                                               name="phoneNumber"
+                                                               placeholder="Numer telefonu"
+                                                               required
+                                                               th:value="${e.getPhoneNumber()}" type="text">
+                                                    </div>
+                                                    <div class="form-group col-xl-6">
+                                                        <input class="form-control" id="address"
+                                                               name="address"
+                                                               placeholder="Adres"
+                                                               required
+                                                               th:value="${e.getAddress()}" type="text">
+                                                    </div>
+                                                    <div class="form-group col-xl-6">
+                                                        <input class="form-control" id="employmentDate"
+                                                               name="employmentDate"
+                                                               placeholder="Data zatrudnienia"
+                                                               readonly
+                                                               required th:value="${e.getEmploymentDate()}" type="text">
+                                                    </div>
+                                                    <div class="form-group col-xl-6">
+                                                        <input class="form-control" id="employeeNumber"
+                                                               name="employeeNumber"
+                                                               placeholder="Numer pracownika"
+                                                               readonly
+                                                               required th:value="${e.getEmployeeNumber()}" type="text">
+                                                    </div>
+                                                    <div class="form-group col-xl-6">
+                                                        <select class="form-control" id="roles" multiple name="roles"
+                                                                required>
+                                                            <option th:value="ADMIN">Administrator</option>
+                                                            <option th:value="BOSS">Szef</option>
+                                                            <option th:value="WORKER">Pracownik</option>
+                                                            <option th:value="MECHANIC">Mechanik</option>
+                                                        </select>
+                                                    </div>
+                                                </div>
+                                                <br>
+                                                <div class="modal-footer">
+                                                    <button class="btn btn-outline-danger" data-dismiss="modal"
+                                                            type="button">Zamknij
+                                                    </button>
+                                                    <button class="btn btn-outline-success" type="submit">Potwierdź
+                                                        zmiany
+                                                    </button>
+                                                </div>
+                                            </form>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </td>
+                        <!--Delete Employeer-->
+                        <td>
+                            <a data-target="#deleteEmplyeer" data-toggle="modal"
+                               th:attr="data-target='#deleteEmplyeer'+${e.getId()}">
+                                <button class="btn btn-outline-danger" role="button"
+                                        th:classappend="${e.getId()} == ${currentUser.getId()} ? 'disabled':''"
+                                        type="button">
+                                    <i class="far fa-trash-alt"></i>
+                                </button>
+                            </a>
+                            <div class="modal modal-warning fade in" th:id="deleteEmplyeer+${e.getId() }">
+                                <div class="modal-dialog">
+                                    <div class="modal-content">
+                                        <div class="modal-header">
+                                            <h5 class="modal-title">Potwierdź usunięcie</h5>
+                                        </div>
+                                        <div class="modal-body" th:if="${e.getId()} == ${currentUser.getId()}">
+                                            <h6>Nie można usunąć zalogowanego użytkownika!</h6>
+                                        </div>
+                                        <div class="modal-body" th:unless="${e.getId()} == ${currentUser.getId()}">
+                                            <h6>Czy napewno chcesz usunąć pracownika
+                                                <span th:text="${e.getFirstName()}+' '+ ${e.getLastName()}"></span>
+                                                ?</h6>
+                                        </div>
+                                        <div class="modal-footer">
+                                            <button class="btn btn-outline-success pull-left" data-dismiss="modal"
+                                                    type="button">Zamknij
+                                            </button>
+                                            <form method="post" th:action="@{/employess/delete/{id}(id=${e.getId()})}"
+                                                  th:unless="${e.getId()} == ${currentUser.getId()}">
+                                                <button class="btn btn-outline-danger" type="submit">Potwierdź
+                                                </button>
+                                            </form>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+    <ul class="pagination justify-content-center" th:if="${pages.totalPages gt 1}">
+        <li class="page-item" th:if="${pages.hasPrevious()}">
+            <a class="page-link" th:href="@{/employees(page=${pages.number-1})}">Poprzednia</a>
+        </li>
+        <li class="page-item" th:classappend="${currentPage} == ${i} ? 'active':''"
+            th:each="i: ${#numbers.sequence(0, pages.totalPages - 1)}">
+            <a class="page-link" th:href="@{/employees(page=${i})}" th:text="${i+1}"></a>
+        </li>
+        <li class="page-item" th:if="${pages.hasNext()}">
+            <a class="page-link" th:href="@{/employees(page=${pages.number+1})}">Następna</a>
+        </li>
+    </ul>
+</div>

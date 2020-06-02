@@ -1,0 +1,73 @@
+<!--
+<!doctype html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head th:replace="fragments/header :: header"></head>
+<body>
+<div th:object="${currentUser}" th:replace="fragments/top-nav :: top-nav"></div>
+<div th:replace="fragments/sidebar :: sidebar"></div>
+<br>
+<br>
+<br>
+<div class="container">
+    <br>
+    <div class="col-md-10 offset-md-2" sec:authorize="hasAnyRole('ROLE_ADMIN', 'ROLE_CLIENT')">
+        <form th:object="${newCession}" th:action="@{/cars/cession/}" method="post">
+            <br>
+            <div class="form-row">
+                <div class="form-group col-xl-3">
+                    <input class="form-control" id="id" name="carId" th:value="${car.id} "
+                           type="number" hidden>
+                    <input class="form-control" id="mark" name="mark" th:field="${car.mark}" placeholder="Marka pojazdu"
+                           type="text" readonly>
+                </div>
+                <div class="form-group col-xl-3">
+                    <input class="form-control" id="model" name="model" th:field="${car.model}"
+                           placeholder="Model pojazdu"
+                           type="text" readonly>
+                </div>
+                <div class="form-group col-xl-3">
+                    <input class="form-control" id="productionYear" th:field="${car.productionYear}"
+                           name="productionYear"
+                           placeholder="Rok produkcji"
+                           type="number" readonly>
+                </div>
+                <div class="form-group col-xl-3">
+                    <input class="form-control" id="bodyNumber" th:field="${car.bodyNumber}" name="bodyNumber"
+                           placeholder="Numer nadwozia"
+                           type="text" readonly>
+                </div>
+            </div>
+            <div class="form-row">
+                <div class="form-group col-xl-3">
+                    <input class="form-control" id="price" name="price" placeholder="Cena pojazdu"
+                           type="number" required min="5000">
+                </div>
+            </div>
+            <br>
+            <a data-toggle="modal" data-target="#modal-warning">
+                <button class="btn btn-success float-right m-1">Generuj przyjęcie
+                </button>
+            </a>
+            <div class="modal modal-warning fade in" id="modal-warning">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title float-left">Przyjęcie auta do oferty komisu</h5>
+                        </div>
+                        <div class="modal-body">
+                            <h6>Czy napewno chcesz dodać do oferty komisu samochód numerze nadzwozia
+                            <span th:text="${car.getBodyNumber()}"></span> ?
+                            </h6>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-danger pull-left" data-dismiss="modal">Zamknij</button>
+                            <button class="btn btn-outline-success" type="submit">Potwierdź</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+</body>
+</html>-->

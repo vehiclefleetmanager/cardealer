@@ -39,12 +39,12 @@
                 <td style="font-size: 18px;" th:text="${event.customer.lastName}"></td>
                 <td style="font-size: 18px;" th:text="${event.customer.phoneNumber}"></td>
                 <td>
-                    <a class="nav-link" th:href="@{'/worker/'+${event.id}+'/car-sale'}">
+                    <a class="nav-link" th:href="@{'/employee/'+${event.id}+'/car-sale'}">
                         <button class="btn btn-outline-info" type="button">SPRZEDAJ<br/>AUTO</button>
                     </a>
                 </td>
                 <td>
-                    <a class="nav-link" th:href="@{'/worker/'+${event.id}+'/car-delete'}">
+                    <a class="nav-link" th:href="@{'/employee/'+${event.id}+'/car-delete'}">
                         <button class="btn btn-outline-danger" type="button">USUŃ Z LISTY</button>
                     </a>
                 </td>

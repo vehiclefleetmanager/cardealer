@@ -1,0 +1,212 @@
+<!doctype html>
+<html lang="en" xmlns:sec="http://www.thymeleaf.org/extras/spring-security" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="fragments/header :: header"></head>
+<body>
+<div th:object="${currentUser}" th:replace="fragments/top-nav :: top-nav"></div>
+<div sec:authorize="isAuthenticated()" th:replace="fragments/sidebar :: sidebar"></div>
+<br>
+<br>
+<br>
+<div class="container">
+
+    <!--Info-->
+    <div class="col-md-10 offset-md-2" th:if="${flag} eq 'time'">
+        <span class="h4 text-danger">Podaj inną godzinę</span>
+    </div>
+    <!--End Info-->
+
+    <!--Breadcrumbs-->
+    <div class="col-md-10 offset-md-2">
+        <nav aria-label="breadcrumb"
+             sec:authorize="hasAnyRole('ROLE_ADMIN', 'ROLE_BOSS','ROLE_WORKER', 'ROLE_MECHANIC')">
+            <ol class="breadcrumb bg-white">
+                <li class="breadcrumb-item"><a th:href="@{/}"><i class="fas fa-warehouse"></i></a></li>
+                <li class="breadcrumb-item active"><a th:href="@{/cars}">Samochody</a></li>
+                <li aria-current="page" class="breadcrumb-item active">Szczegóły</li>
+            </ol>
+        </nav>
+        <nav aria-label="breadcrumb" sec:authorize="hasRole('ROLE_CLIENT')">
+            <ol class="breadcrumb bg-white">
+                <li class="breadcrumb-item"><a th:href="@{/}"><i class="fas fa-warehouse"></i></a></li>
+                <li aria-current="page" class="breadcrumb-item active">Szczegóły</li>
+            </ol>
+        </nav>
+        <nav aria-label="breadcrumb" sec:authorize="isAnonymous()">
+            <ol class="breadcrumb bg-white">
+                <li class="breadcrumb-item"><a th:href="@{/}"><i class="fas fa-warehouse"></i></a></li>
+                <li aria-current="page" class="breadcrumb-item active">Szczegóły</li>
+            </ol>
+        </nav>
+    </div>
+    <!--End Breadcrumbs-->
+
+    <!--Details of car-->
+    <div class="col-md-10 offset-md-2">
+        <div class="row">
+            <div class="col-md-6">
+                <table class="table">
+                    <tbody th:object="${car}">
+                    <tr>
+                        <td th:text="${car.getMark()}"></td>
+                    </tr>
+                    <tr>
+                        <td th:text="${car.getModel()}"></td>
+                    </tr>
+                    <tr>
+                        <td th:text="${car.getProductionYear()}"></td>
+                    </tr>
+                    <tr>
+                        <td th:text="${car.getDistance()}"></td>
+                    </tr>
+                    <tr>
+                        <td th:text="${car.getBodyType().getTypeName()}"></td>
+                    </tr>
+                    <tr>
+                        <td th:text="${car.getTransmission().getTypeName()}"></td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+            <div class="col-md-6">
+                <table class="table">
+                    <tbody>
+                    <tr>
+                        <td th:text="${car.getPowerEngine()}"></td>
+                    </tr>
+                    <tr>
+                        <td th:text="${car.getCapacityEngine()}"></td>
+                    </tr>
+                    <tr>
+                        <td th:text="${car.getFuelType().getTypeName()}"></td>
+                    </tr>
+                    <tr>
+                        <td th:text="${car.getBodyNumber()}"></td>
+                    </tr>
+                    <tr>
+                        <td th:text="${car.getTestDrive()}"></td>
+                    </tr>
+                    <tr>
+                        <td th:text="${car.getPrice()}"></td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+            <div class="col-md-12">
+                <table class="table">
+                    <tbody>
+                    <tr>
+                        <td th:text="${car.getDescription()}"></td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+    <!--End details of car-->
+
+    <!--Reservation test drive-->
+    <div class="col-md-10 offset-md-2">
+        <a data-target="#login" data-toggle="modal" sec:authorize="isAnonymous()">
+            <button class="btn btn-outline-info" type="button">
+                <i class="fas fa-road"></i>
+                Umawianie jazdy próbnej
+            </button>
+        </a>
+        <a data-target="#reservation" data-toggle="modal" sec:authorize="isAuthenticated()">
+            <button class="btn btn-outline-info" type="button">
+                <i class="fas fa-road"></i>
+                Umawianie jazdy próbnej
+            </button>
+        </a>
+        <div class="modal fade-in" id="reservation">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title">Rezerwacja jazdy próbnej</h5>
+                    </div>
+                    <div class="modal-body">
+                        <form th:action="@{../test/{id}(id=${car.getId()})}" th:method="post"
+                              th:object="${newTestDrive}">
+                            <div class="form-row">
+                                <input hidden name="carId" th:value="${car.getId()}">
+                                <input hidden name="userId" th:value="${currentUser.getId()}">
+                                <div class="form-group col-xl-4">
+                                    <label class="form-check-label " for="firstName">Imię</label>
+                                    <input class="form-control" id="firstName" name="firstName" placeholder="Imię"
+                                           readonly th:value="${currentUser.getFirstName()}" type="text">
+                                </div>
+                                <div class="form-group col-xl-4">
+                                    <label class="form-check-label" for="lastName">Nazwisko</label>
+                                    <input class="form-control" id="lastName" name="lastName" placeholder="Nazwisko"
+                                           readonly th:value="${currentUser.getLastName()}" type="text">
+                                </div>
+                                <div class="form-group col-xl-4">
+                                    <label class="form-check-label" for="phoneNumber">Numer telefonu</label>
+                                    <input class="form-control" id="phoneNumber" name="phoneNumber"
+                                           placeholder="Telefon" readonly th:value="${currentUser.getPhoneNumber()}"
+                                           type="text">
+                                </div>
+                                <div class="form-group col-xl-12">
+                                    <label class="form-check-label" for="email">Email</label>
+                                    <input class="form-control" id="email" max="17:00" min="09:00"
+                                           name="email" placeholder="Email" readonly
+                                           th:value="${currentUser.getEmail()}" type="email">
+                                </div>
+                                <div class="form-group col-xl-6">
+                                    <label class="form-check-label" for="date">Proponowana data</label>
+                                    <input class="form-control" id="date" name="date"
+                                           required type="date">
+                                </div>
+                                <div class="form-group col-xl-6">
+                                    <label class="form-check-label" for="time">Proponowana godzina</label>
+                                    <input class="form-control" id="time" name="time"
+                                           required type="time">
+                                </div>
+                            </div>
+                            <br>
+                            <div class="modal-footer">
+                                <button class="btn btn-outline-danger" data-dismiss="modal"
+                                        type="button">Zamknij
+                                </button>
+                                <button class="btn btn-outline-success" type="submit">Potwierdź
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="modal fade-in" id="login">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title">Rezerwacja jazdy próbnej - tylko dla zalogowanych</h5>
+                    </div>
+                    <div class="modal-body">
+                        <a th:href="@{../register}">
+                            <button class="btn btn-outline-warning" type="button">
+                                <i class="fas fa-file-signature"></i>
+                                Rejestracja użytkownika
+                            </button>
+                        </a>
+                        <a th:href="@{../login}">
+                            <button class="btn btn-outline-success" type="button">
+                                <i class="fas fa-lock-open"></i>
+                                Logowanie użytkownika
+                            </button>
+                        </a>
+                        <br>
+                        <div class="modal-footer">
+                            <button class="btn btn-outline-danger" data-dismiss="modal"
+                                    type="button">Zamknij
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!--End reservation test drive-->
+</div>
+</body>
+</html>

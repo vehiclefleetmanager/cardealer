@@ -1,0 +1,163 @@
+<div class="container" th:fragment="customers-list" xmlns:th="http://www.thymeleaf.org"
+>
+    <div class="row">
+        <div class="col-md-12 text-center">
+            <div class="table-responsive ">
+                <p class="warning" th:text="${message}"></p>
+                <table class="table table-striped table-md text-center">
+                    <thead>
+                    <tr>
+                        <th>#</th>
+                        <th>Imię</th>
+                        <th>Nazwisko</th>
+                        <th>Pesel</th>
+                        <th>NIP</th>
+                        <th>Edytuj</th>
+                        <th>Usuń</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr th:each="c :${customers}">
+                        <td style="font-size: 18px;" th:text="${c.getId()}"></td>
+                        <td style="font-size: 18px;" th:text="${c.getFirstName()}"></td>
+                        <td style="font-size: 18px;" th:text="${c.getLastName()}"></td>
+                        <td style="font-size: 18px;" th:text="${c.getPesel()}"></td>
+                        <td style="font-size: 18px;" th:text="${c.getTin()}"></td>
+                        <td>
+                            <a data-target="#updateCustomer" data-toggle="modal"
+                               th:attr="data-target='#updateCustomer'+${c.getId() }">
+                                <button class="btn btn-outline-info" type="button">
+                                    <i class="fas fa-pencil-alt"></i>
+                                </button>
+                            </a>
+                            <div class="modal fade-in" th:id="'updateCustomer'+${c.getId() }">
+                                <div class="modal-dialog">
+                                    <div class="modal-content">
+                                        <div class="modal-header">
+                                            <h5 class="modal-title">Edycja klienta komisu</h5>
+                                        </div>
+                                        <div class="modal-body">
+                                            <form th:action="@{/customers/update/{id}(id=${c.getId()})}"
+                                                  th:method="put"
+                                                  th:object="${updateCustomer}">
+                                                <div class="form-row">
+                                                    <div class="form-group col-xl-4">
+                                                        <label class="form-check-label " for="firstName">Imię</label>
+                                                        <input class="form-control" id="firstName" name="firstName"
+                                                               placeholder="Imię"
+                                                               required th:value="${c.getFirstName()}" type="text">
+                                                    </div>
+                                                    <div class="form-group col-xl-4">
+                                                        <label class="form-check-label" for="lastName">Nazwisko</label>
+                                                        <input class="form-control" id="lastName" name="lastName"
+                                                               placeholder="Nazwisko"
+                                                               required th:value="${c.getLastName()}" type="text">
+                                                    </div>
+                                                    <div class="form-group col-xl-4">
+                                                        <label class="form-check-label" for="phoneNumber">Numer
+                                                            telefonu</label>
+                                                        <input class="form-control" id="phoneNumber" name="phoneNumber"
+                                                               placeholder="Telefon"
+                                                               required th:value="${c.getPhoneNumber()}" type="text">
+                                                    </div>
+                                                    <div class="form-group col-xl-12">
+                                                        <label class="form-check-label" for="address">Adres</label>
+                                                        <input class="form-control" id="address" name="address"
+                                                               placeholder="Adres"
+                                                               required th:value="${c.getAddress()}" type="text">
+                                                    </div>
+                                                </div>
+                                                <div class="form-row">
+                                                    <div class="form-group col-xl-4">
+                                                        <label class="form-check-label" for="tin">NIP</label>
+                                                        <input class="form-control" id="tin" name="tin"
+                                                               placeholder="NIP"
+                                                               required th:value="${c.getTin()}" type="number">
+                                                    </div>
+                                                    <div class="form-group col-xl-4">
+                                                        <label class="form-check-label" for="pesel">Pesel</label>
+                                                        <input class="form-control" id="pesel" name="pesel"
+                                                               placeholder="Pesel"
+                                                               required th:value="${c.getPesel()}" type="number">
+                                                    </div>
+                                                    <div class="form-group col-xl-4">
+                                                        <label class="form-check-label" for="idNumber">Numer
+                                                            dowodu</label>
+                                                        <input class="form-control" id="idNumber" name="idNumber"
+                                                               placeholder="Dowód osobisty"
+                                                               required th:value="${c.getIdNumber()}" type="text">
+                                                    </div>
+                                                    <div class="form-group col-xl-12">
+                                                        <label class="form-check-label" for="email">Email</label>
+                                                        <input class="form-control" id="email" name="email"
+                                                               placeholder="Email"
+                                                               required th:value="${c.getEmail()}" type="email">
+                                                    </div>
+                                                </div>
+                                                <br>
+                                                <div class="modal-footer">
+                                                    <button class="btn btn-outline-danger" data-dismiss="modal"
+                                                            type="button">Zamknij
+                                                    </button>
+                                                    <button class="btn btn-outline-success" type="submit">Potwierdź
+                                                    </button>
+                                                </div>
+                                            </form>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </td>
+                        <td>
+                            <a data-target="#modal-warning" data-toggle="modal"
+                               th:attr="data-target='#modal-warning'+${c.getId() }">
+                                <button class="btn btn-outline-danger" type="button">
+                                    <i class="far fa-trash-alt"></i>
+                                </button>
+                            </a>
+                            <div class="modal modal-warning fade in" th:id="modal-warning+${c.getId() }">
+                                <div class="modal-dialog">
+                                    <div class="modal-content">
+                                        <div class="modal-header">
+                                            <h5 class="modal-title">Potwierdź usunięcie</h5>
+                                        </div>
+                                        <div class="modal-body">
+                                            <h6>Czy napewno chcesz usunąć klienta
+                                                <span class="font-weight-bold"
+                                                      th:text="${c.getFirstName()} + ' ' + ${c.getLastName()}"></span>
+                                                ,pesel
+                                                <span class="font-weight-bold" th:text="${c.getPesel()}"></span>
+                                                ?</h6>
+                                        </div>
+                                        <div class="modal-footer">
+                                            <button class="btn btn-outline-success pull-left" data-dismiss="modal"
+                                                    type="button">Zamknij
+                                            </button>
+                                            <form method="post" th:action="@{/customers/delete/{id}(id=${c.getId()})}">
+                                                <button class="btn btn-outline-danger" type="submit">Potwierdź
+                                                </button>
+                                            </form>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+    <ul class="pagination justify-content-center" th:if="${pages.totalPages gt 1}">
+        <li class="page-item" th:if="${pages.hasPrevious()}">
+            <a class="page-link" th:href="@{/customers(page=${pages.number-1})}">Poprzednia</a>
+        </li>
+        <li class="page-item" th:classappend="${currentPage} == ${i} ? 'active':''"
+            th:each="i: ${#numbers.sequence(0, pages.totalPages - 1)}">
+            <a class="page-link" th:href="@{/customers(page=${i})}" th:text="${i+1}"></a>
+        </li>
+        <li class="page-item" th:if="${pages.hasNext()}">
+            <a class="page-link" th:href="@{/customers(page=${pages.number+1})}">Następna</a>
+        </li>
+    </ul>
+</div>

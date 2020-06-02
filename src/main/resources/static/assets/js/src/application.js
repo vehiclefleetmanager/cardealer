@@ -4,13 +4,13 @@
 
 /*!
  * JavaScript for Bootstrap's docs (https://getbootstrap.com/)
- * Copyright 2011-2018 The Bootstrap Authors
- * Copyright 2011-2018 Twitter, Inc.
- * Licensed under the Creative Commons Attribution 3.0 Unported License. For
- * details, see https://creativecommons.org/licenses/by/3.0/.
+ * Copyright 2011-2019 The Bootstrap Authors
+ * Copyright 2011-2019 Twitter, Inc.
+ * Licensed under the Creative Commons Attribution 3.0 Unported License.
+ * For details, see https://creativecommons.org/licenses/by/3.0/.
  */
 
-/* global ClipboardJS: false, anchors: false, Holder: false */
+/* global ClipboardJS: false, anchors: false, bsCustomFileInput: false */
 
 (function ($) {
     'use strict'
@@ -23,6 +23,12 @@
         })
 
         $('[data-toggle="popover"]').popover()
+
+        $('.toast')
+            .toast({
+                autohide: false
+            })
+            .toast('show')
 
         // Demos within modals
         $('.tooltip-test').tooltip()
@@ -54,7 +60,7 @@
 
         // Insert copy to clipboard button before .highlight
         $('figure.highlight, div.highlight').each(function () {
-            var btnHtml = '<div class="bd-clipboard"><button class="btn-clipboard" title="Copy to clipboard">Copy</button></div>'
+            var btnHtml = '<div class="bd-clipboard"><button type="button" class="btn-clipboard" title="Copy to clipboard">Copy</button></div>'
             $(this).before(btnHtml)
             $('.btn-clipboard')
                 .tooltip()
@@ -99,14 +105,8 @@
             icon: '#'
         }
         anchors.add('.bd-content > h2, .bd-content > h3, .bd-content > h4, .bd-content > h5')
-        $('.bd-content > h2, .bd-content > h3, .bd-content > h4, .bd-content > h5').wrapInner('<div></div>')
+        $('.bd-content').children('h2, h3, h4, h5').wrapInner('<span class="bd-content-title"></span>')
 
-        // Holder
-        Holder.addTheme('gray', {
-            bg: '#777',
-            fg: 'rgba(255,255,255,.75)',
-            font: 'Helvetica',
-            fontweight: 'normal'
-        })
+        bsCustomFileInput.init()
     })
 }(jQuery))
