@@ -15,6 +15,7 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.util.stream.Collectors;
 
@@ -42,25 +43,35 @@ public class CarController {
 
     @PreAuthorize("hasAnyRole('ROLE_ADMIN','ROLE_WORKER')")
     @PostMapping
-    public String addCar(@ModelAttribute("newCessionEvent") CreateCessionRequest request) {
+    public String addCar(@ModelAttribute("newCessionEvent") CreateCessionRequest request,
+                         RedirectAttributes attributes) {
+        String carInfo = request.getMark() + " " + request.getModel() + " " + request.getBodyNumber();
         carService.addCarAndCreateCessionEvent(request, currentUser.getUser().getId());
+        attributes.addFlashAttribute("flag", true);
+        attributes.addFlashAttribute("msg", "Utworzono dokument cesji dla samochodu " + carInfo);
         return "redirect:/cars";
     }
 
     @PreAuthorize("hasAnyRole('ROLE_ADMIN','ROLE_CLIENT')")
     @PutMapping("/update/{id}")
     public String updateCar(@PathVariable("id") Long id,
-                            @ModelAttribute("updateCar") UpdateCarRequest request) {
+                            @ModelAttribute("updateCar") UpdateCarRequest request,
+                            RedirectAttributes attributes) {
         carService.updateCar(id, request);
+        attributes.addFlashAttribute("flag", true);
+        attributes.addFlashAttribute("msg", "Zmieniono dane samochodu numer " + id);
         return "redirect:/cars";
     }
 
     @PreAuthorize("hasAnyRole('ROLE_ADMIN','ROLE_MECHANIC')")
     @PostMapping("/repair/{id}")
     public String repairCar(@PathVariable("id") Long id,
-                            @ModelAttribute("newRepairEvent") CreateRepairRequest request) {
+                            @ModelAttribute("newRepairEvent") CreateRepairRequest request,
+                            RedirectAttributes attributes) {
         Long employeeId = currentUser.getUser().getId();
         carService.repairCar(id, request, employeeId);
+        attributes.addFlashAttribute("flag", true);
+        attributes.addFlashAttribute("msg", "Utowrzono dokument naprawy samochodu " + getCarBasicInfo(id));
         return "redirect:/cars";
     }
 
@@ -76,17 +87,26 @@ public class CarController {
 
     @PreAuthorize("hasAnyRole('ROLE_ADMIN','ROLE_WORKER')")
     @PostMapping("/sale")
-    public String saleCar(@ModelAttribute("newSale") CreateCarSaleRequest request) {
+    public String saleCar(@ModelAttribute("newSale") CreateCarSaleRequest request,
+                          RedirectAttributes attributes) {
         Long employeeId = currentUser.getUser().getId();
-        carService.saleCar(request.getCarId(), request.getNewOwnerId(), request.getPrice(), employeeId);
+        carService.saleCar(request, employeeId);
+        attributes.addFlashAttribute("flag", true);
+        attributes.addFlashAttribute("msg", "Utworzono dokumenty sprzedaży samochodu " + getCarBasicInfo(request.getCarId()));
         return "redirect:/cars";
     }
 
     @PreAuthorize("hasAnyRole('ROLE_ADMIN','ROLE_WORKER')")
     @PostMapping("/delete/{id}")
-    public String deleteCar(@PathVariable("id") Long id) {
+    public String deleteCar(@PathVariable("id") Long id,
+                            RedirectAttributes attributes) {
+        String carInfo = carService.findCar(id).getMark() + " " +
+                carService.findCar(id).getModel() + " " +
+                carService.findCar(id).getBodyNumber();
         User userSystem = currentUser.getUser();
         carService.deleteCar(id, userSystem);
+        attributes.addFlashAttribute("flag", true);
+        attributes.addFlashAttribute("msg", "Usunięto samochód " + carInfo);
         return "redirect:/cars";
     }
 
@@ -102,5 +122,11 @@ public class CarController {
         model.addAttribute("markList", carService.findMark());
         model.addAttribute("currentUser", currentUser.getUser());
         return "cars/cars";
+    }
+
+    private String getCarBasicInfo(Long id) {
+        return carService.findCar(id).getMark() + " " +
+                carService.findCar(id).getModel() + " " +
+                carService.findCar(id).getBodyNumber();
     }
 }

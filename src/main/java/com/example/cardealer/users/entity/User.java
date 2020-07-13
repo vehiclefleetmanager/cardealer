@@ -15,10 +15,7 @@ import java.util.HashSet;
 @Table(name = "users")
 public class User extends Person {
 
-
     private String password;
-
-    private boolean active;
 
     @ManyToMany(cascade = {CascadeType.MERGE},
             fetch = FetchType.EAGER)
@@ -26,7 +23,6 @@ public class User extends Person {
             joinColumns = @JoinColumn(name = "user_id"),
             inverseJoinColumns = @JoinColumn(name = "role_id"))
     private Collection<Role> roles = new HashSet<>();
-
 
     /*constructor for decorate new Employee*/
     public User(Person person, String pass) {
@@ -36,12 +32,12 @@ public class User extends Person {
         setAddress(person.getAddress());
         setPhoneNumber(person.getPhoneNumber());
         setEmail(person.getEmail());
-        this.active = true;
+        setActive(person.isActive());
         this.password = pass;
     }
 
-    /*constructor for decorate new Customer*/
-    public User(Person person, boolean isActive, String pass) {
+    /* *//*constructor for decorate new Customer*//*
+    public User(Person person, String pass) {
         super();
         setFirstName(person.getFirstName());
         setLastName(person.getLastName());
@@ -50,7 +46,7 @@ public class User extends Person {
         setEmail(person.getEmail());
         setActive(isActive);
         this.password = pass;
-    }
+    }*/
 
     public void addRole(Role role) {
         roles.add(role);

@@ -46,7 +46,7 @@ public class ApplicationSecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers("**/assets/**").permitAll()
                 .antMatchers("**/js/**").permitAll()
                 .antMatchers("**/css/**").permitAll()
-                .antMatchers("/**").permitAll()
+                .antMatchers("/").permitAll()
                 .antMatchers("/users/**").authenticated()
                 .antMatchers("/customers/**").authenticated()
                 .antMatchers("/cars/**").authenticated()

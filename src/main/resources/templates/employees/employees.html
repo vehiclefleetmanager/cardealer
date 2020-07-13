@@ -72,7 +72,6 @@
             </div>
         </div>
     </div>
-
     <br>
     <div class="offset-md-2" sec:authorize="hasAnyRole('ROLE_ADMIN','ROLE_BOSS')">
         <div th:object="${employees}" th:replace="employees/employees-list :: employees-list"></div>

@@ -55,25 +55,25 @@ public class StartupData {
         Employee adminEmployee = new Employee("Administrator", "Systemu", "Adresowy",
                 "500400300", "admin@gmail.com", clock.date(), "Em_n_01");
         Employee newAdminEmployee = employeeRepository.save(adminEmployee);
-        User mainUser = new User(newAdminEmployee, true, encoder.encode("az"));
+        User mainUser = new User(newAdminEmployee, encoder.encode("az"));
         mainUser.addRole(setUserRole("ADMIN"));
 
         Employee bossEmployee = new Employee("Boss", "Bossman", "Adresowo",
                 "400300200", "boss@gmail.com", clock.date(), "Em_n_02");
         Employee newBossEmployee = employeeRepository.save(bossEmployee);
-        User bossUser = new User(newBossEmployee, true, encoder.encode("az"));
+        User bossUser = new User(newBossEmployee, encoder.encode("az"));
         bossUser.addRole(setUserRole("BOSS"));
 
         Employee workerEmployee = new Employee("Worker", "Workman", "Adresowny",
                 "300200100", "worker@gmail.com", clock.date(), "Em_n_03");
         Employee newWorkerEmployee = employeeRepository.save(workerEmployee);
-        User workerUser = new User(newWorkerEmployee, true, encoder.encode("az"));
+        User workerUser = new User(newWorkerEmployee, encoder.encode("az"));
         workerUser.addRole(setUserRole("WORKER"));
 
         Employee mechanicEmployee = new Employee("Mechanic", "Mechanicman", "Adresowny",
                 "200100000", "mechanic@gmail.com", clock.date(), "Em_n_04");
         Employee newMechanicEmployee = employeeRepository.save(mechanicEmployee);
-        User mechanicUser = new User(newMechanicEmployee, true, encoder.encode("az"));
+        User mechanicUser = new User(newMechanicEmployee, encoder.encode("az"));
         mechanicUser.addRole(setUserRole("MECHANIC"));
 
         userRepository.saveAll(Arrays.asList(mainUser, bossUser, mechanicUser, workerUser));
@@ -123,7 +123,7 @@ public class StartupData {
                 1800, 115, Car.Transmission.AUTOMATIC, "Opis fiata punto", new BigDecimal("55900"));
 
         Customer jukeOwner = new Customer("Magdalena", "Iwańska", "San Escobar", "1232334",
-                "1112223666", "79082113266", "ABC123456", " maiw@gmail.com", Customer.Status.PRESENT);
+                "1112223666", "79082113266", "ABC123456", "maiw@gmail.com", Customer.Status.PRESENT);
         Car juke = new Car("JUKE1234XYZ", 2012, "Nissan", "Juke",
                 "OC2017/10/2018", Car.FuelType.PETROL, 145000, Car.BodyType.COMBI,
                 1800, 115, Car.Transmission.AUTOMATIC, "Opis nissana juke", new BigDecimal("21900"));
@@ -163,40 +163,40 @@ public class StartupData {
         a4Owner.addCar(a4);
         leonOwner.addCar(leon);
 
-        User clientOwnerGolf = new User(golfOwner, true, encoder.encode("az"));
+        User clientOwnerGolf = new User(golfOwner, encoder.encode("az"));
         clientOwnerGolf.addRole(setUserRole("CLIENT"));
 
-        User clientOwnerFabia = new User(fabiaOwner, true, encoder.encode("az"));
+        User clientOwnerFabia = new User(fabiaOwner, encoder.encode("az"));
         clientOwnerFabia.addRole(setUserRole("CLIENT"));
 
-        User clientOwnerFocus = new User(focusOwner, true, encoder.encode("az"));
+        User clientOwnerFocus = new User(focusOwner, encoder.encode("az"));
         clientOwnerFocus.addRole(setUserRole("CLIENT"));
 
-        User clientOwnerYaris = new User(yarisOwner, true, encoder.encode("az"));
+        User clientOwnerYaris = new User(yarisOwner, encoder.encode("az"));
         clientOwnerYaris.addRole(setUserRole("CLIENT"));
 
-        User clientOwnerI30 = new User(i30Owner, true, encoder.encode("az"));
+        User clientOwnerI30 = new User(i30Owner, encoder.encode("az"));
         clientOwnerI30.addRole(setUserRole("CLIENT"));
 
-        User clientOwnerMazda = new User(mazda3Owner, true, encoder.encode("az"));
+        User clientOwnerMazda = new User(mazda3Owner, encoder.encode("az"));
         clientOwnerMazda.addRole(setUserRole("CLIENT"));
 
-        User clientOwnerPunto = new User(puntoOwner, true, encoder.encode("az"));
+        User clientOwnerPunto = new User(puntoOwner, encoder.encode("az"));
         clientOwnerPunto.addRole(setUserRole("CLIENT"));
 
-        User clientOwnerJuke = new User(jukeOwner, true, encoder.encode("az"));
+        User clientOwnerJuke = new User(jukeOwner, encoder.encode("az"));
         clientOwnerJuke.addRole(setUserRole("CLIENT"));
 
-        User clientOwnerLancer = new User(lancerOwner, true, encoder.encode("az"));
+        User clientOwnerLancer = new User(lancerOwner, encoder.encode("az"));
         clientOwnerLancer.addRole(setUserRole("CLIENT"));
 
-        User clientOwnerA4 = new User(a4Owner, true, encoder.encode("az"));
+        User clientOwnerA4 = new User(a4Owner, encoder.encode("az"));
         clientOwnerA4.addRole(setUserRole("CLIENT"));
 
-        User clientOwnerLeon = new User(leonOwner, true, encoder.encode("az"));
+        User clientOwnerLeon = new User(leonOwner, encoder.encode("az"));
         clientOwnerLeon.addRole(setUserRole("CLIENT"));
 
-        User clientNewOwnerCar = new User(newOwnerCar, true, encoder.encode("az"));
+        User clientNewOwnerCar = new User(newOwnerCar, encoder.encode("az"));
         clientNewOwnerCar.addRole(setUserRole("CLIENT"));
 
         userRepository.saveAll(Arrays.asList(clientOwnerGolf, clientOwnerFabia, clientOwnerFocus, clientOwnerYaris,

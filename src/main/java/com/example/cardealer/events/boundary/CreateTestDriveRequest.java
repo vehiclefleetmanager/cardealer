@@ -1,4 +1,4 @@
-package com.example.cardealer.cars.boundary;
+package com.example.cardealer.events.boundary;
 
 import lombok.Data;
 

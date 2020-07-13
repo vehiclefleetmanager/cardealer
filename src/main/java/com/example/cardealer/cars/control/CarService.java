@@ -1,7 +1,6 @@
 package com.example.cardealer.cars.control;
 
 import com.example.cardealer.cars.boundary.CarRepository;
-import com.example.cardealer.cars.boundary.CreateTestDriveRequest;
 import com.example.cardealer.cars.boundary.UpdateCarRequest;
 import com.example.cardealer.cars.entity.Car;
 import com.example.cardealer.config.Clock;
@@ -109,20 +108,19 @@ public class CarService {
     }
 
     public void updateCar(Long carId, UpdateCarRequest request) {
-        Car car = findCar(carId);
-        car.setBodyNumber(request.getBodyNumber());
-        car.setBodyType(Car.BodyType.findByName(request.getBodyType().toUpperCase()));
-        car.setCapacityEngine(request.getCapacityEngine());
-        car.setDescription(request.getDescription());
-        car.setDistance(request.getDistance());
-        car.setFuelType(Car.FuelType.findByName(request.getFuelType().toUpperCase()));
-        car.setMark(request.getMark());
-        car.setModel(request.getModel());
-        car.setOcNumber(request.getOcNumber());
-        car.setPowerEngine(request.getPowerEngine());
-        car.setProductionYear(request.getProductionYear());
-        car.setTransmission(Car.Transmission.findByName(request.getTransmission().toUpperCase()));
-        carRepository.save(car);
+        findCar(carId).setBodyNumber(request.getBodyNumber());
+        findCar(carId).setBodyType(Car.BodyType.findByName(request.getBodyType().toUpperCase()));
+        findCar(carId).setCapacityEngine(request.getCapacityEngine());
+        findCar(carId).setDescription(request.getDescription());
+        findCar(carId).setDistance(request.getDistance());
+        findCar(carId).setFuelType(Car.FuelType.findByName(request.getFuelType().toUpperCase()));
+        findCar(carId).setMark(request.getMark());
+        findCar(carId).setModel(request.getModel());
+        findCar(carId).setOcNumber(request.getOcNumber());
+        findCar(carId).setPowerEngine(request.getPowerEngine());
+        findCar(carId).setProductionYear(request.getProductionYear());
+        findCar(carId).setTransmission(Car.Transmission.findByName(request.getTransmission().toUpperCase()));
+        carRepository.save(findCar(carId));
     }
 
     public void repairCar(Long carId, CreateRepairRequest request, Long employeeId) {
@@ -158,10 +156,10 @@ public class CarService {
         invoiceRepository.save(invoice);
     }
 
-    public void saleCar(Long carId, Long newOwnerId, BigDecimal price, Long employeeId) {
-        Car car = findCar(carId);
+    public void saleCar(CreateCarSaleRequest request, Long employeeId) {
+        Car car = findCar(request.getCarId());
         Customer existOwner = car.getCarOwner();
-        Customer newOwner = customerRepository.getOne(newOwnerId);
+        Customer newOwner = customerRepository.getOne(request.getNewOwnerId());
         Employee employee = findEmployee(employeeId);
         boolean isAvailable = car.getStatus().name().matches(Car.Status.AVAILABLE.name());
         boolean isInnerOwner = existOwner.getId().toString().matches(newOwner.getId().toString());
@@ -173,8 +171,8 @@ public class CarService {
             updateCar.setCarOwner(newOwner);
             Customer updateExistOwner = customerRepository.save(existOwner);
             Customer updateNewOwner = customerRepository.save(newOwner);
-            makePurchaseCar(updateExistOwner, updateCar, price, employee, "Zakup samochodu");
-            makeSaleCar(updateNewOwner, updateCar, price, employee, "Sprzedaż samochodu");
+            makePurchaseCar(updateExistOwner, updateCar, request.getPrice(), employee, "Zakup samochodu");
+            makeSaleCar(updateNewOwner, updateCar, request.getPrice(), employee, "Sprzedaż samochodu");
         }
     }
 
@@ -259,19 +257,32 @@ public class CarService {
         Car testedCar = findCar(request.getCarId());
         Set<TestDrive> testDrives = testedCar.getTestDrives();
         String flag = "ok";
+        boolean checkTime = true;
         if (testDrives.isEmpty()) {
             createTestDrive(request, date, time, testedCar);
         } else {
-            for (TestDrive testDrive : testDrives) {
-                if (testDrive.getDateOfTestDrive().isEqual(date)) {
-                    if (!testDrive.getTimeOfTestDrive().equals(time)) {
-                        createTestDrive(request, date, time, testedCar);
-                    } else {
-                        flag = "time";
+            for (TestDrive dateVarTestDrive : testDrives) {
+                if (dateVarTestDrive.getDateOfTestDrive().isEqual(date)) {
+                    for (TestDrive timeVarTestDrive : testDrives) {
+                        if (timeVarTestDrive.getTimeOfTestDrive().equals(time)) {
+                            checkTime = false;
+                            flag = "time";
+                            break;
+                        }
                     }
                 }
+                /*if day is not equal date of request, create reservation this car*/
+                else {
+                    createTestDrive(request, date, time, testedCar);
+                    break;
+                }
+            }
+            if (checkTime) {
+                createTestDrive(request, date, time, testedCar);
             }
         }
+        //TODO
+        /*sent emails*/
         return flag;
     }
 
@@ -285,6 +296,7 @@ public class CarService {
         if (!maxPrice.isEmpty()) {
             maxPriceValue = BigDecimal.valueOf(Long.parseLong(maxPrice));
         }
+
         return carRepository.findCarsFromSearchButton(carMark,
                 maxYearValue, maxPriceValue, Car.Status.AVAILABLE);
     }
@@ -328,9 +340,25 @@ public class CarService {
         carRepository.save(testedCar);
     }
 
+    public void updateTestDriveReservation(Long id, UpdateTestDriveRequest request) {
+        DateTimeFormatter dateFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+        DateTimeFormatter timeFormatter = DateTimeFormatter.ofPattern("HH:mm");
+        LocalDate date = LocalDate.parse(request.getDate(), dateFormatter);
+        LocalTime time = LocalTime.parse(request.getTime(), timeFormatter);
+        TestDrive testDrive = findTestDrive(id);
+        testDrive.setDateOfTestDrive(date);
+        testDrive.setTimeOfTestDrive(time);
+        testDrive.setStatus(TestDrive.Status.ACCEPT);
+        testDriveRepository.save(testDrive);
+    }
+
     public List<String> findProductionYear() {
         return carRepository.findProductionYear().stream()
                 .map(Object::toString).collect(Collectors.toList());
+    }
+
+    private TestDrive findTestDrive(Long id) {
+        return testDriveRepository.getOne(id);
     }
 
     public Car findCar(Long id) {
@@ -352,4 +380,5 @@ public class CarService {
     public List<String> findModel() {
         return carRepository.findModel();
     }
+
 }

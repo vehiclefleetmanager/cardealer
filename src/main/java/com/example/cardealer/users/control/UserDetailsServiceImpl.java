@@ -1,7 +1,6 @@
 package com.example.cardealer.users.control;
 
 import com.example.cardealer.users.boundary.UserRepository;
-import com.example.cardealer.users.entity.AuthorizeUserDetails;
 import lombok.AllArgsConstructor;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;

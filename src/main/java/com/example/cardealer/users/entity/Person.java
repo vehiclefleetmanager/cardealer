@@ -29,5 +29,6 @@ public abstract class Person extends BaseEntity {
 
     private String email;
 
+    private boolean active = true;
 
 }

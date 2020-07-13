@@ -12,5 +12,6 @@ public class EmployeeRequest {
     String email;
     String phoneNumber;
     String address;
+    boolean isActive;
     Collection<String> roles;
 }

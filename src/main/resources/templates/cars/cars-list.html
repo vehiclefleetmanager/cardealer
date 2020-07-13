@@ -108,7 +108,8 @@
                                                     <div class="form-group col-xl-4">
                                                         <select class="custom-select" id="fuelType" name="fuelType"
                                                                 required>
-                                                            <option selected="selected" th:text="${car.getFuelType()}">
+                                                            <option selected="selected" th:text="${car.getFuelType()}"
+                                                                    th:value="${car.getFuelType()}">
                                                             </option>
                                                             <option th:each="type:${T(com.example.cardealer.utils.enums.FuelType).values()}"
                                                                     th:text="${type.getType()}"
@@ -118,7 +119,8 @@
                                                     <div class="form-group col-xl-4">
                                                         <select class="custom-select" id="bodyType" name="bodyType"
                                                                 required>
-                                                            <option selected="selected" th:text="${car.getBodyType()} ">
+                                                            <option selected="selected" th:text="${car.getBodyType()}"
+                                                                    th:value="${car.getBodyType()}">
                                                             </option>
                                                             <option th:each="type:${T(com.example.cardealer.utils.enums.BodyType).values()}"
                                                                     th:text="${type.getType()}"

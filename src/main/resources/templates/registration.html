@@ -34,7 +34,7 @@
                         <div class="form-group">
                             <input class="form-control" placeholder="Telefon" required="required"
                                    th:field="*{phoneNumber}"
-                                   type="phone"/>
+                                   type="text"/>
                             <p th:each="error : ${#fields.errors('phoneNumber')}"
                                th:text="${error}">Validation error</p>
                         </div>

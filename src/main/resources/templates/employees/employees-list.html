@@ -9,6 +9,7 @@
                         <th>Imię</th>
                         <th>Nazwisko</th>
                         <th>E-mail</th>
+                        <th>Aktywny</th>
                         <th>Edytuj</th>
                         <th>Usuń</th>
                     </tr>
@@ -19,6 +20,10 @@
                         <td style="font-size: 18px;" th:text="${e.getFirstName()}"></td>
                         <td style="font-size: 18px;" th:text="${e.getLastName()}"></td>
                         <td style="font-size: 18px;" th:text="${e.getEmail()}"></td>
+                        <td>
+                            <input class="checkbox" disabled name="isActive"
+                                   th:checked="${e.isActive()}" type="checkbox">
+                        </td>
                         <!--Edit Employeer-->
                         <td>
                             <a data-target="#updateEmployee" data-toggle="modal"
@@ -34,12 +39,12 @@
                                             <h5 class="modal-title">Edycja pracownika</h5>
                                         </div>
                                         <div class="modal-body">
-                                            <form th:action="@{/emloyees/update/{id}(id=${e.getId()})}"
+                                            <form th:action="@{/employees/{id}(id=${e.getId()})}"
                                                   th:method="put"
                                                   th:object="${updateEmployee}">
                                                 <div class="form-row">
-                                                    <input class="form-control" hidden id="id"
-                                                           name="carId" th:value="${e.getId()}" type="number">
+                                                    <input hidden id="id"
+                                                           name="id" th:value="${e.getId()}" type="number">
                                                     <div class="form-group col-xl-6">
                                                         <input class="form-control" id="firstName" name="firstName"
                                                                placeholder="Imię"
@@ -85,6 +90,14 @@
                                                                placeholder="Numer pracownika"
                                                                readonly
                                                                required th:value="${e.getEmployeeNumber()}" type="text">
+                                                    </div>
+                                                    <div class="col-xl-6">
+                                                        <label class="label" for="isActive">Aktywność</label>
+                                                        <input id="isActive"
+                                                               name="isActive"
+                                                               th:checked="${e.isActive()}"
+                                                               th:value="${e.isActive()}"
+                                                               type="checkbox">
                                                     </div>
                                                     <div class="form-group col-xl-6">
                                                         <select class="form-control" id="roles" multiple name="roles"

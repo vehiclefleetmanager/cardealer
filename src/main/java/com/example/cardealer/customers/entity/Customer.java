@@ -51,6 +51,7 @@ public class Customer extends Person {
         this.setAddress(address);
         this.setPhoneNumber(phoneNumber);
         this.setEmail(email);
+        this.setActive(true);
         this.tin = tin;
         this.pesel = pesel;
         this.idNumber = idNumber;

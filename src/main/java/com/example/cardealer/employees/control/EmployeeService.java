@@ -43,19 +43,20 @@ public class EmployeeService {
         Employee newEmployee = employeeRepository.save(employee);
         String tempPass = password.temporaryPassword();
         System.out.println("Temporary password for " + newEmployee.getFirstName() + " set: " + tempPass);
-        User userSystem = new User(newEmployee, true, encoder.encode(tempPass));
+        User userSystem = new User(newEmployee, encoder.encode(tempPass));
         userSystem.setRoles(setEmployeeRoles(request));
         userRepository.save(userSystem);
     }
 
-    public void updateEmployee(EmployeeRequest request) {
-        employeeRepository.findById(request.getId()).ifPresent(
+    public void updateEmployee(long id, EmployeeRequest request) {
+        employeeRepository.findById(id).ifPresent(
                 e -> {
                     e.setFirstName(request.getFirstName());
                     e.setLastName(request.getLastName());
                     e.setEmail(request.getEmail());
                     e.setPhoneNumber(request.getPhoneNumber());
                     e.setAddress(request.getAddress());
+                    e.setActive(request.isActive());
                     employeeRepository.save(e);
                 });
         userRepository.findByEmail(request.getEmail()).ifPresent(

@@ -1,4 +1,5 @@
-<div class="container" th:fragment="repairs-list" xmlns:th="http://www.thymeleaf.org">
+<div class="container" th:fragment="repairs-list" xmlns:sec="http://www.thymeleaf.org/extras/spring-security"
+     xmlns:th="http://www.thymeleaf.org">
     <div class="row">
         <div class="col-sm-12 text-center">
             <div class="table-responsive ">
@@ -10,6 +11,7 @@
                         <th>Nr_nadwozia</th>
                         <th>Wartość</th>
                         <th>Podgląd</th>
+                        <th>Drukuj</th>
                     </tr>
                     </thead>
                     <tbody>
@@ -18,10 +20,53 @@
                         <td style="font-size: 18px;" th:text="${r.getRepairDate()}"></td>
                         <td style="font-size: 18px;" th:text="${r.getCarBodyNumber()}"></td>
                         <td style="font-size: 18px;" th:text="${r.getRepairAmount()}"></td>
-                        <td>
-                            <a th:href="@{'/'}">
+                        <td sec:authorize="hasAnyRole('ROLE_ADMIN', 'ROLE_MECHANIC')">
+                            <a data-target="#repairCar" data-toggle="modal"
+                               th:attr="data-target='#repairCar' +${r.getId()}">
                                 <button class="btn btn-outline-info" type="button">
                                     <i class="far fa-eye"></i>
+                                </button>
+                            </a>
+                            <div class="modal fade-in" th:id="'repairCar'+${r.getId() }">
+                                <div class="modal-dialog">
+                                    <div class="modal-content">
+                                        <div class="modal-header">
+                                            <h5 class="modal-title">Potwierdzenie naprawy samochodu</h5>
+                                        </div>
+                                        <div class="modal-body">
+                                            <div>
+                                                <h5 th:text="'Dokument naprawy numer '+${r.getId() +
+                                                '/'+ r.getRepairDate()}">
+                                                </h5>
+                                                <p th:text="'Pojazd: ' +${r.getCarMark()+' '+ r.getCarModel()}"></p>
+                                                <p th:text="'Numer nadwozia: ' +${r.getCarBodyNumber()}"></p>
+                                                <p th:text="'Rok produkcji: ' +${r.getCarProductionYear()}"></p>
+                                                <p th:text="'Przebieg (km): ' +${r.getCarDistance()}"></p>
+                                                <br>
+                                                <p th:text="'Opis naprawy: ' +${r.getRepairDescription()}"></p>
+                                                <p th:text="'Wykorzystane części:'"></p>
+                                                <ul th:each="rep : ${r.getPartsName()}">
+                                                    <li th:text="${rep.getPartName()}"></li>
+                                                </ul>
+                                                <br>
+                                                <p th:text="'Wartość naprawy: ' +${r.getRepairAmount()}"></p>
+                                                <p th:text="'Diagnozy i naprawy dokonywał: ' +${r.getMechanicFName() + ' ' + r.getMechanicLName()}"></p>
+                                            </div>
+                                            <br>
+                                            <div class="modal-footer">
+                                                <button class="btn btn-outline-danger" data-dismiss="modal"
+                                                        type="button">Zamknij
+                                                </button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </td>
+                        <td>
+                            <a th:href="'repairs/generate/' + ${r.getId()}">
+                                <button class="btn btn-outline-warning" type="button">
+                                    <i class="fas fa-file-download"></i>
                                 </button>
                             </a>
                         </td>

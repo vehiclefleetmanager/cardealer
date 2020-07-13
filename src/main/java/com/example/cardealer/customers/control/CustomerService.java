@@ -2,6 +2,7 @@ package com.example.cardealer.customers.control;
 
 import com.example.cardealer.cars.entity.Car;
 import com.example.cardealer.config.TemporaryPassword;
+import com.example.cardealer.customers.boundary.CreateCustomerRequest;
 import com.example.cardealer.customers.boundary.CustomerRepository;
 import com.example.cardealer.customers.boundary.UpdateCustomerRequest;
 import com.example.cardealer.customers.entity.Customer;
@@ -39,7 +40,7 @@ public class CustomerService {
 
 
     public void addCarOwner(Car addedCar, CreateCessionRequest request) {
-        Customer addCustomer = getCustomer(request.getFirstName(), request.getLastName(), request.getAddress(),
+        Customer addCustomer = findCustomer(request.getFirstName(), request.getLastName(), request.getAddress(),
                 request.getPhoneNumber(), request.getTin(), request.getPesel(), request.getIdNumber(),
                 request.getEmail(), Customer.Status.PRESENT);
         addCustomer.addCar(addedCar);
@@ -50,10 +51,10 @@ public class CustomerService {
         // */
     }
 
-    public void addCustomer(String firstName, String lastName, String address, String phoneNumber, String tin,
-                            String pesel, String idNumber, String email) {
-        saveCustomer(getCustomer(firstName, lastName, address, phoneNumber, tin,
-                pesel, idNumber, email, Customer.Status.FUTURE));
+    public void addCustomer(CreateCustomerRequest request) {
+        saveCustomer(findCustomer(request.getFirstName(), request.getLastName(),
+                request.getAddress(), request.getPhoneNumber(), request.getTin(), request.getPesel(),
+                request.getIdNumber(), request.getEmail(), Customer.Status.FUTURE));
         //TODO/*
         // add send info on customer email
         // */
@@ -74,6 +75,10 @@ public class CustomerService {
                 });
     }
 
+    public Customer findCustomer(Long id) {
+        return customerRepository.getOne(id);
+    }
+
     public void deleteCustomer(Long id) {
         customerRepository.findById(id).ifPresent(
                 customer -> customerRepository.deleteById(id));
@@ -90,9 +95,9 @@ public class CustomerService {
     }
 
 
-    private Customer getCustomer(String firstName, String lastName, String address,
-                                 String phoneNumber, String tin, String pesel,
-                                 String idNumber, String email, Customer.Status status) {
+    private Customer findCustomer(String firstName, String lastName, String address,
+                                  String phoneNumber, String tin, String pesel,
+                                  String idNumber, String email, Customer.Status status) {
         return new Customer(firstName, lastName, address, phoneNumber,
                 tin, pesel, idNumber, email, status);
     }
@@ -102,7 +107,7 @@ public class CustomerService {
         Role customerRole = roleRepository.findByName("Client".toUpperCase());
         String tempPass = password.temporaryPassword();
         System.out.println("Temporary password for " + newCustomer.getFirstName() + " set: " + tempPass);
-        User addUser = new User(newCustomer, true, passwordEncoder.encode(tempPass));
+        User addUser = new User(newCustomer, passwordEncoder.encode(tempPass));
         addUser.addRole(customerRole);
         userRepository.save(addUser);
     }

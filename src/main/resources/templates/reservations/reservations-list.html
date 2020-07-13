@@ -22,16 +22,87 @@
                             th:text="${r.getCarMark()} +' ' +${r.getCarModel()} +' ' + ${r.getCarBodyNumber()}"></td>
                         <td style="font-size: 18px;" th:text="${r.getDate()} +' ' + ${r.getTime()}"></td>
                         <td>
-                            <a th:href="@{'/'}">
+                            <a data-toggle="modal"
+                               th:attr="data-target='#confirm'+${r.getId()}">
                                 <button class="btn btn-outline-info" type="button">
                                     <i class="far fa-eye"></i>
                                 </button>
                             </a>
+                            <div class="modal fade-in" th:id="'confirm'+${r.getId()}">
+                                <div class="modal-dialog">
+                                    <div class="modal-content">
+                                        <div class="modal-header">
+                                            <h5 class="modal-title">Potwierdzenie rezerwacji</h5>
+                                        </div>
+                                        <div class="modal-body">
+                                            <form th:action="@{reservations/confirm/{id}(id=${r.getId()})}"
+                                                  th:method="post"
+                                                  th:object="${updateTestDrive}">
+                                                <div class="form-row">
+                                                    <input hidden name="carId" th:value="${r.getCarId()}">
+                                                    <input hidden name="userId" th:value="${r.getCustomerId()}">
+                                                    <div class="form-group col-xl-4">
+                                                        <label class="form-check-label " for="firstName">Imię</label>
+                                                        <input class="form-control" id="firstName" name="firstName"
+                                                               placeholder="Imię"
+                                                               readonly th:value="${r.getCustomerFirstName()}"
+                                                               type="text">
+                                                    </div>
+                                                    <div class="form-group col-xl-4">
+                                                        <label class="form-check-label" for="lastName">Nazwisko</label>
+                                                        <input class="form-control" id="lastName" name="lastName"
+                                                               placeholder="Nazwisko"
+                                                               readonly th:value="${r.getCustomerLastName()}"
+                                                               type="text">
+                                                    </div>
+                                                    <div class="form-group col-xl-4">
+                                                        <label class="form-check-label" for="phoneNumber">Numer
+                                                            telefonu</label>
+                                                        <input class="form-control" id="phoneNumber" name="phoneNumber"
+                                                               placeholder="Telefon" readonly
+                                                               th:value="${r.getCustomerPhoneNumber()}"
+                                                               type="text">
+                                                    </div>
+                                                    <div class="form-group col-xl-12">
+                                                        <label class="form-check-label" for="email">Email</label>
+                                                        <input class="form-control" id="email" max="17:00" min="09:00"
+                                                               name="email" placeholder="Email" readonly
+                                                               th:value="${r.getCustomerEmail()}"
+                                                               type="email">
+                                                    </div>
+                                                    <div class="form-group col-xl-6">
+                                                        <label class="form-check-label" for="date">Proponowana
+                                                            data</label>
+                                                        <input class="form-control" id="date" name="date"
+                                                               required th:value="${r.getDate()}"
+                                                               type="date">
+                                                    </div>
+                                                    <div class="form-group col-xl-6">
+                                                        <label class="form-check-label" for="time">Proponowana
+                                                            godzina</label>
+                                                        <input class="form-control" id="time" name="time"
+                                                               required th:value="${r.getTime()}"
+                                                               type="time">
+                                                    </div>
+                                                </div>
+                                                <br>
+                                                <div class="modal-footer">
+                                                    <button class="btn btn-outline-danger" data-dismiss="modal"
+                                                            type="button">Zamknij
+                                                    </button>
+                                                    <button class="btn btn-outline-success" type="submit">Potwierdź
+                                                    </button>
+                                                </div>
+                                            </form>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
                         </td>
                         <td th:if="${r.getStatus() eq 'NEW'} ">
                             <span class="badge badge-pill badge-danger">Nowa</span>
                         </td>
-                        <td th:if="${r.getStatus() eq 'WAIT'}">
+                        <td th:if="${r.getStatus() eq 'ACCEPT'}">
                             <span class="badge badge-pill badge-success">Oczekująca</span>
                         </td>
                         <td th:if="${r.getStatus() eq 'END'}">

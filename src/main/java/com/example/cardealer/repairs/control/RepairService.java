@@ -16,4 +16,8 @@ public class RepairService {
     public Page<Repair> findAllRepairs(Pageable pageable) {
         return repairRepository.findAll(pageable);
     }
+
+    public Repair getRepairById(Long id) {
+        return repairRepository.getOne(id);
+    }
 }

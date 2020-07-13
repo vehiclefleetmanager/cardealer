@@ -10,10 +10,22 @@
 <div class="container">
 
     <!--Info-->
-    <div class="col-md-10 offset-md-2" th:if="${flag} eq 'time'">
-        <span class="h4 text-danger">Podaj inną godzinę</span>
+    <div class="col-md-10 offset-md-2 alert alert-warning alert-dismissible fade show" role="alert"
+         th:if="${flag} eq 'time'">
+        <p th:text="${time}"></p>
+        <button aria-label="Close" class="close" data-dismiss="alert" type="button">
+            <span aria-hidden="true">&times;</span>
+        </button>
     </div>
     <!--End Info-->
+
+    <div class="col-md-10 offset-md-2 alert alert-success alert-dismissible fade show" role="alert"
+         th:if="${flag} eq true">
+        <p th:text="${msg}"></p>
+        <button aria-label="Close" class="close" data-dismiss="alert" type="button">
+            <span aria-hidden="true">&times;</span>
+        </button>
+    </div>
 
     <!--Breadcrumbs-->
     <div class="col-md-10 offset-md-2">

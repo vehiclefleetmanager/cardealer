@@ -163,7 +163,7 @@ public class Car extends BaseEntity {
 
     public enum BodyType {
         HATCHBACK("Hatchback"),
-        COMBI("Kombi"),
+        COMBI("Combi"),
         SEDAN("Sedan"),
         SUV("Suv"),
         VAN("Van"),

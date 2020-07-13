@@ -1,6 +1,5 @@
 package com.example.cardealer.users.control;
 
-import com.example.cardealer.users.entity.AuthorizeUserDetails;
 import com.example.cardealer.users.entity.User;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;

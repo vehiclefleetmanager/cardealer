@@ -13,6 +13,7 @@ public class EmployeeResponse {
     String address;
     String phoneNumber;
     String email;
+    boolean isActive;
     String employmentDate;
     String employeeNumber;
 
@@ -24,6 +25,7 @@ public class EmployeeResponse {
                 employee.getAddress(),
                 employee.getPhoneNumber(),
                 employee.getEmail(),
+                employee.isActive(),
                 employee.getEmploymentDate().toString(),
                 employee.getEmployeeNumber());
     }

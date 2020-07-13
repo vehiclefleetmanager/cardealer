@@ -1,9 +1,9 @@
 package com.example.cardealer.web_controller;
 
 import com.example.cardealer.cars.boundary.CarResponse;
-import com.example.cardealer.cars.boundary.CreateTestDriveRequest;
 import com.example.cardealer.cars.control.CarService;
 import com.example.cardealer.cars.entity.Car;
+import com.example.cardealer.events.boundary.CreateTestDriveRequest;
 import com.example.cardealer.users.boundary.CreateUserRequest;
 import com.example.cardealer.users.control.CurrentUser;
 import com.example.cardealer.users.control.UserService;
@@ -14,6 +14,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.validation.Valid;
 import java.util.List;
@@ -49,13 +50,18 @@ public class IndexController {
     @PostMapping("/test/{id}")
     public String testDriveReservation(@PathVariable("id") Long id,
                                        @ModelAttribute("newTestDrive") CreateTestDriveRequest request,
-                                       Model model) {
+                                       Model model, RedirectAttributes attributes) {
         String flag = carService.testDriveReservation(request);
         if (flag.matches("ok")) {
             setAnonymousUser(model);
+            attributes.addFlashAttribute("flag", true);
+            attributes.addFlashAttribute("msg",
+                    "Dokonano wstępnej rezerwazcji jazdy testowej samochodem " + getCarBasicInfo(id) + " na dzień " +
+                            request.getDate() + " na godzinę " + request.getTime());
             return "redirect:../details/" + id;
         } else {
             model.addAttribute("flag", flag);
+            model.addAttribute("time", "Godzina " + request.getTime() + " jest już zajęta. Podaj inną godzinę.");
             return showCarsDetails(id, model);
         }
     }
@@ -77,7 +83,8 @@ public class IndexController {
     public String filterCarOnMainPage(
             @RequestParam(value = "mark", required = false) @PathVariable String carMark,
             @RequestParam(value = "maxYear", required = false) @PathVariable String maxYear,
-            @RequestParam(value = "maxPrice", required = false) @PathVariable String maxPrice, Model model) {
+            @RequestParam(value = "maxPrice", required = false) @PathVariable String maxPrice,
+            Model model) {
         List<Car> carsFromSearchButton = carService.getCarsFromSearchButton(carMark, maxYear, maxPrice);
         model.addAttribute("cars", carsFromSearchButton.stream().map(CarResponse::from).collect(Collectors.toList()));
         setAnonymousUser(model);
@@ -116,5 +123,11 @@ public class IndexController {
     private void prepareSearchFormFields(Model model) {
         model.addAttribute("markList", carService.findMark());
         model.addAttribute("years", carService.findProductionYear());
+    }
+
+    private String getCarBasicInfo(Long id) {
+        return carService.findCar(id).getMark() + " " +
+                carService.findCar(id).getModel() + " " +
+                carService.findCar(id).getBodyNumber();
     }
 }

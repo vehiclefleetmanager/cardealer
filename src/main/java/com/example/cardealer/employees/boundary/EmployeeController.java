@@ -34,6 +34,7 @@ public class EmployeeController {
         model.addAttribute("pages", employeeService.findAllEmployees(PageRequest.of(page, 10)));
         model.addAttribute("currentPage", page);
         model.addAttribute("currentUser", currentUser.getUser());
+
         return "employees/employees";
     }
 
@@ -45,9 +46,9 @@ public class EmployeeController {
     }
 
     @PreAuthorize("hasAnyRole('ROLE_ADMIN', 'ROLE_BOSS', 'ROLE_WORKER')")
-    @PutMapping("/employees")
-    public String updateEmployee(@ModelAttribute("updateEmployee") EmployeeRequest request) {
-        employeeService.updateEmployee(request);
+    @PutMapping("/employees/{id}")
+    public String updateEmployee(@RequestParam("id") long id, @ModelAttribute("updateEmployee") EmployeeRequest request) {
+        employeeService.updateEmployee(id, request);
         return "redirect:/employees";
     }
 
