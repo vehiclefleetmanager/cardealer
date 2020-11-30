@@ -4,14 +4,16 @@ package com.example.cardealer.events.entity;
 import com.example.cardealer.cars.entity.Car;
 import com.example.cardealer.customers.entity.Customer;
 import com.example.cardealer.documents.entiity.Agreement;
-import com.example.cardealer.employees.entity.Employee;
 import com.example.cardealer.entities.BaseEntity;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-import javax.persistence.*;
+import javax.persistence.CascadeType;
+import javax.persistence.JoinColumn;
+import javax.persistence.MappedSuperclass;
+import javax.persistence.OneToOne;
 
 @MappedSuperclass
 @NoArgsConstructor
@@ -20,18 +22,15 @@ import javax.persistence.*;
 @Setter
 public class Event extends BaseEntity {
 
-    @ManyToOne(cascade = CascadeType.ALL)
+    @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "car_id")
     private Car car;
 
-    @ManyToOne(cascade = CascadeType.ALL)
+    @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "customer_id")
     private Customer customer;
 
-    @ManyToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "employee_id")
-    private Employee employee;
-
-    @OneToOne
+    @OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "agreement_id")
     private Agreement agreement;
 }

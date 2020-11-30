@@ -1,5 +1,6 @@
 package com.example.cardealer.users.entity;
 
+import com.example.cardealer.entities.BaseEntity;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -13,7 +14,17 @@ import java.util.HashSet;
 @Setter
 @NoArgsConstructor
 @Table(name = "users")
-public class User extends Person {
+public class User extends BaseEntity {
+
+    private String firstName;
+
+    private String lastName;
+
+    private String phoneNumber;
+
+    private String email;
+
+    private boolean active = true;
 
     private String password;
 
@@ -24,31 +35,16 @@ public class User extends Person {
             inverseJoinColumns = @JoinColumn(name = "role_id"))
     private Collection<Role> roles = new HashSet<>();
 
-    /*constructor for decorate new Employee*/
-    public User(Person person, String pass) {
-        super();
-        setFirstName(person.getFirstName());
-        setLastName(person.getLastName());
-        setAddress(person.getAddress());
-        setPhoneNumber(person.getPhoneNumber());
-        setEmail(person.getEmail());
-        setActive(person.isActive());
-        this.password = pass;
-    }
-
-    /* *//*constructor for decorate new Customer*//*
-    public User(Person person, String pass) {
-        super();
-        setFirstName(person.getFirstName());
-        setLastName(person.getLastName());
-        setAddress(person.getAddress());
-        setPhoneNumber(person.getPhoneNumber());
-        setEmail(person.getEmail());
-        setActive(isActive);
-        this.password = pass;
-    }*/
 
     public void addRole(Role role) {
-        roles.add(role);
+        if (roles.isEmpty() && getRoles().stream().noneMatch(r -> r.getName().matches(r.getName()))) {
+            roles.add(role);
+        }
+    }
+
+    public void removeRole(Role role) {
+        if (getRoles().stream().noneMatch(r -> r.getName().matches(r.getName()))) {
+            getRoles().remove(role);
+        }
     }
 }

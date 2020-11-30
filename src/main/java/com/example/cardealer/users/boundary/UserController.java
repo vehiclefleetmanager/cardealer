@@ -5,7 +5,6 @@ import com.example.cardealer.users.control.CurrentUser;
 import com.example.cardealer.users.control.UserService;
 import lombok.AllArgsConstructor;
 import org.springframework.data.domain.PageRequest;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -21,7 +20,6 @@ public class UserController {
     private final CurrentUser currentUser;
     private final RoleRepository roleRepository;
 
-    @PreAuthorize("hasAnyRole('ROLE_ADMIN', 'ROLE_BOSS')")
     @GetMapping()
     public String getSystemUsers(@RequestParam(defaultValue = "0") int page, Model model) {
         model.addAttribute("users", userService.findAllUsers(PageRequest.of(page, 10))
@@ -32,8 +30,6 @@ public class UserController {
         model.addAttribute("roles", roleRepository.findAll());
         return "users/users";
     }
-
-    @PreAuthorize("hasAnyRole('ROLE_ADMIN', 'ROLE_BOSS')")
     @PostMapping()
     public String addNewUser(@ModelAttribute("newUser") CreateUserRequest request, Model model) {
         String msg = userService.addNewUser(request);
@@ -41,14 +37,12 @@ public class UserController {
         return "redirect:/users";
     }
 
-    @PreAuthorize("hasAnyRole('ROLE_ADMIN', 'ROLE_BOSS')")
     @PutMapping("/update/{id}")
     public String updateUser(@ModelAttribute("updatePassword") UpdateUserPasswordRequest request) {
         userService.updateUserPassword(request);
         return "redirect:/users";
     }
 
-    @PreAuthorize("hasAnyRole('ROLE_ADMIN', 'ROLE_BOSS')")
     @PostMapping("delete/{id}")
     public String deleteUser(@PathVariable("id") Long id) {
         userService.deleteUser(id);

@@ -21,4 +21,8 @@ public class AgreementService {
     public void save(Agreement agreement) {
         agreementRepository.save(agreement);
     }
+
+    public Page<Agreement> findAllAgreementsOfUser(Long userId, Pageable pageable) {
+        return agreementRepository.findAllAgreementsOfUser(userId, pageable);
+    }
 }

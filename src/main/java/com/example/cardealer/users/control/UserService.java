@@ -1,10 +1,8 @@
 
 package com.example.cardealer.users.control;
 
-import com.example.cardealer.users.boundary.CreateUserRequest;
-import com.example.cardealer.users.boundary.RoleRepository;
-import com.example.cardealer.users.boundary.UpdateUserPasswordRequest;
-import com.example.cardealer.users.boundary.UserRepository;
+import com.example.cardealer.customers.boundary.CustomerRepository;
+import com.example.cardealer.users.boundary.*;
 import com.example.cardealer.users.entity.User;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -18,12 +16,18 @@ import java.util.Arrays;
 @RequiredArgsConstructor
 public class UserService {
     private final UserRepository userRepository;
+    private final CustomerRepository customerRepository;
     private final RoleRepository roleRepository;
     private final PasswordEncoder passwordEncoder;
 
     public Page<User> findAllUsers(Pageable pageable) {
         return userRepository.findAll(pageable);
     }
+
+    public User findUser(Long id) {
+        return userRepository.findById(id).get();
+    }
+
 
     public String addNewUser(CreateUserRequest request) {
         if (emailExists(request.getEmail())) {
@@ -52,12 +56,23 @@ public class UserService {
         //TODO
         /*send message about change password (requset.getPassword()) on request.getEmail() */
     }
-
     public void deleteUser(Long id) {
         userRepository.findById(id).ifPresent(u -> userRepository.deleteById(u.getId()));
     }
 
+    public void updateUserInformation(UpdateUserRequest request) {
+        userRepository.findById(request.getId()).ifPresent(
+                u -> {
+                    u.setFirstName(request.getFirstName());
+                    u.setLastName(request.getLastName());
+                    u.setEmail(request.getEmail());
+                    u.setPhoneNumber(request.getPhoneNumber());
+                }
+        );
+    }
+
     /*Registration*/
+
     public void registrationNewAppUser(CreateUserRequest request) {
         User user = new User();
         user.setFirstName(request.getFirstName());

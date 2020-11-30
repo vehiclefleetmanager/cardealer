@@ -10,7 +10,6 @@ public class EmployeeResponse {
     Long id;
     String firstName;
     String lastName;
-    String address;
     String phoneNumber;
     String email;
     boolean isActive;
@@ -22,7 +21,6 @@ public class EmployeeResponse {
                 employee.getId(),
                 employee.getFirstName(),
                 employee.getLastName(),
-                employee.getAddress(),
                 employee.getPhoneNumber(),
                 employee.getEmail(),
                 employee.isActive(),

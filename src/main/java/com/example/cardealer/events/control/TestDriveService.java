@@ -13,8 +13,11 @@ public class TestDriveService {
 
     private final TestDriveRepository testDriveRepository;
 
-
     public Page<TestDrive> findAllReservations(Pageable pageable) {
         return testDriveRepository.findAll(pageable);
+    }
+
+    public Page<TestDrive> findAllReservationsOfUser(Long id, Pageable pageable) {
+        return testDriveRepository.findAllReservationsOfUser(id, pageable);
     }
 }

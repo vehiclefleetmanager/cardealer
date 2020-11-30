@@ -3,9 +3,6 @@ package com.example.cardealer.events.entity;
 
 import com.example.cardealer.cars.entity.Car;
 import com.example.cardealer.customers.entity.Customer;
-import com.example.cardealer.documents.entiity.Agreement;
-import com.example.cardealer.employees.entity.Employee;
-import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -19,17 +16,15 @@ import java.time.LocalDate;
 @Getter
 @Setter
 @NoArgsConstructor
-@AllArgsConstructor
 @Table(name = "cessions")
 public class Cession extends Event {
 
-    private LocalDate cessionDate;
+    private LocalDate eventDate;
 
-    public Cession(Car updateCar, LocalDate date, Customer carOwner, Agreement agreement, Employee employee) {
-        setCar(updateCar);
+    public Cession(Car updateCar, Customer carOwner, LocalDate date) {
+        super();
         setCustomer(carOwner);
-        setAgreement(agreement);
-        setEmployee(employee);
-        this.cessionDate = date;
+        setCar(updateCar);
+        this.setEventDate(date);
     }
 }

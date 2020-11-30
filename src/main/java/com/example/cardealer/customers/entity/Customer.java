@@ -1,12 +1,13 @@
 package com.example.cardealer.customers.entity;
 
 import com.example.cardealer.cars.entity.Car;
-import com.example.cardealer.users.entity.Person;
+import com.example.cardealer.users.entity.Role;
+import com.example.cardealer.users.entity.User;
 import lombok.*;
 
 import javax.persistence.*;
-import java.util.Collection;
 import java.util.HashSet;
+import java.util.Set;
 
 /**
  * This class describes the Customers in the application.
@@ -18,7 +19,7 @@ import java.util.HashSet;
 @AllArgsConstructor
 @Entity
 @Table(name = "customers")
-public class Customer extends Person {
+public class Customer extends User {
 
     @Column(unique = true)
     private String tin;
@@ -26,14 +27,16 @@ public class Customer extends Person {
     @Column(unique = true)
     private String pesel;
 
+    private String address;
+
     private String idNumber;
 
     @Enumerated(EnumType.STRING)
     private Status status;
 
-    @OneToMany(cascade = CascadeType.PERSIST)
+    @OneToMany(cascade = CascadeType.ALL)
     @JoinColumn(name = "customer_id")
-    private Collection<Car> cars = new HashSet<>();
+    private Set<Car> cars = new HashSet<>();
 
     public Customer(String tin, String pesel,
                     String idNumber) {
@@ -44,14 +47,29 @@ public class Customer extends Person {
 
     public Customer(String firstName, String lastName, String address,
                     String phoneNumber, String tin, String pesel,
-                    String idNumber, String email, Status status) {
+                    String idNumber, String email, String password, Role role, Status status) {
         super();
-        this.setFirstName(firstName);
-        this.setLastName(lastName);
-        this.setAddress(address);
-        this.setPhoneNumber(phoneNumber);
-        this.setEmail(email);
-        this.setActive(true);
+        setFirstName(firstName);
+        setLastName(lastName);
+        setAddress(address);
+        setPhoneNumber(phoneNumber);
+        setEmail(email);
+        setPassword(password);
+        addRole(role);
+        this.tin = tin;
+        this.pesel = pesel;
+        this.idNumber = idNumber;
+        this.status = status;
+    }
+
+    /* This constructor is use with create cession events*/
+    public Customer(String firstName, String lastName, String address, String phoneNumber, String tin, String pesel, String idNumber, String email, Status status) {
+        super();
+        setFirstName(firstName);
+        setLastName(lastName);
+        setAddress(address);
+        setPhoneNumber(phoneNumber);
+        setEmail(email);
         this.tin = tin;
         this.pesel = pesel;
         this.idNumber = idNumber;
@@ -66,9 +84,10 @@ public class Customer extends Person {
         cars.remove(car);
     }
 
-    public Collection<Car> getCars() {
+    public Set<Car> getCars() {
         return cars;
     }
+
 
     public enum Status {
         ABSENT("Były właściciel"),

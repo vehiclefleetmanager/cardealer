@@ -1,16 +1,20 @@
 package com.example.cardealer.customers.control;
 
+import com.example.cardealer.cars.boundary.CarRepository;
 import com.example.cardealer.cars.entity.Car;
 import com.example.cardealer.config.TemporaryPassword;
 import com.example.cardealer.customers.boundary.CreateCustomerRequest;
 import com.example.cardealer.customers.boundary.CustomerRepository;
 import com.example.cardealer.customers.boundary.UpdateCustomerRequest;
 import com.example.cardealer.customers.entity.Customer;
+import com.example.cardealer.documents.boundary.AgreementRepository;
+import com.example.cardealer.documents.boundary.InvoiceRepository;
+import com.example.cardealer.documents.entiity.Agreement;
+import com.example.cardealer.documents.entiity.Invoice;
 import com.example.cardealer.events.boundary.CreateCessionRequest;
 import com.example.cardealer.users.boundary.RoleRepository;
 import com.example.cardealer.users.boundary.UserRepository;
 import com.example.cardealer.users.entity.Role;
-import com.example.cardealer.users.entity.User;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -28,6 +32,9 @@ public class CustomerService {
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
     private final TemporaryPassword password;
+    private final CarRepository carRepository;
+    private final AgreementRepository agreementRepository;
+    private final InvoiceRepository invoiceRepository;
 
 
     public Collection<Customer> findAll() {
@@ -103,12 +110,23 @@ public class CustomerService {
     }
 
     private void saveCustomer(Customer addCustomer) {
-        Customer newCustomer = customerRepository.save(addCustomer);
         Role customerRole = roleRepository.findByName("Client".toUpperCase());
         String tempPass = password.temporaryPassword();
-        System.out.println("Temporary password for " + newCustomer.getFirstName() + " set: " + tempPass);
-        User addUser = new User(newCustomer, passwordEncoder.encode(tempPass));
-        addUser.addRole(customerRole);
-        userRepository.save(addUser);
+        System.out.println("Temporary password for " + addCustomer.getFirstName() + " set: " + tempPass);
+        addCustomer.setPassword(passwordEncoder.encode(tempPass));
+        addCustomer.addRole(customerRole);
+        userRepository.save(addCustomer);
+    }
+
+    public Collection<Car> findCars(Long id) {
+        return carRepository.findAllCarsOfCustomer(id);
+    }
+
+    public Collection<Agreement> findAgreements(Long id) {
+        return agreementRepository.findAllAgreementsOfCustomer(id);
+    }
+
+    public Collection<Invoice> findInvoices(Long id) {
+        return invoiceRepository.findAllInvoicesOfCustomer(id);
     }
 }

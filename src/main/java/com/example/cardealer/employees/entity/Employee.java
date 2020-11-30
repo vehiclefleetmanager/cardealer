@@ -1,6 +1,7 @@
 package com.example.cardealer.employees.entity;
 
-import com.example.cardealer.users.entity.Person;
+import com.example.cardealer.users.entity.Role;
+import com.example.cardealer.users.entity.User;
 import lombok.*;
 
 import javax.persistence.Entity;
@@ -19,31 +20,23 @@ import java.time.LocalDate;
 @Entity
 @Table(name = "employees")
 //@Inheritance(strategy = InheritanceType.JOINED)
-public class Employee extends Person {
+public class Employee extends User {
 
     private LocalDate employmentDate;
+
     private String employeeNumber;
 
 
-    public Employee(String firstName, String lastName, String address, String phoneNumber,
-                    String email, LocalDate date, String employeeNumber) {
-        super();
-        setFirstName(firstName);
-        setLastName(lastName);
-        setAddress(address);
-        setPhoneNumber(phoneNumber);
-        setEmail(email);
-        this.employmentDate = date;
-        this.employeeNumber = employeeNumber;
-    }
-
     public Employee(String firstName, String lastName, String phoneNumber,
-                    String email, LocalDate date) {
+                    String email, String password, Role role, LocalDate employmentDate, String employeeNumber) {
         super();
         setFirstName(firstName);
         setLastName(lastName);
         setPhoneNumber(phoneNumber);
         setEmail(email);
-        this.employmentDate = date;
+        setPassword(password);
+        addRole(role);
+        this.employmentDate = employmentDate;
+        this.employeeNumber = employeeNumber;
     }
 }

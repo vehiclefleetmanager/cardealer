@@ -1,0 +1,225 @@
+<!doctype html>
+<html lang="en" xmlns:sec="http://www.thymeleaf.org/extras/spring-security" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="fragments/header :: header"></head>
+<body>
+<div th:object="${currentUser}" th:replace="fragments/top-nav :: top-nav"></div>
+<div sec:authorize="isAuthenticated()" th:replace="fragments/sidebar :: sidebar"></div>
+<br>
+<br>
+<br>
+<div class="container">
+
+    <!--Breadcrumbs-->
+    <div class="col-md-10 offset-md-2">
+        <nav aria-label="breadcrumb"
+             sec:authorize="hasAnyRole('ROLE_ADMIN', 'ROLE_BOSS','ROLE_WORKER', 'ROLE_MECHANIC')">
+            <ol class="breadcrumb bg-white">
+                <li class="breadcrumb-item"><a th:href="@{/}"><i class="fas fa-warehouse"></i></a></li>
+                <li class="breadcrumb-item active"><a th:href="@{/customers}">Klienci</a></li>
+                <li aria-current="page" class="breadcrumb-item active">Szczegóły</li>
+            </ol>
+        </nav>
+        <nav aria-label="breadcrumb" sec:authorize="hasRole('ROLE_CLIENT')">
+            <ol class="breadcrumb bg-white">
+                <li class="breadcrumb-item"><a th:href="@{/}"><i class="fas fa-warehouse"></i></a></li>
+                <li aria-current="page" class="breadcrumb-item active">Szczegóły</li>
+            </ol>
+        </nav>
+        <nav aria-label="breadcrumb" sec:authorize="isAnonymous()">
+            <ol class="breadcrumb bg-white">
+                <li class="breadcrumb-item"><a th:href="@{/}"><i class="fas fa-warehouse"></i></a></li>
+                <li aria-current="page" class="breadcrumb-item active">Szczegóły</li>
+            </ol>
+        </nav>
+    </div>
+    <!--End Breadcrumbs-->
+
+    <!--Details of customer-->
+    <div class="col-md-10 offset-md-2">
+        <div class="row">
+            <div class="col-md-5">
+                <table class="table">
+                    <tbody>
+                    <tr>
+                        <td th:text="${customer.getFirstName() + ' '+customer.getLastName()}"></td>
+                    </tr>
+                    <tr>
+                        <td th:text="${customer.getAddress()}"></td>
+                    </tr>
+                    <tr>
+                        <td th:text="${customer.getPhoneNumber()}"></td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <a data-backdrop="static" data-target="#updateCustomer" data-toggle="modal"
+                               th:attr="data-target='#updateCustomer'+${customer.getId() }">
+                                <button class="btn btn-outline-success" type="button">
+                                    Edytuj <i class="fas fa-pencil-alt"></i>
+                                </button>
+                            </a>
+                            <div class="modal fade-in" th:id="'updateCustomer'+${customer.getId() }">
+                                <div class="modal-dialog">
+                                    <div class="modal-content">
+                                        <div class="modal-header">
+                                            <h5 class="modal-title">Edycja klienta komisu</h5>
+                                        </div>
+                                        <div class="modal-body">
+                                            <form th:action="@{/customers/{id}(id=${customer.getId()})}"
+                                                  th:method="put"
+                                                  th:object="${updateCustomer}">
+                                                <div class="form-row">
+                                                    <div class="form-group col-xl-4">
+                                                        <label class="form-check-label " for="firstName">Imię</label>
+                                                        <input class="form-control" id="firstName" name="firstName"
+                                                               placeholder="Imię"
+                                                               required th:value="${customer.getFirstName()}"
+                                                               type="text">
+                                                    </div>
+                                                    <div class="form-group col-xl-4">
+                                                        <label class="form-check-label" for="lastName">Nazwisko</label>
+                                                        <input class="form-control" id="lastName" name="lastName"
+                                                               placeholder="Nazwisko"
+                                                               required th:value="${customer.getLastName()}"
+                                                               type="text">
+                                                    </div>
+                                                    <div class="form-group col-xl-4">
+                                                        <label class="form-check-label" for="phoneNumber">Numer
+                                                            telefonu</label>
+                                                        <input class="form-control" id="phoneNumber" name="phoneNumber"
+                                                               placeholder="Telefon"
+                                                               required th:value="${customer.getPhoneNumber()}"
+                                                               type="text">
+                                                    </div>
+                                                    <div class="form-group col-xl-12">
+                                                        <label class="form-check-label" for="address">Adres</label>
+                                                        <input class="form-control" id="address" name="address"
+                                                               placeholder="Adres"
+                                                               required th:value="${customer.getAddress()}" type="text">
+                                                    </div>
+                                                </div>
+                                                <div class="form-row">
+                                                    <div class="form-group col-xl-4">
+                                                        <label class="form-check-label" for="tin">NIP</label>
+                                                        <input class="form-control" id="tin" name="tin"
+                                                               placeholder="NIP"
+                                                               required th:value="${customer.getTin()}" type="number">
+                                                    </div>
+                                                    <div class="form-group col-xl-4">
+                                                        <label class="form-check-label" for="pesel">Pesel</label>
+                                                        <input class="form-control" id="pesel" name="pesel"
+                                                               placeholder="Pesel"
+                                                               required th:value="${customer.getPesel()}" type="number">
+                                                    </div>
+                                                    <div class="form-group col-xl-4">
+                                                        <label class="form-check-label" for="idNumber">Numer
+                                                            dowodu</label>
+                                                        <input class="form-control" id="idNumber" name="idNumber"
+                                                               placeholder="Dowód osobisty"
+                                                               required th:value="${customer.getIdNumber()}"
+                                                               type="text">
+                                                    </div>
+                                                    <div class="form-group col-xl-12">
+                                                        <label class="form-check-label" for="email">Email</label>
+                                                        <input class="form-control" id="email" name="email"
+                                                               placeholder="Email"
+                                                               required th:value="${customer.getEmail()}" type="email">
+                                                    </div>
+                                                </div>
+                                                <br>
+                                                <div class="modal-footer">
+                                                    <button class="btn btn-outline-danger" data-dismiss="modal"
+                                                            type="button">Zamknij
+                                                    </button>
+                                                    <button class="btn btn-outline-success" type="submit">Potwierdź
+                                                    </button>
+                                                </div>
+                                            </form>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+            <div class="col-md-5">
+                <table class="table">
+                    <tbody>
+                    <tr>
+                        <td th:text="${customer.getPesel()}"></td>
+                    </tr>
+                    <tr>
+                        <td th:text="${customer.getTin()}"></td>
+                    </tr>
+                    <tr>
+                        <td th:text="${customer.getIdNumber()}"></td>
+                    </tr>
+                    <tr>
+                        <td th:text="${customer.getEmail()}"></td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-10" th:if="${cars.size() gt 0}">
+                <table class="table">
+                    <caption>Samochody klienta</caption>
+                    <tbody>
+                    <tr class="table-info" th:each="car : ${cars}">
+                        <td th:text="${car.getBodyNumber()}"></td>
+                        <td th:text="${car.getMark()}"></td>
+                        <td th:text="${car.getModel()}"></td>
+                        <td>
+                            <a target="_blank" th:href="@{/../details/{id}(id=${car.getId()})}">
+                                <button class="btn btn-outline-info" type="button">
+                                    Pokaż <i class="far fa-eye"></i>
+                                </button>
+                            </a>
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+            <div class="col-md-5" th:if="${agreements.size() gt 0}">
+                <table class="table">
+                    <caption>Przygotowane umowy</caption>
+                    <tbody>
+                    <tr class="table-secondary" th:each="agr : ${agreements}">
+                        <td th:text="${agr.getCreatedAt()}"></td>
+                        <td th:text="${agr.getAgreementNumber()}"></td>
+                        <td>
+                            <a target="_blank" th:href="@{/../details/{id}(id=${agr.getId()})}">
+                                <button class="btn btn-outline-secondary" type="button">
+                                    Pokaż <i class="far fa-eye"></i>
+                                </button>
+                            </a>
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+            <div class="col-md-5" th:if="${invoices.size() gt 0}">
+                <table class="table">
+                    <caption>Wystawione faktury</caption>
+                    <tbody>
+                    <tr class="table-warning" th:each="inv : ${invoices}">
+                        <td th:text="${inv.getCreatedAt()}"></td>
+                        <td th:text="${inv.getInvoiceNumber()}"></td>
+                        <td>
+                            <a target="_blank" th:href="@{/../details/{id}(id=${inv.getId()})}">
+                                <button class="btn btn-outline-warning" type="button">
+                                    Pokaż <i class="far fa-eye"></i>
+                                </button>
+                            </a>
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+</html>

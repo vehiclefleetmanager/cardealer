@@ -20,20 +20,20 @@ import java.time.LocalTime;
 @Table(name = "tests_drives")
 public class TestDrive extends BaseEntity {
 
-    @ManyToOne(cascade = CascadeType.PERSIST)
+    @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "car_id")
-    Car car;
+    private Car car;
 
-    @ManyToOne(cascade = CascadeType.PERSIST)
+    @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "user_id")
-    User user;
+    private User user;
 
-    LocalDate dateOfTestDrive;
+    private LocalDate dateOfTestDrive;
 
-    LocalTime timeOfTestDrive;
+    private LocalTime timeOfTestDrive;
 
     @Enumerated(EnumType.STRING)
-    Status status;
+    private Status status;
 
     public enum Status {
         NEW("Nowa"),

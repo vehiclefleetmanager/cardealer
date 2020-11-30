@@ -1,9 +1,9 @@
 <div th:fragment="content" xmlns:th="http://www.thymleaf.org">
-    <div class="row offset-md-2">
-        <div class="col-xs-9 col-sm-9 col-md-4 col-xl-4" th:each="c : ${cars}">
+    <div class="row">
+        <div class="col-xs-12 col-sm-6 col-md-6 col-xl-4" th:each="c : ${cars}">
             <div class="card m-1">
                 <div class="card-body text-center">
-                    <img alt="Car image" style="width: 80%; height: 80%;"
+                    <img alt="Car image" class="img-fluid "
                          th:src="@{/images/index/images.jpg}"/>
                     <h5 class="card-title" th:text="${c.getMark()+' '+c.getModel()}"></h5>
                     <!--this img tag is to retrieve the photo from the database-->

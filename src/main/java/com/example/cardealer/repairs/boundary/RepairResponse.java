@@ -14,7 +14,6 @@ public class RepairResponse {
     Long id;
     String repairDate;
     String repairAmount;
-    String repairInvoiceNumber;
     String repairDescription;
     String carBodyNumber;
     String carProductionYear;
@@ -31,7 +30,6 @@ public class RepairResponse {
                 repair.getId(),
                 repair.getRepairDate().toString(),
                 repair.getRepairAmount().toString(),
-                repair.getRepairInvoice().getInvoiceNumber(),
                 repair.getRepairDescription(),
                 repair.getCar().getBodyNumber(),
                 repair.getCar().getProductionYear().toString(),

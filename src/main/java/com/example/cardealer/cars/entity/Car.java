@@ -44,18 +44,18 @@ public class Car extends BaseEntity {
     @Enumerated(EnumType.STRING)
     private Transmission transmission;
     private String description;
-    private Integer testDrive;
+    private int testDrive;
     private BigDecimal price = new BigDecimal(0);
 
-    @OneToMany(cascade = CascadeType.PERSIST)
+    @OneToMany(cascade = CascadeType.ALL)
     @JoinColumn(name = "repairs")
     private Set<Repair> repairs = new HashSet<>();
 
-    @OneToMany(cascade = CascadeType.PERSIST)
+    @OneToMany(cascade = CascadeType.ALL)
     @JoinColumn(name = "tests_drives")
     private Set<TestDrive> testDrives = new HashSet<>();
 
-    @ManyToOne(cascade = CascadeType.PERSIST)
+    @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "customer_id")
     private Customer carOwner;
 
@@ -64,7 +64,6 @@ public class Car extends BaseEntity {
                Integer capacityEngine, Integer powerEngine, Transmission transmission,
                String description, BigDecimal price) {
         super();
-        this.status = Status.AVAILABLE;
         this.testDrive = 0;
         this.bodyNumber = bodyNumber;
         this.productionYear = productionYear;
@@ -79,14 +78,45 @@ public class Car extends BaseEntity {
         this.transmission = transmission;
         this.description = description;
         this.price = price;
+        this.status = Status.WAIT;
+    }
+
+    public Car(String bodyNumber, Integer productionYear, String mark, String model,
+               String ocNumber, FuelType fuelType, Integer distance, BodyType bodyType,
+               Integer capacityEngine, Integer powerEngine, Transmission transmission,
+               String description, BigDecimal price, Car.Status status) {
+        super();
+        this.testDrive = 0;
+        this.bodyNumber = bodyNumber;
+        this.productionYear = productionYear;
+        this.mark = mark;
+        this.model = model;
+        this.ocNumber = ocNumber;
+        this.fuelType = fuelType;
+        this.distance = distance;
+        this.bodyType = bodyType;
+        this.capacityEngine = capacityEngine;
+        this.powerEngine = powerEngine;
+        this.transmission = transmission;
+        this.description = description;
+        this.price = price;
+        this.status = status;
     }
 
     public void addRepair(Repair repair) {
         repairs.add(repair);
     }
 
+    public Set<Repair> getRepairs() {
+        return repairs;
+    }
+
     public void addTestDrive(TestDrive testDrive) {
         testDrives.add(testDrive);
+    }
+
+    public Set<TestDrive> getTestDrives() {
+        return testDrives;
     }
 
     public enum Transmission {
@@ -149,7 +179,8 @@ public class Car extends BaseEntity {
         AVAILABLE("Dostępny"),
         SOLD("Sprzedany"),
         BOUGHT("Kupiony"),
-        REJECTED("Odrzucony");
+        REJECTED("Odrzucony"),
+        DELETED("Usunięty");
         private String status;
 
         Status(String status) {

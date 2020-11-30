@@ -23,7 +23,7 @@
                     Klienci
                 </a>
             </li>
-            <li class="nav-item" sec:authorize="hasAnyRole('ROLE_ADMIN','ROLE_WORKER','ROLE_MECHANIC')">
+            <li class="nav-item" sec:authorize="hasAnyRole('ROLE_ADMIN','ROLE_WORKER','ROLE_MECHANIC','ROLE_CLIENT')">
                 <a class="nav-link" th:href="@{'/cars'}">
                     <i class="fas fa-car"></i>
                     Samochody
@@ -42,19 +42,19 @@
                     Faktury
                 </a>
             </li>
-            <li class="nav-item" sec:authorize="hasAnyRole('ROLE_ADMIN','ROLE_WORKER')">
+            <li class="nav-item" sec:authorize="hasAnyRole('ROLE_ADMIN','ROLE_WORKER','ROLE_CLIENT')">
                 <a class="nav-link" th:href="@{'/agreements'}">
                     <i class="fas fa-file-contract"></i>
                     Umowy
                 </a>
             </li>
-            <li class="nav-item" sec:authorize="hasAnyRole('ROLE_ADMIN','ROLE_WORKER')">
+            <!--<li class="nav-item" sec:authorize="hasAnyRole('ROLE_ADMIN','ROLE_WORKER')">
                 <a class="nav-link" th:href="@{'/cessions'}">
                     <i class="fas fa-search-dollar"></i>
                     Przyjęcia w komis
                 </a>
-            </li>
-            <li class="nav-item" sec:authorize="hasAnyRole('ROLE_ADMIN','ROLE_WORKER')">
+            </li>-->
+            <li class="nav-item" sec:authorize="hasAnyRole('ROLE_ADMIN','ROLE_WORKER','ROLE_CLIENT')">
                 <a class="nav-link" th:href="@{'/reservations'}">
                     <i class="fas fa-road"></i>
                     Jazdy testowe
@@ -76,6 +76,12 @@
                 <a class="nav-link" th:href="@{'/users'}">
                     <i class="fas fa-users-cog"></i>
                     Użytkownicy
+                </a>
+            </li>
+            <li class="nav-item" sec:authorize="hasAnyRole('ROLE_CLIENT')">
+                <a class="nav-link" th:href="@{'/userArea'}">
+                    <i class="fas fa-user-secret"></i>
+                    Strefa użytkownika
                 </a>
             </li>
         </ul>

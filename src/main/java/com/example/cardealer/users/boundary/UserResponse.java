@@ -16,6 +16,7 @@ public class UserResponse {
     String lastName;
     String email;
     String phoneNumber;
+    boolean isActive;
     Collection<String> roles;
 
     public static UserResponse from(User user) {
@@ -25,6 +26,7 @@ public class UserResponse {
                 user.getLastName(),
                 user.getEmail(),
                 user.getPhoneNumber(),
+                user.isActive(),
                 user.getRoles().stream().map(Role::getName).collect(Collectors.toList())
         );
     }

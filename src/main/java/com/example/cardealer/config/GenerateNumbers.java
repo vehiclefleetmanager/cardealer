@@ -1,11 +1,11 @@
 package com.example.cardealer.config;
 
-import com.example.cardealer.utils.enums.Transaction;
+import com.example.cardealer.events.entity.Event;
 
 import java.util.Collection;
 
 public interface GenerateNumbers {
-    String generateInvoicesNumbers(Collection collection, Transaction transaction);
+    String generateInvoicesNumbers(Collection collection, Event event);
 
-    String generateAgreementsNumbers(Collection collection, Transaction transaction);
+    String generateAgreementsNumbers(Collection collection, Event event);
 }

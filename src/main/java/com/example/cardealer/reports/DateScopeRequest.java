@@ -1,4 +1,4 @@
-package com.example.cardealer.documents.boundary;
+package com.example.cardealer.reports;
 
 import lombok.Data;
 

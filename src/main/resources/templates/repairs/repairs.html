@@ -7,7 +7,7 @@
 <br>
 <br>
 <br>
-<div class="container">
+<div class="container-fluid">
     <div class="col-md-10 offset-md-2">
         <nav aria-label="breadcrumb">
             <ol class="breadcrumb bg-white">
@@ -19,6 +19,35 @@
     <div class="col-md-10 offset-md-2" sec:authorize="hasAnyRole('ROLE_CLIENT')">
         Ta część aplikacji wymaga podwyższonych uprawnień!
     </div>
+
+    <!--repairs search-->
+    <div class="offset-md-2" sec:authorize="hasAnyRole('ROLE_ADMIN','ROLE_BOSS', 'ROLE_WORKER')">
+        <div class="col-md-12">
+            <form th:action="@{/repairs/search}" th:method="post">
+                <div class="input-group">
+                    <div class="input-group-prepend date">
+                        <input autocomplete="off" class="form-control" id="from" name="from" type="date"/>
+                    </div>
+
+                    <div class="input-group-prepend date">
+                        <input autocomplete="off" class="form-control" id="to" name="to" type="date"/>
+                    </div>
+                    <div class="input-group-prepend">
+                        <input class="form-control" name="vinNumber" placeholder="Nr_nadwozia" type="text">
+                    </div>
+                    <div class="input-group-prepend">
+                        <input class="form-control" name="repairAmount" placeholder="Wartość naprawy" type="text">
+                    </div>
+                    <div class="input-group-prepend button">
+                        <button class="btn btn-outline-secondary" id="button-addon2" type="submit">Filtruj
+                        </button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+    <br>
+    <!--repairs list-->
     <div class="offset-md-2" sec:authorize="hasAnyRole('ROLE_ADMIN', 'ROLE_MECHANIC')">
         <div th:object="${repairs}" th:replace="repairs/repairs-list :: repairs-list"></div>
     </div>

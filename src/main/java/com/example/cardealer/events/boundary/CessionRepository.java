@@ -11,10 +11,12 @@ import java.util.List;
 
 @Repository
 public interface CessionRepository extends JpaRepository<Cession, Long> {
-    @Query("select c from Cession c where c.agreement.transaction = 'CESSION'")
+    @Query("select c from Cession c")
     List<Cession> findAllCessions();
 
-    @Query("select c from Cession c where c.agreement.transaction = 'CESSION'")
+    @Query("select c from Cession c")
     Page<Cession> findAllCessions(Pageable pageable);
 
+    @Query("select c from Cession c where c.customer.id = ?1")
+    Page<Cession> findAllCessionsOfUser(Long id, Pageable pageable);
 }

@@ -2,17 +2,26 @@
 <html lang="en" xmlns:sec="http://www.thymeleaf.org/extras/spring-security" xmlns:th="http://www.thymeleaf.org">
 <head th:replace="fragments/header :: header"></head>
 <body>
-<div th:replace="fragments/top-nav :: top-nav"></div>
-<br>
-<br>
-<br>
-<div class="container">
-    <div class="row">
-        <div sec:authorize="isAuthenticated()" th:replace="fragments/sidebar :: sidebar"></div>
-        <div th:replace="fragments/search :: search"></div>
-    </div>
-    <div th:replace="fragments/content :: content"></div>
-</div>
 
+<div class="col-xl-12" th:object="${'currentUser'}" th:replace="fragments/top-nav :: top-nav"></div>
+
+<div class="container">
+    <div class="row" sec:authorize="isAuthenticated()">
+        <div class="col-xs-10 offset-2">
+            <div th:replace="fragments/sidebar :: sidebar"></div>
+            <div th:replace="fragments/welcome :: welcome"></div>
+            <div th:replace="fragments/search :: search"></div>
+            <div th:replace="fragments/content :: content"></div>
+        </div>
+    </div>
+    <div class="row" sec:authorize="isAnonymous()">
+        <div class="col-xs-12">
+            <div th:replace="fragments/welcome :: welcome"></div>
+            <div th:replace="fragments/search :: search"></div>
+            <div th:replace="fragments/content :: content"></div>
+        </div>
+    </div>
+    <!--<div th:replace="fragments/pagination :: pagination"></div>-->
+</div>
 </body>
 </html>

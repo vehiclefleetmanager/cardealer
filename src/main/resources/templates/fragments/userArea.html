@@ -1,0 +1,116 @@
+<!doctype html>
+<html lang="en" xmlns:sec="http://www.thymeleaf.org/extras/spring-security" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="fragments/header :: header"></head>
+<body>
+<div th:object="${currentUser}" th:replace="fragments/top-nav :: top-nav"></div>
+<div th:replace="fragments/sidebar :: sidebar"></div>
+<br>
+<br>
+<br>
+<div class="container">
+    <div class="col-md-10 offset-md-2">
+        <nav aria-label="breadcrumb">
+            <ol class="breadcrumb bg-white">
+                <li class="breadcrumb-item"><a th:href="@{/}"><i class="fas fa-warehouse"></i></a></li>
+                <li aria-current="page" class="breadcrumb-item active">Strefa Użytkownika</li>
+            </ol>
+        </nav>
+    </div>
+
+    <div class="col-md-5 offset-md-2" sec:authorize="hasAnyRole('ROLE_CLIENT')">
+        <div class="row mb-2">
+            <div class="col-md-6">
+                <!--user information with edit personal data-->
+                <button class="btn btn-success" data-target="#editUserData" data-toggle="modal" type="button">
+                    Edycja informacji
+                </button>
+                <div class="modal fade-in" id="editUserData">
+                    <div class="modal-dialog">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title">Edycja danych</h5>
+                            </div>
+                            <div class="modal-body">
+                                <form method="put" th:action="@{/updateUserInfo}" th:object="${updateUserInfo}">
+                                    <div class="form-row">
+                                        <input class="form-control" hidden="hidden" id="id" name="id"
+                                               readonly required th:value="${currentUser.getId()}" type="number">
+                                        <div class="form-group col-xl-6">
+                                            <input class="form-control" id="name" name="firstName" required
+                                                   th:value="${currentUser.getFirstName()}" type="text">
+                                        </div>
+                                        <div class="form-group col-xl-6">
+                                            <input class="form-control" id="surname" name="lastName"
+                                                   required
+                                                   th:value="${currentUser.getLastName()}" type="text">
+                                        </div>
+                                        <div class="form-group col-xl-6">
+                                            <input class="form-control" id="email" name="email"
+                                                   required
+                                                   th:value="${currentUser.getEmail()}" type="email">
+                                        </div>
+                                        <div class="form-group col-xl-6">
+                                            <input class="form-control" id="phone" name="phoneNumber"
+                                                   required
+                                                   th:value="${currentUser.getPhoneNumber()}" type="tel">
+                                        </div>
+                                    </div>
+                                    <br>
+                                    <div class="modal-footer">
+                                        <button class="btn btn-outline-danger" data-dismiss="modal"
+                                                type="button">Zamknij
+                                        </button>
+                                        <button class="btn btn-outline-success" type="submit">Potwierdź
+                                        </button>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-5 offset-md-2" sec:authorize="hasAnyRole('ROLE_CLIENT')">
+        <div class="row mb-2">
+            <!--<div class="col-md-6">
+                <div class="row no-gutters border rounded overflow-hidden flex-md-row mb-4 shadow-sm h-md-250 position-relative">
+                    <div class="col p-4 d-flex flex-column position-static">
+                        <strong class="d-inline-block mb-2 text-info">Zakupy</strong>
+                        <h3 class="mb-0" th:text="${purchaseAmounts}+' PLN'">0,00 zł</h3>
+                    </div>
+                </div>
+            </div>-->
+            <div class="col-md-6">
+                <div class="row no-gutters border rounded overflow-hidden flex-md-row mb-4 shadow-sm h-md-250 position-relative">
+                    <div class="col p-4 d-flex flex-column position-static">
+                        <strong class="d-inline-block mb-2 text-success">Ilość samochodów w komisie</strong>
+                        <a th:href="@{/cars}">
+                            <h3 class="mb-0" th:text="${userCars.getTotalElements()}"></h3>
+                        </a>
+                    </div>
+                </div>
+            </div>
+            <!--<div class="col-md-6">
+                <div class="row no-gutters border rounded overflow-hidden flex-md-row mb-4 shadow-sm h-md-250 position-relative">
+                    <div class="col p-4 d-flex flex-column position-static">
+                        <strong class="d-inline-block mb-2 text-danger"></strong>
+                        <h3 class="mb-0" th:text="${taxAmount}+' PLN'">0,00 zł</h3>
+                    </div>
+                </div>
+            </div>-->
+            <!--<div class="col-md-6">
+                <div class="row no-gutters border rounded overflow-hidden flex-md-row mb-4 shadow-sm h-md-250 position-relative">
+                    <div class="col p-4 d-flex flex-column position-static">
+                        <strong class="d-inline-block mb-2 text-success">Dochód</strong>
+                        <h3 class="mb-0" th:text="${profitAmount}+' PLN'">0,00 zł</h3>
+                    </div>
+                </div>
+            </div>-->
+        </div>
+    </div>
+</div>
+</body>
+</html>

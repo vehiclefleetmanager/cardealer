@@ -4,12 +4,14 @@
         <div class="col-md-12 text-center">
             <div class="table-responsive ">
                 <p class="warning" th:text="${message}"></p>
-                <table class="table table-striped table-md text-center">
+                <table class="table table-striped table-md text-center ">
                     <thead>
                     <tr>
-                        <th>#</th>
+                        <th sec:authorize="hasAnyRole('ROLE_ADMIN', 'ROLE_WORKER', 'ROLE_MECHANIC')">#</th>
                         <th>Nr_nadwozia</th>
-                        <th sec:authorize="hasAnyRole('ROLE_ADMIN', 'ROLE_WORKER', 'ROLE_MECHANIC')">Podgląd</th>
+                        <th sec:authorize="hasAnyRole('ROLE_ADMIN', 'ROLE_WORKER', 'ROLE_MECHANIC', 'ROLE_CLIENT')">
+                            Podgląd
+                        </th>
                         <th sec:authorize="hasAnyRole('ROLE_ADMIN', 'ROLE_WORKER')">Edycja</th>
                         <th sec:authorize="hasAnyRole('ROLE_ADMIN', 'ROLE_MECHANIC')">Naprawa</th>
                         <th sec:authorize="hasAnyRole('ROLE_ADMIN', 'ROLE_WORKER')">Sprzedaż</th>
@@ -19,10 +21,12 @@
                     </thead>
                     <tbody>
                     <tr th:each="car : ${cars}">
-                        <td style="font-size: 18px;" th:text="${car.getId()}"></td>
+                        <td sec:authorize="hasAnyRole('ROLE_ADMIN', 'ROLE_WORKER', 'ROLE_MECHANIC')"
+                            style="font-size: 18px;" th:text="${car.getId()}"></td>
                         <td style="font-size: 18px;" th:text="${car.getBodyNumber()}"></td>
-                        <td sec:authorize="hasAnyRole('ROLE_ADMIN', 'ROLE_WORKER', 'ROLE_MECHANIC')">
-                            <a th:href="@{/../details/{id}(id=${car.getId()})}">
+                        <td sec:authorize="hasAnyRole('ROLE_ADMIN', 'ROLE_WORKER', 'ROLE_MECHANIC', 'ROLE_CLIENT')">
+                            <a th:href="@{/../details/{id}(id=${car.getId()})}"
+                               th:unless="${car.getStatus() eq 'DELETED'}">
                                 <button class="btn btn-outline-info" type="button">
                                     <i class="far fa-eye"></i>
                                 </button>
@@ -30,8 +34,9 @@
                         </td>
                         <!--UPDATE CAR-->
                         <td sec:authorize="hasAnyRole('ROLE_ADMIN', 'ROLE_WORKER')">
-                            <a data-target="#updateCar" data-toggle="modal"
-                               th:attr="data-target='#updateCar'+${car.getId() }">
+                            <a data-backdrop="static" data-target="#updateCar" data-toggle="modal"
+                               th:attr="data-target='#updateCar'+${car.getId() }"
+                               th:unless="${car.getStatus() eq 'DELETED'}">
                                 <button class="btn btn-outline-success" type="button">
                                     <i class="fas fa-pencil-alt"></i>
                                 </button>
@@ -43,7 +48,7 @@
                                             <h5 class="modal-title">Edycja samochodu</h5>
                                         </div>
                                         <div class="modal-body">
-                                            <form th:action="@{/cars/update/{id}(id=${car.getId()})}"
+                                            <form th:action="@{/cars/{id}(id=${car.getId()})}"
                                                   th:method="put"
                                                   th:object="${updateCar}">
                                                 <div class="form-row">
@@ -106,10 +111,11 @@
                                                 </div>
                                                 <div class="form-row">
                                                     <div class="form-group col-xl-4">
+                                                        <label class="text-muted font-italic" for="fuelType"
+                                                               th:text="${car.getFuelType()}"></label>
                                                         <select class="custom-select" id="fuelType" name="fuelType"
-                                                                required>
-                                                            <option selected="selected" th:text="${car.getFuelType()}"
-                                                                    th:value="${car.getFuelType()}">
+                                                        >
+                                                            <option selected="selected">Wybierz..
                                                             </option>
                                                             <option th:each="type:${T(com.example.cardealer.utils.enums.FuelType).values()}"
                                                                     th:text="${type.getType()}"
@@ -117,10 +123,11 @@
                                                         </select>
                                                     </div>
                                                     <div class="form-group col-xl-4">
+                                                        <label class="text-muted font-italic" for="bodyType"
+                                                               th:text="${car.getBodyType()}"></label>
                                                         <select class="custom-select" id="bodyType" name="bodyType"
                                                                 required>
-                                                            <option selected="selected" th:text="${car.getBodyType()}"
-                                                                    th:value="${car.getBodyType()}">
+                                                            <option selected="selected">Wybierz..
                                                             </option>
                                                             <option th:each="type:${T(com.example.cardealer.utils.enums.BodyType).values()}"
                                                                     th:text="${type.getType()}"
@@ -128,17 +135,15 @@
                                                         </select>
                                                     </div>
                                                     <div class="form-group col-xl-4">
+                                                        <label class="text-muted font-italic" for="transmission"
+                                                               th:text="${car.getTransmission()}"></label>
                                                         <select class="custom-select" id="transmission"
                                                                 name="transmission"
                                                                 required>
-                                                            <option selected="selected"
-                                                                    th:text="${car.getTransmission()}"
-                                                                    th:value="${car.getTransmission()}">
-                                                            </option>
+                                                            <option selected>Wybierz..</option>
                                                             <option th:each="type:${T(com.example.cardealer.utils.enums.Transmission).values()}"
                                                                     th:text="${type.getType()}"
-                                                                    th:value="${type.name()}"
-                                                            ></option>
+                                                                    th:value="${type.name()}"></option>
                                                         </select>
                                                     </div>
                                                 </div>
@@ -149,7 +154,6 @@
                                                               th:value="${car.getDescription()}"
                                                               type="text"></textarea>
                                                 </div>
-
                                                 <br>
                                                 <div class="modal-footer">
                                                     <button class="btn btn-outline-danger" data-dismiss="modal"
@@ -166,8 +170,9 @@
                         </td>
                         <!--REPAIR CAR-->
                         <td sec:authorize="hasAnyRole('ROLE_ADMIN', 'ROLE_MECHANIC')">
-                            <a data-target="#repairCar" data-toggle="modal"
-                               th:attr="data-target='#repairCar' +${car.getId()}">
+                            <a data-backdrop="static" data-target="#repairCar" data-toggle="modal"
+                               th:attr="data-target='#repairCar' +${car.getId()}"
+                               th:if="${car.getStatus() eq 'WAIT'}">
                                 <button class="btn btn-outline-warning" type="button">
                                     <i class="fas fa-tools"></i>
                                 </button>
@@ -236,7 +241,8 @@
                         </td>
                         <!--SALE CAR-->
                         <td sec:authorize="hasAnyRole('ROLE_ADMIN', 'ROLE_WORKER')">
-                            <a th:href="@{/cars/sale/{id}(id=${car.getId()})}">
+                            <a th:href="@{/cars/sale/{id}(id=${car.getId()})}"
+                               th:if="${car.getStatus() eq 'AVAILABLE'}">
                                 <button class="btn btn-outline-success" type="button">
                                     <i class="fas fa-euro-sign"></i>
                                 </button>
@@ -244,8 +250,9 @@
                         </td>
                         <!--DELETE CAR-->
                         <td sec:authorize="hasAnyRole('ROLE_ADMIN', 'ROLE_WORKER')">
-                            <a data-target="#deleteCar" data-toggle="modal"
-                               th:attr="data-target='#deleteCar'+${car.getId() }">
+                            <a data-backdrop="static" data-target="#deleteCar" data-toggle="modal"
+                               th:attr="data-target='#deleteCar'+${car.getId() }"
+                               th:unless="${car.getStatus() eq 'DELETED'}">
                                 <button class="btn btn-outline-danger" type="button">
                                     <i class="far fa-trash-alt"></i>
                                 </button>
@@ -263,6 +270,7 @@
                                                 o numerze nadwozia
                                                 <span class="font-weight-bold" th:text="${car.getBodyNumber()}"></span>
                                                 ?</h6>
+                                            <h5 class="badge-danger">Operacja jest nieodwracalna!</h5>
                                         </div>
                                         <div class="modal-footer">
                                             <button class="btn btn-outline-success pull-left" data-dismiss="modal"
@@ -278,14 +286,17 @@
                             </div>
                         </td>
                         <!--STATUS OF CAR-->
-                        <td>
+                        <td sec:authorize="hasAnyRole('ROLE_ADMIN', 'ROLE_WORKER', 'ROLE_MECHANIC')">
                             <span class="badge badge-pill badge-warning"
                                   th:if="${car.getStatus() eq 'WAIT'}">Oczekujący</span>
-                            <span class="badge badge-pill badge-success" th:if="${car.getStatus() eq 'ACCEPTED'}">Zatwierdzony</span>
+                            <span class="badge badge-pill badge-success"
+                                  th:if="${car.getStatus() eq 'ACCEPTED'}">Zatwierdzony</span>
                             <span class="badge badge-pill badge-info"
                                   th:if="${car.getStatus() eq 'AVAILABLE'}">Dostępny</span>
                             <span class="badge badge-pill badge-success"
                                   th:if="${car.getStatus() eq 'SOLD'}">Sprzedany</span>
+                            <span class="badge badge-pill badge-danger"
+                                  th:if="${car.getStatus() eq 'DELETED'}">Usunięty</span>
                         </td>
                     </tr>
                     </tbody>

@@ -5,7 +5,6 @@ import com.example.cardealer.events.control.TestDriveService;
 import com.example.cardealer.users.control.CurrentUser;
 import lombok.AllArgsConstructor;
 import org.springframework.data.domain.PageRequest;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -21,18 +20,23 @@ public class TestDriveController {
     private final CurrentUser currentUser;
     private final CarService carService;
 
-    @PreAuthorize("hasAnyRole('ROLE_ADMIN', 'ROLE_WORKER')")
     @GetMapping
     public String getSystemReservations(@RequestParam(defaultValue = "0") int page, Model model) {
-        model.addAttribute("reservations", testDriveService.findAllReservations(PageRequest.of(page, 10))
-                .stream().map(TestDriveResponse::from).collect(Collectors.toList()));
-        model.addAttribute("pages", testDriveService.findAllReservations(PageRequest.of(page, 10)));
+        if (currentUser.getUser().getRoles().stream().anyMatch(role -> role.getName().matches("CLIENT"))) {
+            model.addAttribute("reservations", testDriveService.findAllReservationsOfUser(currentUser.getUser().getId(), PageRequest.of(page, 10))
+                    .stream().map(TestDriveResponse::from).collect(Collectors.toList()));
+            model.addAttribute("pages", testDriveService.findAllReservationsOfUser(currentUser.getUser().getId(), PageRequest.of(page, 10)));
+        } else {
+            model.addAttribute("reservations", testDriveService.findAllReservations(PageRequest.of(page, 10))
+                    .stream().map(TestDriveResponse::from).collect(Collectors.toList()));
+            model.addAttribute("pages", testDriveService.findAllReservations(PageRequest.of(page, 10)));
+        }
         model.addAttribute("currentPage", page);
         model.addAttribute("currentUser", currentUser.getUser());
         return "reservations/reservations";
     }
 
-    @PostMapping("/confirm/{id}")
+    @PutMapping("/{id}")
     public String updateDriveReservation(@PathVariable("id") Long id,
                                          @ModelAttribute("updateTestDrive") UpdateTestDriveRequest request,
                                          RedirectAttributes attributes) {

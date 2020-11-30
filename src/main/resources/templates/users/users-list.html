@@ -9,6 +9,7 @@
                         <th>Imię</th>
                         <th>Nazwisko</th>
                         <th>E-mail</th>
+                        <th>Aktywność</th>
                         <th>Reset hasła</th>
                         <th>Usuń</th>
                     </tr>
@@ -19,9 +20,13 @@
                         <td style="font-size: 18px;" th:text="${u.getFirstName()}"></td>
                         <td style="font-size: 18px;" th:text="${u.getLastName()}"></td>
                         <td style="font-size: 18px;" th:text="${u.getEmail()}"></td>
+                        <td style="font-size: 18px;">
+                            <input class="checkbox" disabled name="active"
+                                   th:checked="${u?.isActive()}" type="checkbox">
+                        </td>
                         <!--Reset password-->
                         <td>
-                            <a data-target="#resetPassword" data-toggle="modal"
+                            <a data-backdrop="static" data-target="#resetPassword" data-toggle="modal"
                                th:attr="data-target='#resetPassword'+${u.getId()}">
                                 <button class="btn btn-outline-info" type="button">
                                     <i class="fas fa-key"></i>
@@ -85,7 +90,7 @@
                         </td>
                         <!--Delete User-->
                         <td>
-                            <a data-target="#deleteUser" data-toggle="modal"
+                            <a data-backdrop="static" data-target="#deleteUser" data-toggle="modal"
                                th:attr="data-target='#deleteUser'+${u.getId()}">
                                 <button class="btn btn-outline-danger" role="button"
                                         th:classappend="${u.getId()} == ${currentUser.getId()} ? 'disabled':''"

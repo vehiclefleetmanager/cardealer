@@ -4,13 +4,13 @@ package com.example.cardealer.events.entity;
 import com.example.cardealer.cars.entity.Car;
 import com.example.cardealer.customers.entity.Customer;
 import com.example.cardealer.documents.entiity.Agreement;
-import com.example.cardealer.employees.entity.Employee;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-import javax.persistence.*;
+import javax.persistence.Entity;
+import javax.persistence.Table;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 
@@ -26,22 +26,16 @@ import java.time.LocalDate;
 @Table(name = "sales")
 public class Sale extends Event {
 
-    private LocalDate saleDate;
+    private LocalDate eventDate;
     private BigDecimal saleAmount;
 
-    @ManyToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "employee_id")
-    private Employee employee;
-
     public Sale(Car updateCar, Customer newOwner, LocalDate date,
-                Agreement agreement, BigDecimal price,
-                Employee employee) {
-        setCar(updateCar);
+                Agreement agreement, BigDecimal price) {
         setCustomer(newOwner);
-        setAgreement(agreement);
-        setEmployee(employee);
-        this.saleDate = date;
+        setCar(updateCar);
+        this.eventDate = date;
         this.saleAmount = price;
+        setAgreement(agreement);
 
     }
 }

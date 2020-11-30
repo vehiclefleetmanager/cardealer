@@ -15,10 +15,7 @@ import com.example.cardealer.employees.boundary.EmployeeRepository;
 import com.example.cardealer.employees.entity.Employee;
 import com.example.cardealer.events.boundary.*;
 import com.example.cardealer.events.control.CessionService;
-import com.example.cardealer.events.entity.Cession;
-import com.example.cardealer.events.entity.Purchase;
-import com.example.cardealer.events.entity.Sale;
-import com.example.cardealer.events.entity.TestDrive;
+import com.example.cardealer.events.entity.*;
 import com.example.cardealer.repairs.boundary.RepairRepository;
 import com.example.cardealer.repairs.entity.Repair;
 import com.example.cardealer.users.boundary.UserRepository;
@@ -48,10 +45,8 @@ public class CarService {
     private final InvoiceRepository invoiceRepository;
     private final AgreementRepository agreementRepository;
     private final CessionService cessionService;
-    private final PurchaseRepository purchaseRepository;
     private final CustomerRepository customerRepository;
     private final UserRepository userRepository;
-    private final SaleRepository saleRepository;
     private final TestDriveRepository testDriveRepository;
     private final SystemGenerateNumbers generateNumbers;
     private final Clock clock;
@@ -64,47 +59,33 @@ public class CarService {
         return carRepository.findCarsByStatus(pageable, Car.Status.AVAILABLE);
     }
 
-    public void addCarAndCreateCessionEvent(CreateCessionRequest request, Long employeeId) {
-        Customer existOwner = new Customer(request.getFirstName(), request.getLastName(), request.getAddress(),
-                request.getPhoneNumber(), request.getTin(), request.getPesel(), request.getIdNumber(),
-                request.getEmail(), Customer.Status.PRESENT);
-
-        Car.BodyType body = Car.BodyType.findByName(request.getBodyType());
-        Car.FuelType fuel = Car.FuelType.findByName(request.getFuelType());
-        Car.Transmission transmission = Car.Transmission.findByName(request.getTransmission());
-        Car car = new Car(request.getBodyNumber(), request.getProductionYear(), request.getMark(),
-                request.getModel(), request.getOcNumber(), fuel, request.getDistance(), body,
-                request.getCapacityEngine(), request.getPowerEngine(), transmission, request.getDescription(),
-                request.getPrice());
-        car.setStatus(Car.Status.WAIT);
-        car.setCarOwner(existOwner);
-        existOwner.addCar(car);
-        cessionCar(car, car.getPrice(), employeeId);
+    public Page<Car> findAllCarsOfUser(Long userId, Pageable pageable) {
+        return carRepository.findAllCarsOfCustomer(userId, pageable);
     }
 
-    public void cessionCar(Car car, BigDecimal price, Long employeeId) {
-        Employee employee = findEmployee(employeeId);
+    public void addCarAndCreateCessionEventAndCessionAgreement(CreateCessionRequest request, Long employeeId) {
+        //add new car's owner
+        Customer existOwner = createCarOwner(request);
+        // add new car
+        Car car = createNewCar(request, existOwner);
+        existOwner.addCar(car);
+        //create cession event
+        makeCession(car, existOwner, clock.date());
+    }
+
+    private void makeCession(Car car, Customer existOwner, LocalDate date) {
+        // this variable "count" will greater by 0 Car shouldn't add to system
         long count = carRepository.findCarsByStatus(Car.Status.SOLD).stream()
                 .filter(c -> c.getBodyNumber().matches(car.getBodyNumber())).count();
+        //this boolean variable "checkCarStatus" set true when car's status is 'WAIT'
+        // or false when car's status is different
         boolean checkCarStatus = car.getStatus().name().matches(Car.Status.WAIT.name());
         if (count == 0L && checkCarStatus) {
-            car.setPrice(price);
             car.setStatus(Car.Status.ACCEPTED);
-            Car updateCar = carRepository.save(car);
-            Customer existOwner = updateCar.getCarOwner();
-            makeCessionCar(existOwner, updateCar, employee);
+            Cession cession = new Cession(car, existOwner, date);
+            Cession newCession = cessionService.save(cession);
+            makeAgreement(existOwner, newCession, Transaction.CESSION);
         }
-    }
-
-    private void makeCessionCar(Customer existOwner, Car updateCar, Employee employee) {
-        //AgreementCession
-        Agreement newAgreement = makeAgreement("Przyjęcie w komis", Transaction.CESSION);
-        //Cession
-        makeCessionEvent(existOwner, updateCar, newAgreement, employee);
-    }
-
-    private void makeCessionEvent(Customer existOwner, Car updateCar, Agreement agreement, Employee employee) {
-        cessionService.save(new Cession(updateCar, clock.date(), existOwner, agreement, employee));
     }
 
     public void updateCar(Long carId, UpdateCarRequest request) {
@@ -140,23 +121,9 @@ public class CarService {
         car.setStatus(Car.Status.AVAILABLE);
         car.addRepair(newRepair);
         carRepository.save(car);
-        //Invoice -> makeRepairCar()
-        makeRepairInvoice(employee, newRepair);
     }
 
-    private void makeRepairInvoice(Employee employee, Repair newRepair) {
-        Invoice invoice = new Invoice();
-        invoice.setInvoiceAmount(newRepair.getRepairAmount());
-        invoice.setEmployee(employee);
-        invoice.setCreatedAt(clock.date());
-        invoice.setTransaction(Transaction.REPAIR);
-        invoice.setInvoiceNumber(generateNumbers.generateInvoicesNumbers(
-                invoiceRepository.findAll(), Transaction.REPAIR));
-        newRepair.setRepairInvoice(invoice);
-        invoiceRepository.save(invoice);
-    }
-
-    public void saleCar(CreateCarSaleRequest request, Long employeeId) {
+    public boolean saleCar(CreateCarSaleRequest request, Long employeeId) {
         Car car = findCar(request.getCarId());
         Customer existOwner = car.getCarOwner();
         Customer newOwner = customerRepository.getOne(request.getNewOwnerId());
@@ -164,80 +131,86 @@ public class CarService {
         boolean isAvailable = car.getStatus().name().matches(Car.Status.AVAILABLE.name());
         boolean isInnerOwner = existOwner.getId().toString().matches(newOwner.getId().toString());
         if (isAvailable && !isInnerOwner) {
-            existOwner.removeCar(car);
-            newOwner.addCar(car);
-            car.setStatus(Car.Status.SOLD);
-            Car updateCar = carRepository.save(car);
-            updateCar.setCarOwner(newOwner);
-            Customer updateExistOwner = customerRepository.save(existOwner);
-            Customer updateNewOwner = customerRepository.save(newOwner);
-            makePurchaseCar(updateExistOwner, updateCar, request.getPrice(), employee, "Zakup samochodu");
-            makeSaleCar(updateNewOwner, updateCar, request.getPrice(), employee, "Sprzedaż samochodu");
+            Invoice invoicePurchase = preparePurchaseEvent(car, existOwner, employee);
+            prepareSaleEvent(invoicePurchase, newOwner);
+            return true;
         }
+        return false;
     }
 
-    private void makePurchaseCar(Customer oldOwner, Car updateCar, BigDecimal price, Employee employee, String agreementContent) {
-        //AgreementPurchase
-        Agreement newAgreement = makeAgreement(agreementContent, Transaction.PURCHASE);
-        //Purchase
-        Purchase newPurchase = makePurchaseEvent(oldOwner, updateCar, newAgreement, price, employee);
-        //InvoicePurchase
-        makePurchaseInvoice(newAgreement, newPurchase, employee);
+    private Invoice preparePurchaseEvent(Car car, Customer customer, Employee employee) {
+        BigDecimal priceOfCar = prepareAmountOfCarForPurchaseEvent(car);
+        Purchase purchase = new Purchase();
+        purchase.setEventDate(clock.date());
+        purchase.setPurchaseAmount(priceOfCar);
+        purchase.setCustomer(customer);
+        purchase.setCar(car);
+        Agreement agreementPurchase = makeAgreement(car.getCarOwner(), purchase, Transaction.PURCHASE);
+        agreementPurchase.setAgreementAmount(priceOfCar);
+        purchase.setAgreement(agreementPurchase);
+        Invoice purchaseInvoice = makeInvoice(purchase, agreementPurchase, Transaction.PURCHASE);
+        purchaseInvoice.setInvoiceAmount(priceOfCar);
+        purchaseInvoice.setEmployee(employee);
+        customer.removeCar(car);
+        car.setStatus(Car.Status.BOUGHT);
+        return invoiceRepository.save(purchaseInvoice);
     }
 
-    private Purchase makePurchaseEvent(Customer oldOwner, Car updateCar, Agreement newAgreement,
-                                       BigDecimal price, Employee employee) {
-        BigDecimal repairsAmount = getRepairsAmount(updateCar.getRepairs());
-        BigDecimal amountWithoutRepairs = price.subtract(repairsAmount);
-        BigDecimal purchasePrice = amountWithoutRepairs.multiply(new BigDecimal("0.80"));
-        return purchaseRepository.save(new Purchase(updateCar, oldOwner, clock.date(), newAgreement,
-                purchasePrice, employee));
+    private void prepareSaleEvent(Invoice invoice, Customer customer) {
+        Car car = invoice.getAgreement().getEvent().getCar();
+        customer.addCar(car);
+        car.setCarOwner(customer);
+        car.setStatus(Car.Status.SOLD);
+        Sale sale = new Sale();
+        sale.setEventDate(clock.date());
+        sale.setSaleAmount(car.getPrice());
+        sale.setCar(car);
+        sale.setCustomer(customer);
+        Agreement agreement = makeAgreement(customer, sale, Transaction.SALE);
+        agreement.setAgreementAmount(sale.getSaleAmount());
+        sale.setAgreement(agreement);
+        Invoice saleInvoice = makeInvoice(sale, agreement, Transaction.SALE);
+        saleInvoice.setInvoiceAmount(agreement.getAgreementAmount());
+        saleInvoice.setEmployee(invoice.getEmployee());
+        invoiceRepository.save(saleInvoice);
     }
 
-    private void makePurchaseInvoice(Agreement agreement, Purchase purchase, Employee employee) {
-        Invoice invoice = new Invoice(agreement,
-                agreement.getTransaction(),
-                clock.date(), purchase.getPurchaseAmount());
-        invoice.setInvoiceNumber(generateNumbers.generateInvoicesNumbers(invoiceRepository.findAll(),
-                agreement.getTransaction()));
-        invoice.setAgreement(agreement);
-        agreement.setInvoice(invoice);
-        invoice.setEmployee(employee);
-        invoiceRepository.save(invoice);
+    private Agreement makeAgreement(Customer customer, Event event, Transaction transaction) {
+        Agreement agreement = new Agreement();
+        agreement.setEvent(event);
+        agreement.setCustomer(customer);
+        agreement.setAgreementNumber(generateNumbers.
+                generateAgreementsNumbers(agreementRepository.findAll(), event));
+        agreement.setContent(
+                event.getCar().getMark() + " " + event.getCar().getModel() + " " +
+                        event.getCar().getBodyNumber());
+        agreement.setTransaction(transaction);
+        agreement.setCreatedAt(clock.date());
+        agreement.setEvent(event);
+        return agreement;
     }
 
-    private void makeSaleCar(Customer newOwner, Car updateCar, BigDecimal price,
-                             Employee employee, String agreementContent) {
-        //SaleAgreement
-        Agreement agreement = makeAgreement(agreementContent, Transaction.SALE);
-        //Sale
-        Sale newSale = makeSaleEvent(newOwner, updateCar, agreement, price, employee);
-        //InvoiceSale
-        makeSaleInvoice(agreement, newSale, employee);
+    private Invoice makeInvoice(Event event, Agreement agreement, Transaction transaction) {
+        Invoice invoice = new Invoice();
+        invoice.setAgreement(event.getAgreement());
+        invoice.setCustomer(event.getCustomer());
+        invoice.setCreatedAt(clock.date());
+        invoice.setInvoiceAmount(agreement.getAgreementAmount());
+        invoice.setTransaction(transaction);
+        invoice.setInvoiceNumber(generateNumbers.generateInvoicesNumbers(
+                invoiceRepository.findAll(), event));
+        event.getAgreement().setInvoice(invoice);
+        return invoice;
     }
 
-    private void makeSaleInvoice(Agreement agreement, Sale sale, Employee employee) {
-        Invoice invoice = new Invoice(agreement, agreement.getTransaction(), clock.date(),
-                sale.getSaleAmount());
-        invoice.setInvoiceNumber(generateNumbers.generateInvoicesNumbers(invoiceRepository.findAll(),
-                agreement.getTransaction()));
-        invoice.setEmployee(employee);
-        invoice.setAgreement(agreement);
-        agreement.setInvoice(invoice);
-        invoiceRepository.save(invoice);
-    }
-
-    private Sale makeSaleEvent(Customer newOwner, Car updateCar, Agreement agreement,
-                               BigDecimal price, Employee employee) {
-        return saleRepository.save(new Sale(updateCar, newOwner, clock.date(),
-                agreement, price, employee));
-    }
-
-    private Agreement makeAgreement(String content, Transaction transaction) {
-        Agreement agreement = new Agreement(clock.date(), content, transaction);
-        agreement.setAgreementNumber(generateNumbers.generateAgreementsNumbers(agreementRepository.findAll(),
-                agreement.getTransaction()));
-        return agreementRepository.save(agreement);
+    private BigDecimal prepareAmountOfCarForPurchaseEvent(Car car) {
+        BigDecimal repairsValue = new BigDecimal(String.valueOf(BigDecimal.ZERO));
+        if (!car.getRepairs().isEmpty()) {
+            car.getRepairs().forEach(
+                    repair -> repairsValue.add(repair.getRepairAmount()));
+        }
+        BigDecimal priceCarSubtractRepairs = car.getPrice().subtract(repairsValue);
+        return priceCarSubtractRepairs.multiply(new BigDecimal("0.80"));
     }
 
     public void deleteCar(Long id, User userSystem) {
@@ -245,7 +218,10 @@ public class CarService {
                 || userSystem.getRoles().stream().anyMatch(r -> r.getName().matches("WORKER"))
                 || userSystem.getRoles().stream().anyMatch(r -> r.getName().matches("CLIENT"))) {
             carRepository.findById(id).ifPresent(
-                    car -> carRepository.deleteById(id));
+                    car -> {
+                        car.setStatus(Car.Status.DELETED);
+                        carRepository.save(car);
+                    });
         }
     }
 
@@ -287,6 +263,24 @@ public class CarService {
     }
 
     public List<Car> getCarsFromSearchButton(String carMark, String maxYear,
+                                             String maxPrice, String status) {
+        int maxYearValue = 0;
+        Car.Status searchStatus = Car.Status.AVAILABLE;
+        BigDecimal maxPriceValue = BigDecimal.ZERO;
+        if (!maxYear.isEmpty()) {
+            maxYearValue = Integer.parseInt(maxYear);
+        }
+        if (!maxPrice.isEmpty()) {
+            maxPriceValue = BigDecimal.valueOf(Long.parseLong(maxPrice));
+        }
+        if (!status.isEmpty()) {
+            searchStatus = getCarStatus(status);
+        }
+        return carRepository.findCarsFromSearchButton(carMark,
+                maxYearValue, maxPriceValue, searchStatus);
+    }
+
+    public List<Car> getCarsFromSearchButton(String carMark, String maxYear,
                                              String maxPrice) {
         int maxYearValue = 0;
         BigDecimal maxPriceValue = BigDecimal.ZERO;
@@ -296,13 +290,13 @@ public class CarService {
         if (!maxPrice.isEmpty()) {
             maxPriceValue = BigDecimal.valueOf(Long.parseLong(maxPrice));
         }
-
         return carRepository.findCarsFromSearchButton(carMark,
-                maxYearValue, maxPriceValue, Car.Status.AVAILABLE);
+                maxYearValue, maxPriceValue);
     }
 
-    public Page<Car> getCarsFromSearchButton(String carMark, String maxYear, String maxPrice, Pageable pageable) {
+    public Page<Car> getCarsFromSearchButton(String carMark, String maxYear, String maxPrice, String status, Pageable pageable) {
         int maxYearValue = 0;
+        Car.Status searchStatus = Car.Status.AVAILABLE;
         BigDecimal maxPriceValue = BigDecimal.ZERO;
         if (!maxYear.isEmpty()) {
             maxYearValue = Integer.parseInt(maxYear);
@@ -310,8 +304,11 @@ public class CarService {
         if (!maxPrice.isEmpty()) {
             maxPriceValue = BigDecimal.valueOf(Long.parseLong(maxPrice));
         }
+        if (!status.isEmpty()) {
+            searchStatus = getCarStatus(status);
+        }
         return carRepository.findCarsFromSearchButton(carMark,
-                maxYearValue, maxPriceValue, Car.Status.AVAILABLE, pageable);
+                maxYearValue, maxPriceValue, searchStatus, pageable);
 
     }
 
@@ -346,6 +343,8 @@ public class CarService {
         LocalDate date = LocalDate.parse(request.getDate(), dateFormatter);
         LocalTime time = LocalTime.parse(request.getTime(), timeFormatter);
         TestDrive testDrive = findTestDrive(id);
+        int drive = testDrive.getCar().getTestDrive();
+        testDrive.getCar().setTestDrive(drive + 1);
         testDrive.setDateOfTestDrive(date);
         testDrive.setTimeOfTestDrive(time);
         testDrive.setStatus(TestDrive.Status.ACCEPT);
@@ -356,6 +355,26 @@ public class CarService {
         return carRepository.findProductionYear().stream()
                 .map(Object::toString).collect(Collectors.toList());
     }
+
+    private Car createNewCar(CreateCessionRequest request, Customer existOwner) {
+        Car.BodyType body = Car.BodyType.findByName(request.getBodyType());
+        Car.FuelType fuel = Car.FuelType.findByName(request.getFuelType());
+        Car.Transmission transmission = Car.Transmission.findByName(request.getTransmission());
+        Car car = new Car(request.getBodyNumber(), request.getProductionYear(), request.getMark(),
+                request.getModel(), request.getOcNumber(), fuel, request.getDistance(), body,
+                request.getCapacityEngine(), request.getPowerEngine(), transmission, request.getDescription(),
+                request.getPrice());
+        car.setStatus(Car.Status.WAIT);
+        car.setCarOwner(existOwner);
+        return car;
+    }
+
+    private Customer createCarOwner(CreateCessionRequest request) {
+        return new Customer(request.getFirstName(), request.getLastName(), request.getAddress(),
+                request.getPhoneNumber(), request.getTin(), request.getPesel(), request.getIdNumber(),
+                request.getEmail(), Customer.Status.PRESENT);
+    }
+
 
     private TestDrive findTestDrive(Long id) {
         return testDriveRepository.getOne(id);
@@ -381,4 +400,12 @@ public class CarService {
         return carRepository.findModel();
     }
 
+    private Car.Status getCarStatus(String status) {
+        return Car.Status.valueOf(status);
+    }
+
+    private String getBasicInfoAboutCar(Car updateCar) {
+        return updateCar.getMark() + " " + updateCar.getModel()
+                + " " + updateCar.getBodyNumber();
+    }
 }

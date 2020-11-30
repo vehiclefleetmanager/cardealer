@@ -4,6 +4,7 @@ public enum Transaction {
     PURCHASE("ZAKUP"),
     CESSION("ODSTĄPEINIE"),
     SALE("SPRZEDAŻ"),
+    EMPTY("PUSTA"),
     REPAIR("NAPRAWA");
 
     private String typeName;

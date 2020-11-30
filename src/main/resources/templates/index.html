@@ -6,27 +6,22 @@
 <div class="col-xl-12" th:object="${'currentUser'}" th:replace="fragments/top-nav :: top-nav"></div>
 
 <div class="container">
-    <div class="row">
-        <div sec:authorize="isAuthenticated()" th:replace="fragments/sidebar :: sidebar"></div>
-        <div th:replace="fragments/welcome :: welcome"></div>
-        <div th:replace="fragments/search :: search"></div>
-        <div th:replace="fragments/content :: content"></div>
+    <div class="row" sec:authorize="isAuthenticated()">
+        <div class="col-xs-10 offset-2">
+            <div th:replace="fragments/sidebar :: sidebar"></div>
+            <div th:replace="fragments/welcome :: welcome"></div>
+            <div th:replace="fragments/search :: search"></div>
+            <div th:replace="fragments/content :: content"></div>
+        </div>
     </div>
-    <br>
-    <div class="offset-md-2">
-        <ul class="pagination justify-content-center" th:if="${pages.totalPages gt 1}">
-            <li class="page-item" th:if="${pages.hasPrevious()}">
-                <a class="page-link" th:href="@{/(page=${pages.number-1})}">Poprzednia</a>
-            </li>
-            <li class="page-item" th:classappend="${currentPage} == ${i} ? 'active':''"
-                th:each="i: ${#numbers.sequence(0, pages.totalPages - 1)}">
-                <a class="page-link" th:href="@{/(page=${i})}" th:text="${i+1}"></a>
-            </li>
-            <li class="page-item" th:if="${pages.hasNext()}">
-                <a class="page-link" th:href="@{/(page=${pages.number+1})}">Następna</a>
-            </li>
-        </ul>
+    <div class="row" sec:authorize="isAnonymous()">
+        <div class="col-xs-12">
+            <div th:replace="fragments/welcome :: welcome"></div>
+            <div th:replace="fragments/search :: search"></div>
+            <div th:replace="fragments/content :: content"></div>
+        </div>
     </div>
+    <div th:replace="fragments/pagination :: pagination"></div>
 </div>
 </body>
 </html>

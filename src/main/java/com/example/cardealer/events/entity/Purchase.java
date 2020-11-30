@@ -3,7 +3,6 @@ package com.example.cardealer.events.entity;
 import com.example.cardealer.cars.entity.Car;
 import com.example.cardealer.customers.entity.Customer;
 import com.example.cardealer.documents.entiity.Agreement;
-import com.example.cardealer.employees.entity.Employee;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -26,17 +25,15 @@ import java.time.LocalDate;
 @Table(name = "purchases")
 public class Purchase extends Event {
 
-    private LocalDate purchaseDate;
+    private LocalDate eventDate;
     private BigDecimal purchaseAmount;
 
     public Purchase(Car updateCar, Customer oldOwner, LocalDate date,
-                    Agreement newAgreement, BigDecimal purchasePrice,
-                    Employee employee) {
-        setCar(updateCar);
+                    BigDecimal purchasePrice, Agreement agreement) {
         setCustomer(oldOwner);
-        setAgreement(newAgreement);
-        setEmployee(employee);
-        this.purchaseDate = date;
+        setCar(updateCar);
+        this.eventDate = date;
         this.purchaseAmount = purchasePrice;
+        setAgreement(agreement);
     }
 }

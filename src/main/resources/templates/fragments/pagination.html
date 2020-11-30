@@ -1,0 +1,14 @@
+<div class="m-4" th:fragment="pagination" xmlns:th="http://www.thymleaf.org">
+    <ul class="pagination justify-content-center" th:if="${pages.totalPages gt 1}">
+        <li class="page-item" th:if="${pages.hasPrevious()}">
+            <a class="page-link" th:href="@{/(page=${pages.number-1})}">Poprzednia</a>
+        </li>
+        <li class="page-item" th:classappend="${currentPage} == ${i} ? 'active':''"
+            th:each="i: ${#numbers.sequence(0, pages.totalPages - 1)}">
+            <a class="page-link" th:href="@{/(page=${i})}" th:text="${i+1}"></a>
+        </li>
+        <li class="page-item" th:if="${pages.hasNext()}">
+            <a class="page-link" th:href="@{/(page=${pages.number+1})}">Następna</a>
+        </li>
+    </ul>
+</div>

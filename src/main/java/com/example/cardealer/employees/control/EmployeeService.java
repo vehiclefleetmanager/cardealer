@@ -2,8 +2,8 @@ package com.example.cardealer.employees.control;
 
 import com.example.cardealer.config.Clock;
 import com.example.cardealer.config.TemporaryPassword;
+import com.example.cardealer.employees.boundary.CreateEmployeeRequest;
 import com.example.cardealer.employees.boundary.EmployeeRepository;
-import com.example.cardealer.employees.boundary.EmployeeRequest;
 import com.example.cardealer.employees.entity.Employee;
 import com.example.cardealer.users.boundary.RoleRepository;
 import com.example.cardealer.users.boundary.UserRepository;
@@ -18,6 +18,7 @@ import org.springframework.stereotype.Service;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -33,29 +34,40 @@ public class EmployeeService {
         return employeeRepository.findAll(pageable);
     }
 
-    public void addEmployee(EmployeeRequest request) {
-        Employee employee = new Employee(
+    public void addEmployee(CreateEmployeeRequest request) {
+        String tempPass = password.temporaryPassword();
+        User employee = new Employee(
                 request.getFirstName(),
                 request.getLastName(),
                 request.getPhoneNumber(),
                 request.getEmail(),
-                clock.date());
-        Employee newEmployee = employeeRepository.save(employee);
-        String tempPass = password.temporaryPassword();
-        System.out.println("Temporary password for " + newEmployee.getFirstName() + " set: " + tempPass);
-        User userSystem = new User(newEmployee, encoder.encode(tempPass));
-        userSystem.setRoles(setEmployeeRoles(request));
-        userRepository.save(userSystem);
+                encoder.encode(tempPass),
+                roleRepository.findByName("Worker"),
+                clock.date(),
+                setEmployeeNumber());
+        System.out.println("Temporary password for " + request.getFirstName() + " set: " + tempPass);
+        ;
+        userRepository.save(employee);
     }
 
-    public void updateEmployee(long id, EmployeeRequest request) {
+    private String setEmployeeNumber() {
+        String prefix = "EN";
+        List<User> allUsers = userRepository.findAll();
+        List<User> onlyClientUsers = userRepository.findAll().stream()
+                .filter(user -> user.getRoles().stream()
+                        .allMatch(role -> role.getName().
+                                matches("CLIENT"))).collect(Collectors.toList());
+        int employeeUsers = allUsers.size() - onlyClientUsers.size();
+        return prefix + (employeeUsers + 1);
+    }
+
+    public void updateEmployee(long id, CreateEmployeeRequest request) {
         employeeRepository.findById(id).ifPresent(
                 e -> {
                     e.setFirstName(request.getFirstName());
                     e.setLastName(request.getLastName());
                     e.setEmail(request.getEmail());
                     e.setPhoneNumber(request.getPhoneNumber());
-                    e.setAddress(request.getAddress());
                     e.setActive(request.isActive());
                     employeeRepository.save(e);
                 });
@@ -67,7 +79,7 @@ public class EmployeeService {
         );
     }
 
-    private Collection<Role> setEmployeeRoles(EmployeeRequest request) {
+    private Collection<Role> setEmployeeRoles(CreateEmployeeRequest request) {
         List<Role> roles = new ArrayList<>();
         for (String r : request.getRoles()) {
             roles.add(roleRepository.findByName(r));

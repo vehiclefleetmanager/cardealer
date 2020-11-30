@@ -22,11 +22,11 @@
                         <td style="font-size: 18px;" th:text="${e.getEmail()}"></td>
                         <td>
                             <input class="checkbox" disabled name="isActive"
-                                   th:checked="${e.isActive()}" type="checkbox">
+                                   th:checked="${e?.isActive()}" type="checkbox">
                         </td>
                         <!--Edit Employeer-->
                         <td>
-                            <a data-target="#updateEmployee" data-toggle="modal"
+                            <a data-backdrop="static" data-target="#updateEmployee" data-toggle="modal"
                                th:attr="data-target='#updateEmployee'+${e.getId()}">
                                 <button class="btn btn-outline-info" type="button">
                                     <i class="fas fa-pencil-alt"></i>
@@ -71,13 +71,6 @@
                                                                th:value="${e.getPhoneNumber()}" type="text">
                                                     </div>
                                                     <div class="form-group col-xl-6">
-                                                        <input class="form-control" id="address"
-                                                               name="address"
-                                                               placeholder="Adres"
-                                                               required
-                                                               th:value="${e.getAddress()}" type="text">
-                                                    </div>
-                                                    <div class="form-group col-xl-6">
                                                         <input class="form-control" id="employmentDate"
                                                                name="employmentDate"
                                                                placeholder="Data zatrudnienia"
@@ -92,11 +85,10 @@
                                                                required th:value="${e.getEmployeeNumber()}" type="text">
                                                     </div>
                                                     <div class="col-xl-6">
-                                                        <label class="label" for="isActive">Aktywność</label>
-                                                        <input id="isActive"
-                                                               name="isActive"
-                                                               th:checked="${e.isActive()}"
-                                                               th:value="${e.isActive()}"
+                                                        <label class="label" for="active">Aktywność</label>
+                                                        <input id="active"
+                                                               name="active"
+                                                               th:checked="${e?.isActive()}"
                                                                type="checkbox">
                                                     </div>
                                                     <div class="form-group col-xl-6">
@@ -126,7 +118,7 @@
                         </td>
                         <!--Delete Employeer-->
                         <td>
-                            <a data-target="#deleteEmplyeer" data-toggle="modal"
+                            <a data-backdrop="static" data-target="#deleteEmplyeer" data-toggle="modal"
                                th:attr="data-target='#deleteEmplyeer'+${e.getId()}">
                                 <button class="btn btn-outline-danger" role="button"
                                         th:classappend="${e.getId()} == ${currentUser.getId()} ? 'disabled':''"

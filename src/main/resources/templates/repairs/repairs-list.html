@@ -11,7 +11,6 @@
                         <th>Nr_nadwozia</th>
                         <th>Wartość</th>
                         <th>Podgląd</th>
-                        <th>Drukuj</th>
                     </tr>
                     </thead>
                     <tbody>
@@ -27,7 +26,7 @@
                                     <i class="far fa-eye"></i>
                                 </button>
                             </a>
-                            <div class="modal fade-in" th:id="'repairCar'+${r.getId() }">
+                            <div class="modal fade-in" data-backdrop="static" th:id="'repairCar'+${r.getId() }">
                                 <div class="modal-dialog">
                                     <div class="modal-content">
                                         <div class="modal-header">
@@ -46,7 +45,7 @@
                                                 <p th:text="'Opis naprawy: ' +${r.getRepairDescription()}"></p>
                                                 <p th:text="'Wykorzystane części:'"></p>
                                                 <ul th:each="rep : ${r.getPartsName()}">
-                                                    <li th:text="${rep.getPartName()}"></li>
+                                                    <li th:text="${rep}"></li>
                                                 </ul>
                                                 <br>
                                                 <p th:text="'Wartość naprawy: ' +${r.getRepairAmount()}"></p>
@@ -54,6 +53,11 @@
                                             </div>
                                             <br>
                                             <div class="modal-footer">
+                                                <a th:href="'repairs/generate/' + ${r.getId()}">
+                                                    <button class="btn btn-outline-success" data-backdrop="static"
+                                                            type="button">Drukuj
+                                                    </button>
+                                                </a>
                                                 <button class="btn btn-outline-danger" data-dismiss="modal"
                                                         type="button">Zamknij
                                                 </button>
@@ -62,13 +66,6 @@
                                     </div>
                                 </div>
                             </div>
-                        </td>
-                        <td>
-                            <a th:href="'repairs/generate/' + ${r.getId()}">
-                                <button class="btn btn-outline-warning" type="button">
-                                    <i class="fas fa-file-download"></i>
-                                </button>
-                            </a>
                         </td>
                     </tr>
                     </tbody>

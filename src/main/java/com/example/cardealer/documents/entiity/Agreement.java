@@ -1,11 +1,11 @@
 package com.example.cardealer.documents.entiity;
 
-import com.example.cardealer.utils.enums.Transaction;
+import com.example.cardealer.customers.entity.Customer;
+import com.example.cardealer.events.entity.Event;
 import lombok.*;
 
-import javax.persistence.Entity;
-import javax.persistence.OneToOne;
-import javax.persistence.Table;
+import javax.persistence.*;
+import java.math.BigDecimal;
 import java.time.LocalDate;
 
 /**
@@ -24,13 +24,21 @@ public class Agreement extends Document {
 
     private String content;
 
-    @OneToOne
+    @OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "invoice_id")
     private Invoice invoice;
 
+    private BigDecimal agreementAmount;
 
-    public Agreement(LocalDate date, String content, Transaction transaction) {
+    @Transient
+    private Event event;
+
+
+    public Agreement(Customer customer, Event event, LocalDate date, String content) {
+        super();
+        setCustomer(customer);
+        setEvent(event);
         setCreatedAt(date);
-        setTransaction(transaction);
         this.content = content;
     }
 }

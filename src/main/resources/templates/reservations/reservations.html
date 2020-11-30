@@ -7,7 +7,7 @@
 <br>
 <br>
 <br>
-<div class="container">
+<div class="container-fluid">
     <div class="col-md-10 offset-md-2">
         <nav aria-label="breadcrumb">
             <ol class="breadcrumb bg-white">
@@ -23,10 +23,7 @@
             <span aria-hidden="true">&times;</span>
         </button>
     </div>
-    <div class="col-md-10 offset-md-2" sec:authorize="hasAnyRole('ROLE_CLIENT')">
-        Ta część aplikacji wymaga podwyższonych uprawnień!
-    </div>
-    <div class="offset-md-2" sec:authorize="hasAnyRole('ROLE_ADMIN', 'ROLE_WORKER')">
+    <div class="offset-md-2" sec:authorize="hasAnyRole('ROLE_ADMIN', 'ROLE_WORKER','ROLE_CLIENT')">
         <div th:object="${reservations}" th:replace="reservations/reservations-list :: reservations-list"></div>
     </div>
 </div>
