@@ -113,6 +113,8 @@ public class CustomerService {
         Role customerRole = roleRepository.findByName("Client".toUpperCase());
         String tempPass = password.temporaryPassword();
         System.out.println("Temporary password for " + addCustomer.getFirstName() + " set: " + tempPass);
+        //TODO
+        /*send pass on costumer's email */
         addCustomer.setPassword(passwordEncoder.encode(tempPass));
         addCustomer.addRole(customerRole);
         userRepository.save(addCustomer);

@@ -47,12 +47,10 @@ public class Car extends BaseEntity {
     private int testDrive;
     private BigDecimal price = new BigDecimal(0);
 
-    @OneToMany(cascade = CascadeType.ALL)
-    @JoinColumn(name = "repairs")
+    @OneToMany(mappedBy = "car", cascade = CascadeType.ALL)
     private Set<Repair> repairs = new HashSet<>();
 
-    @OneToMany(cascade = CascadeType.ALL)
-    @JoinColumn(name = "tests_drives")
+    @OneToMany(mappedBy = "car", cascade = CascadeType.ALL)
     private Set<TestDrive> testDrives = new HashSet<>();
 
     @ManyToOne(cascade = CascadeType.ALL)

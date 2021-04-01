@@ -25,8 +25,8 @@ public interface CarRepository extends JpaRepository<Car, Long> {
     @Query("select c from Car c where c.status = ?1")
     List<Car> findCarsByStatus(Car.Status status);
 
-    @Query("select distinct c.mark from Car c order by c.mark asc")
-    List<String> findMark();
+    @Query("select distinct c.mark from Car c where c.status = ?1 order by c.mark asc")
+    List<String> findMark(Car.Status status);
 
     @Query("select distinct c.model from Car c order by c.model asc")
     List<String> findModel();
@@ -42,8 +42,8 @@ public interface CarRepository extends JpaRepository<Car, Long> {
     Page<Car> findCarsFromSearchButton(String carMark, int maxYearValue, BigDecimal maxPriceValue,
                                        Car.Status status, Pageable pageable);
 
-    @Query("select distinct c.productionYear from Car c order by c.productionYear asc")
-    List<Integer> findProductionYear();
+    @Query("select distinct c.productionYear from Car c where c.status = ?1 order by c.productionYear asc")
+    List<Integer> findProductionYear(Car.Status status);
 
     @Query("select c from Car c where c.mark=?1 or c.productionYear <= ?2 " +
             "or c.price <= ?3 and c.status = 'AVAILABLE'")

@@ -9,7 +9,6 @@ import com.example.cardealer.documents.boundary.InvoiceRepository;
 import com.example.cardealer.documents.entiity.Agreement;
 import com.example.cardealer.documents.entiity.Invoice;
 import com.example.cardealer.employees.entity.Employee;
-import com.example.cardealer.events.boundary.CessionRepository;
 import com.example.cardealer.events.entity.Cession;
 import com.example.cardealer.events.entity.Event;
 import com.example.cardealer.events.entity.Purchase;
@@ -39,7 +38,6 @@ import java.util.Arrays;
 public class StartupData {
 
     private final UserRepository userRepository;
-    private final CessionRepository cessionRepository;
     private final RoleRepository roleRepository;
     private final RepairRepository repairRepository;
     private final AgreementRepository agreementRepository;
@@ -95,6 +93,7 @@ public class StartupData {
         Car fabia = new Car("FABIA1234XYZ", 2009, "Skoda", "Fabia",
                 "OC2017/10/2018", Car.FuelType.DIESEL, 105000, Car.BodyType.HATCHBACK,
                 1400, 115, Car.Transmission.MANUAL, "Opis Skody Fabii", new BigDecimal("37890"));
+        fabia.setStatus(Car.Status.AVAILABLE);
 
         Customer yarisOwner = new Customer("Piotr", "Niemiec", "San Escobar", "1232334",
                 "1112223222", "79082113222", "ABC123456", "pini@gmail.com", encoder.encode("az"),
@@ -109,6 +108,7 @@ public class StartupData {
         Car i30 = new Car("I301234XYZ", 2019, "Hyundai", "I30",
                 "OC2017/10/2018", Car.FuelType.PETROL, 145000, Car.BodyType.COMBI,
                 1800, 115, Car.Transmission.AUTOMATIC, "Opis hyundaia i30", new BigDecimal("45987"));
+        i30.setStatus(Car.Status.AVAILABLE);
 
         Customer mazda3Owner = new Customer("Celina", "Sienkiewicz", "San Escobar", "1232334",
                 "1112223444", "79082113244", "ABC123456", "cesi@gmail.com", encoder.encode("az"),
@@ -123,6 +123,7 @@ public class StartupData {
         Car punto = new Car("PUNTO1234XYZ", 2018, "Fiat", "Punto",
                 "OC2017/10/2018", Car.FuelType.PETROL, 145000, Car.BodyType.COMBI,
                 1800, 115, Car.Transmission.AUTOMATIC, "Opis fiata punto", new BigDecimal("55900"));
+        punto.setStatus(Car.Status.AVAILABLE);
 
         Customer jukeOwner = new Customer("Magdalena", "Iwańska", "San Escobar", "1232334",
                 "1112223666", "79082113266", "ABC123456", "maiw@gmail.com", encoder.encode("az"),
@@ -144,6 +145,7 @@ public class StartupData {
         Car a4 = new Car("A41234XYZ", 2009, "Audi", "A4",
                 "OC2017/10/2018", Car.FuelType.PETROL, 145000, Car.BodyType.COMBI,
                 1800, 115, Car.Transmission.AUTOMATIC, "Opis audi a4", new BigDecimal("44234"));
+        a4.setStatus(Car.Status.AVAILABLE);
 
         golfOwner.addCar(golf);
         fabiaOwner.addCar(fabia);

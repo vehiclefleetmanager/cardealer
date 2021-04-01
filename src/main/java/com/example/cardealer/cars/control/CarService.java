@@ -35,6 +35,8 @@ import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 
+import static com.example.cardealer.cars.entity.Car.*;
+
 
 @Service
 @RequiredArgsConstructor
@@ -56,7 +58,7 @@ public class CarService {
     }
 
     public Page<Car> findAllAvailableCars(Pageable pageable) {
-        return carRepository.findCarsByStatus(pageable, Car.Status.AVAILABLE);
+        return carRepository.findCarsByStatus(pageable, Status.AVAILABLE);
     }
 
     public Page<Car> findAllCarsOfUser(Long userId, Pageable pageable) {
@@ -75,13 +77,13 @@ public class CarService {
 
     private void makeCession(Car car, Customer existOwner, LocalDate date) {
         // this variable "count" will greater by 0 Car shouldn't add to system
-        long count = carRepository.findCarsByStatus(Car.Status.SOLD).stream()
+        long count = carRepository.findCarsByStatus(Status.SOLD).stream()
                 .filter(c -> c.getBodyNumber().matches(car.getBodyNumber())).count();
         //this boolean variable "checkCarStatus" set true when car's status is 'WAIT'
         // or false when car's status is different
-        boolean checkCarStatus = car.getStatus().name().matches(Car.Status.WAIT.name());
+        boolean checkCarStatus = car.getStatus().name().matches(Status.WAIT.name());
         if (count == 0L && checkCarStatus) {
-            car.setStatus(Car.Status.ACCEPTED);
+            car.setStatus(Status.ACCEPTED);
             Cession cession = new Cession(car, existOwner, date);
             Cession newCession = cessionService.save(cession);
             makeAgreement(existOwner, newCession, Transaction.CESSION);
@@ -90,17 +92,17 @@ public class CarService {
 
     public void updateCar(Long carId, UpdateCarRequest request) {
         findCar(carId).setBodyNumber(request.getBodyNumber());
-        findCar(carId).setBodyType(Car.BodyType.findByName(request.getBodyType().toUpperCase()));
+        findCar(carId).setBodyType(BodyType.findByName(request.getBodyType().toUpperCase()));
         findCar(carId).setCapacityEngine(request.getCapacityEngine());
         findCar(carId).setDescription(request.getDescription());
         findCar(carId).setDistance(request.getDistance());
-        findCar(carId).setFuelType(Car.FuelType.findByName(request.getFuelType().toUpperCase()));
+        findCar(carId).setFuelType(FuelType.findByName(request.getFuelType().toUpperCase()));
         findCar(carId).setMark(request.getMark());
         findCar(carId).setModel(request.getModel());
         findCar(carId).setOcNumber(request.getOcNumber());
         findCar(carId).setPowerEngine(request.getPowerEngine());
         findCar(carId).setProductionYear(request.getProductionYear());
-        findCar(carId).setTransmission(Car.Transmission.findByName(request.getTransmission().toUpperCase()));
+        findCar(carId).setTransmission(Transmission.findByName(request.getTransmission().toUpperCase()));
         carRepository.save(findCar(carId));
     }
 
@@ -118,7 +120,7 @@ public class CarService {
         //Update car's price status and added repair to car
         car.setPrice(car.getPrice().add(newRepair.getRepairAmount()));
         repair.setCar(car);
-        car.setStatus(Car.Status.AVAILABLE);
+        car.setStatus(Status.AVAILABLE);
         car.addRepair(newRepair);
         carRepository.save(car);
     }
@@ -128,7 +130,7 @@ public class CarService {
         Customer existOwner = car.getCarOwner();
         Customer newOwner = customerRepository.getOne(request.getNewOwnerId());
         Employee employee = findEmployee(employeeId);
-        boolean isAvailable = car.getStatus().name().matches(Car.Status.AVAILABLE.name());
+        boolean isAvailable = car.getStatus().name().matches(Status.AVAILABLE.name());
         boolean isInnerOwner = existOwner.getId().toString().matches(newOwner.getId().toString());
         if (isAvailable && !isInnerOwner) {
             Invoice invoicePurchase = preparePurchaseEvent(car, existOwner, employee);
@@ -152,7 +154,7 @@ public class CarService {
         purchaseInvoice.setInvoiceAmount(priceOfCar);
         purchaseInvoice.setEmployee(employee);
         customer.removeCar(car);
-        car.setStatus(Car.Status.BOUGHT);
+        car.setStatus(Status.BOUGHT);
         return invoiceRepository.save(purchaseInvoice);
     }
 
@@ -160,7 +162,7 @@ public class CarService {
         Car car = invoice.getAgreement().getEvent().getCar();
         customer.addCar(car);
         car.setCarOwner(customer);
-        car.setStatus(Car.Status.SOLD);
+        car.setStatus(Status.SOLD);
         Sale sale = new Sale();
         sale.setEventDate(clock.date());
         sale.setSaleAmount(car.getPrice());
@@ -219,7 +221,7 @@ public class CarService {
                 || userSystem.getRoles().stream().anyMatch(r -> r.getName().matches("CLIENT"))) {
             carRepository.findById(id).ifPresent(
                     car -> {
-                        car.setStatus(Car.Status.DELETED);
+                        car.setStatus(Status.DELETED);
                         carRepository.save(car);
                     });
         }
@@ -262,23 +264,6 @@ public class CarService {
         return flag;
     }
 
-    public List<Car> getCarsFromSearchButton(String carMark, String maxYear,
-                                             String maxPrice, String status) {
-        int maxYearValue = 0;
-        Car.Status searchStatus = Car.Status.AVAILABLE;
-        BigDecimal maxPriceValue = BigDecimal.ZERO;
-        if (!maxYear.isEmpty()) {
-            maxYearValue = Integer.parseInt(maxYear);
-        }
-        if (!maxPrice.isEmpty()) {
-            maxPriceValue = BigDecimal.valueOf(Long.parseLong(maxPrice));
-        }
-        if (!status.isEmpty()) {
-            searchStatus = getCarStatus(status);
-        }
-        return carRepository.findCarsFromSearchButton(carMark,
-                maxYearValue, maxPriceValue, searchStatus);
-    }
 
     public List<Car> getCarsFromSearchButton(String carMark, String maxYear,
                                              String maxPrice) {
@@ -291,12 +276,15 @@ public class CarService {
             maxPriceValue = BigDecimal.valueOf(Long.parseLong(maxPrice));
         }
         return carRepository.findCarsFromSearchButton(carMark,
-                maxYearValue, maxPriceValue);
+                maxYearValue, maxPriceValue)
+                .stream()
+                .filter(car -> car.getStatus().equals(Status.AVAILABLE))
+                .collect(Collectors.toList());
     }
 
     public Page<Car> getCarsFromSearchButton(String carMark, String maxYear, String maxPrice, String status, Pageable pageable) {
         int maxYearValue = 0;
-        Car.Status searchStatus = Car.Status.AVAILABLE;
+        Status searchStatus = Status.AVAILABLE;
         BigDecimal maxPriceValue = BigDecimal.ZERO;
         if (!maxYear.isEmpty()) {
             maxYearValue = Integer.parseInt(maxYear);
@@ -352,19 +340,19 @@ public class CarService {
     }
 
     public List<String> findProductionYear() {
-        return carRepository.findProductionYear().stream()
+        return carRepository.findProductionYear(Status.AVAILABLE).stream()
                 .map(Object::toString).collect(Collectors.toList());
     }
 
     private Car createNewCar(CreateCessionRequest request, Customer existOwner) {
-        Car.BodyType body = Car.BodyType.findByName(request.getBodyType());
-        Car.FuelType fuel = Car.FuelType.findByName(request.getFuelType());
-        Car.Transmission transmission = Car.Transmission.findByName(request.getTransmission());
+        BodyType body = BodyType.findByName(request.getBodyType());
+        FuelType fuel = FuelType.findByName(request.getFuelType());
+        Transmission transmission = Transmission.findByName(request.getTransmission());
         Car car = new Car(request.getBodyNumber(), request.getProductionYear(), request.getMark(),
                 request.getModel(), request.getOcNumber(), fuel, request.getDistance(), body,
                 request.getCapacityEngine(), request.getPowerEngine(), transmission, request.getDescription(),
                 request.getPrice());
-        car.setStatus(Car.Status.WAIT);
+        car.setStatus(Status.WAIT);
         car.setCarOwner(existOwner);
         return car;
     }
@@ -374,7 +362,6 @@ public class CarService {
                 request.getPhoneNumber(), request.getTin(), request.getPesel(), request.getIdNumber(),
                 request.getEmail(), Customer.Status.PRESENT);
     }
-
 
     private TestDrive findTestDrive(Long id) {
         return testDriveRepository.getOne(id);
@@ -393,15 +380,11 @@ public class CarService {
     }
 
     public List<String> findMark() {
-        return carRepository.findMark();
+        return carRepository.findMark(Status.AVAILABLE);
     }
 
-    public List<String> findModel() {
-        return carRepository.findModel();
-    }
-
-    private Car.Status getCarStatus(String status) {
-        return Car.Status.valueOf(status);
+    private Status getCarStatus(String status) {
+        return Status.valueOf(status);
     }
 
     private String getBasicInfoAboutCar(Car updateCar) {

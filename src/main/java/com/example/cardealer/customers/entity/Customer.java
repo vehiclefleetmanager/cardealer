@@ -1,5 +1,6 @@
 package com.example.cardealer.customers.entity;
 
+
 import com.example.cardealer.cars.entity.Car;
 import com.example.cardealer.users.entity.Role;
 import com.example.cardealer.users.entity.User;
@@ -34,8 +35,8 @@ public class Customer extends User {
     @Enumerated(EnumType.STRING)
     private Status status;
 
-    @OneToMany(cascade = CascadeType.ALL)
-    @JoinColumn(name = "customer_id")
+    @OneToMany(mappedBy = "carOwner", cascade = CascadeType.ALL)
+    //@JoinColumn(name = "customer_id")
     private Set<Car> cars = new HashSet<>();
 
     public Customer(String tin, String pesel,

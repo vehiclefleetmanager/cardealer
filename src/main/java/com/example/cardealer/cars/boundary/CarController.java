@@ -40,7 +40,6 @@ public class CarController {
         }
         model.addAttribute("currentPage", page);
         model.addAttribute("markList", carService.findMark());
-        model.addAttribute("modelList", carService.findModel());
         model.addAttribute("currentUser", currentUser.getUser());
         return "cars/cars";
     }

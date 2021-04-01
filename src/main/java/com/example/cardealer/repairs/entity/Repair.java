@@ -34,6 +34,7 @@ public class Repair extends BaseEntity {
     @OneToMany(cascade = CascadeType.ALL)
     @JoinColumn(name = "repair_id")
     Set<Part> parts = new HashSet<>();
+
     @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "car_id")
     private Car car;

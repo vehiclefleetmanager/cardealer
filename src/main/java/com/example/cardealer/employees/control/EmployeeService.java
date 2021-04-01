@@ -46,7 +46,8 @@ public class EmployeeService {
                 clock.date(),
                 setEmployeeNumber());
         System.out.println("Temporary password for " + request.getFirstName() + " set: " + tempPass);
-        ;
+        //TODO
+        /*send pass o worker's email*/
         userRepository.save(employee);
     }
 
