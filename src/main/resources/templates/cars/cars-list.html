@@ -112,7 +112,7 @@
                                                 <div class="form-row">
                                                     <div class="form-group col-xl-4">
                                                         <label class="text-muted font-italic" for="fuelType"
-                                                               th:text="${car.getFuelType()}"></label>
+                                                               th:text="'Obecnie: '+${car.getFuelType()}"></label>
                                                         <select class="custom-select" id="fuelType" name="fuelType"
                                                         >
                                                             <option selected="selected">Wybierz..
@@ -124,7 +124,7 @@
                                                     </div>
                                                     <div class="form-group col-xl-4">
                                                         <label class="text-muted font-italic" for="bodyType"
-                                                               th:text="${car.getBodyType()}"></label>
+                                                               th:text="'Obecnie: '+${car.getBodyType()}"></label>
                                                         <select class="custom-select" id="bodyType" name="bodyType"
                                                                 required>
                                                             <option selected="selected">Wybierz..
@@ -136,7 +136,7 @@
                                                     </div>
                                                     <div class="form-group col-xl-4">
                                                         <label class="text-muted font-italic" for="transmission"
-                                                               th:text="${car.getTransmission()}"></label>
+                                                               th:text="'Obecnie: '+${car.getTransmission()}"></label>
                                                         <select class="custom-select" id="transmission"
                                                                 name="transmission"
                                                                 required>

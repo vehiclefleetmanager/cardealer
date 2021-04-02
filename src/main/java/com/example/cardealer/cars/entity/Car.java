@@ -118,6 +118,7 @@ public class Car extends BaseEntity {
     }
 
     public enum Transmission {
+        EMPTY("Pusty"),
         MANUAL("Manualna"),
         AUTOMATIC("Automatyczna"),
         DSG("DSG");
@@ -129,10 +130,11 @@ public class Car extends BaseEntity {
 
         public static Transmission findByName(String trans) {
             Transmission[] values = Transmission.values();
-            Transmission transType = null;
+            Transmission transType = EMPTY;
             for (Transmission bufTrans : values) {
                 if (bufTrans.name().matches(trans)) {
                     transType = bufTrans;
+                    break;
                 }
             }
             return transType;
@@ -144,6 +146,7 @@ public class Car extends BaseEntity {
     }
 
     public enum FuelType {
+        EMPTY("Pusty"),
         DIESEL("Diesel"),
         PETROL("Benzyna"),
         GAS_PETROL("Gaz + Benzyna"),
@@ -157,10 +160,11 @@ public class Car extends BaseEntity {
 
         public static FuelType findByName(String fuel) {
             FuelType[] values = FuelType.values();
-            FuelType fuelType = null;
+            FuelType fuelType = EMPTY;
             for (FuelType bufType : values) {
                 if (bufType.name().matches(fuel)) {
                     fuelType = bufType;
+                    break;
                 }
             }
             return fuelType;
@@ -191,6 +195,7 @@ public class Car extends BaseEntity {
     }
 
     public enum BodyType {
+        EMPTY("Pusty"),
         HATCHBACK("Hatchback"),
         COMBI("Combi"),
         SEDAN("Sedan"),
@@ -205,15 +210,15 @@ public class Car extends BaseEntity {
 
         public static BodyType findByName(String types) {
             BodyType[] values = BodyType.values();
-            BodyType bodyType = null;
+            BodyType bodyType = EMPTY;
             for (BodyType bufType : values) {
                 if (bufType.name().matches(types)) {
                     bodyType = bufType;
+                    break;
                 }
             }
             return bodyType;
         }
-
         public String getTypeName() {
             return typeName;
         }
