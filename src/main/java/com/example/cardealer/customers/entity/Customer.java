@@ -4,6 +4,7 @@ package com.example.cardealer.customers.entity;
 import com.example.cardealer.cars.entity.Car;
 import com.example.cardealer.users.entity.Role;
 import com.example.cardealer.users.entity.User;
+import com.example.cardealer.utils.enums.UserType;
 import lombok.*;
 
 import javax.persistence.*;
@@ -57,6 +58,7 @@ public class Customer extends User {
         setEmail(email);
         setPassword(password);
         addRole(role);
+        setUserType(UserType.CLIENT);
         this.tin = tin;
         this.pesel = pesel;
         this.idNumber = idNumber;
@@ -71,6 +73,7 @@ public class Customer extends User {
         setAddress(address);
         setPhoneNumber(phoneNumber);
         setEmail(email);
+        setUserType(UserType.CLIENT);
         this.tin = tin;
         this.pesel = pesel;
         this.idNumber = idNumber;

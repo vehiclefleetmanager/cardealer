@@ -2,13 +2,16 @@ package com.example.cardealer.employees.boundary;
 
 import lombok.Data;
 
+import java.util.Collection;
+
 @Data
-public class CreateEmployeeRequest {
+public class UpdateEmployeeRequest {
+    Long id;
     String firstName;
     String lastName;
     String email;
     String phoneNumber;
     String address;
     boolean isActive;
-    String roles;
+    Collection<String> roles;
 }

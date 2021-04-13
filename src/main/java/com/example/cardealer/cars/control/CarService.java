@@ -21,6 +21,7 @@ import com.example.cardealer.repairs.entity.Repair;
 import com.example.cardealer.users.boundary.UserRepository;
 import com.example.cardealer.users.entity.User;
 import com.example.cardealer.utils.enums.Transaction;
+import com.example.cardealer.utils.enums.UserType;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -69,6 +70,7 @@ public class CarService {
     public void addCarAndCreateCessionEventAndCessionAgreement(CreateCessionRequest request, Long employeeId) {
         //add new car's owner
         Customer existOwner = createCarOwner(request);
+        existOwner.setUserType(UserType.CLIENT);
         // add new car
         Car car = createNewCar(request, existOwner);
         existOwner.addCar(car);
@@ -84,7 +86,6 @@ public class CarService {
         // or false when car's status is different
         boolean checkCarStatus = car.getStatus().name().matches(Status.WAIT.name());
         if (count == 0L && checkCarStatus) {
-            car.setStatus(Status.ACCEPTED);
             Cession cession = new Cession(car, existOwner, date);
             Cession newCession = cessionService.save(cession);
             makeAgreement(existOwner, newCession, Transaction.CESSION);
@@ -93,66 +94,8 @@ public class CarService {
 
     @Transactional
     public void updateCar(Long carId, UpdateCarRequest request) {
-
         carRepository.findById(carId)
                 .map(car -> updateFields(request, car));
-
-        /*findCar(carId).setBodyNumber(request.getBodyNumber());
-        findCar(carId).setBodyType(BodyType.findByName(request.getBodyType().toUpperCase()));
-        findCar(carId).setCapacityEngine(request.getCapacityEngine());
-        findCar(carId).setDescription(request.getDescription());
-        findCar(carId).setDistance(request.getDistance());
-        findCar(carId).setFuelType(FuelType.findByName(request.getFuelType().toUpperCase()));
-        findCar(carId).setMark(request.getMark());
-        findCar(carId).setModel(request.getModel());
-        findCar(carId).setOcNumber(request.getOcNumber());
-        findCar(carId).setPowerEngine(request.getPowerEngine());
-        findCar(carId).setProductionYear(request.getProductionYear());
-        findCar(carId).setTransmission(Transmission.findByName(request.getTransmission().toUpperCase()));
-        carRepository.save(findCar(carId));*/
-    }
-
-    private Car updateFields(UpdateCarRequest request, Car car) {
-        if (request.getMark() != null) {
-            car.setMark(request.getMark());
-        }
-        if (request.getModel() != null) {
-            car.setModel(request.getModel());
-        }
-        if (request.getBodyNumber() != null) {
-            car.setBodyNumber(request.getBodyNumber());
-        }
-        if (request.getProductionYear() != null) {
-            car.setProductionYear(request.getProductionYear());
-        }
-        if (request.getOcNumber() != null) {
-            car.setOcNumber(request.getOcNumber());
-        }
-        if (request.getFuelType() != null) {
-            car.setFuelType(FuelType.findByName(request.getFuelType()));
-        }
-        if (request.getDistance() != null) {
-            car.setDistance(request.getDistance());
-        }
-        if (request.getBodyType() != null) {
-            car.setBodyType(BodyType.findByName(request.getBodyType()));
-        }
-        if (request.getCapacityEngine() != null) {
-            car.setCapacityEngine(request.getCapacityEngine());
-        }
-        if (request.getPowerEngine() != null) {
-            car.setPowerEngine(request.getPowerEngine());
-        }
-        if (request.getTransmission() != null) {
-            car.setTransmission(Transmission.findByName(request.getTransmission()));
-        }
-        if (request.getDescription() != null) {
-            car.setDescription(request.getDescription());
-        }
-        if (request.getPrice() != null) {
-            car.setPrice(new BigDecimal(request.getPrice()));
-        }
-        return car;
     }
 
     public void repairCar(Long carId, CreateRepairRequest request, Long employeeId) {
@@ -439,5 +382,48 @@ public class CarService {
     private String getBasicInfoAboutCar(Car updateCar) {
         return updateCar.getMark() + " " + updateCar.getModel()
                 + " " + updateCar.getBodyNumber();
+    }
+
+    private Car updateFields(UpdateCarRequest request, Car car) {
+        if (request.getMark() != null) {
+            car.setMark(request.getMark());
+        }
+        if (request.getModel() != null) {
+            car.setModel(request.getModel());
+        }
+        if (request.getBodyNumber() != null) {
+            car.setBodyNumber(request.getBodyNumber());
+        }
+        if (request.getProductionYear() != null) {
+            car.setProductionYear(request.getProductionYear());
+        }
+        if (request.getOcNumber() != null) {
+            car.setOcNumber(request.getOcNumber());
+        }
+        if (request.getFuelType() != null) {
+            car.setFuelType(FuelType.findByName(request.getFuelType()));
+        }
+        if (request.getDistance() != null) {
+            car.setDistance(request.getDistance());
+        }
+        if (request.getBodyType() != null) {
+            car.setBodyType(BodyType.findByName(request.getBodyType()));
+        }
+        if (request.getCapacityEngine() != null) {
+            car.setCapacityEngine(request.getCapacityEngine());
+        }
+        if (request.getPowerEngine() != null) {
+            car.setPowerEngine(request.getPowerEngine());
+        }
+        if (request.getTransmission() != null) {
+            car.setTransmission(Transmission.findByName(request.getTransmission()));
+        }
+        if (request.getDescription() != null) {
+            car.setDescription(request.getDescription());
+        }
+        if (request.getPrice() != null) {
+            car.setPrice(new BigDecimal(request.getPrice()));
+        }
+        return car;
     }
 }

@@ -4,6 +4,7 @@ package com.example.cardealer.users.control;
 import com.example.cardealer.customers.boundary.CustomerRepository;
 import com.example.cardealer.users.boundary.*;
 import com.example.cardealer.users.entity.User;
+import com.example.cardealer.utils.enums.UserType;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -40,7 +41,8 @@ public class UserService {
             user.setPhoneNumber(request.getPhoneNumber());
             user.setPassword(passwordEncoder.encode(request.getPassword()));
             user.setActive(true);
-            user.addRole(roleRepository.findByName(request.getRoles()));
+            user.addRole(roleRepository.findByName("CLIENT"));
+            user.setUserType(UserType.CLIENT);
             userRepository.save(user);
             return "Dodano użytkonika " + request.getFirstName() + " " + request.getLastName();
         }

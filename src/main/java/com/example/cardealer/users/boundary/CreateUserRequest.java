@@ -10,5 +10,4 @@ public class CreateUserRequest {
     private String email;
     private String password;
     private String confPass;
-    private String roles;
 }

@@ -35,16 +35,16 @@
                             <div class="form-row">
                                 <div class="form-group col-xl-4">
                                     <input class="form-control" id="firstName" name="firstName" placeholder="Imię"
-                                           required type="text">
+                                           pattern="[A-Za-z]{2,15}" required type="text">
                                 </div>
                                 <div class="form-group col-xl-4">
                                     <input class="form-control" id="lastName" name="lastName" placeholder="Nazwisko"
-                                           required type="text">
+                                           pattern="[A-Za-z]{2,20}" required type="text">
                                 </div>
                                 <div class="form-group col-xl-4">
                                     <input class="form-control" id="phoneNumber" name="phoneNumber"
-                                           placeholder="Telefon"
-                                           required type="text">
+                                           pattern="[0-9]{9,9}"
+                                           placeholder="Telefon 9 cyfr" required type="text">
                                 </div>
                             </div>
                             <div class="form-row">
@@ -53,7 +53,9 @@
                                            required type="email">
                                 </div>
                                 <div class="form-group col-xl-6">
-                                    <select class="form-control" id="roles" multiple name="roles" required>
+                                    <select class="form-control" id="roles" name="roles" required>
+                                        <option selected th:value="ADMIN">Administrator</option>
+                                        <option th:value="BOSS">Szef</option>
                                         <option th:value="WORKER">Pracownik</option>
                                         <option th:value="MECHANIC">Mechanik</option>
                                     </select>

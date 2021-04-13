@@ -2,6 +2,7 @@ package com.example.cardealer.employees.entity;
 
 import com.example.cardealer.users.entity.Role;
 import com.example.cardealer.users.entity.User;
+import com.example.cardealer.utils.enums.UserType;
 import lombok.*;
 
 import javax.persistence.Entity;
@@ -36,6 +37,7 @@ public class Employee extends User {
         setEmail(email);
         setPassword(password);
         addRole(role);
+        setUserType(UserType.WORKER);
         this.employmentDate = employmentDate;
         this.employeeNumber = employeeNumber;
     }

@@ -16,6 +16,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import javax.validation.Valid;
 import java.util.stream.Collectors;
 
 @Controller
@@ -38,6 +39,7 @@ public class CarController {
                     .stream().map(CarResponse::from).collect(Collectors.toList()));
             model.addAttribute("pages", carService.findAllCars(PageRequest.of(page, 10)));
         }
+        model.addAttribute("newCessionEvent", new CreateCessionRequest());
         model.addAttribute("currentPage", page);
         model.addAttribute("markList", carService.findMark());
         model.addAttribute("currentUser", currentUser.getUser());
@@ -45,7 +47,7 @@ public class CarController {
     }
 
     @PostMapping()
-    public String addCar(@ModelAttribute("newCessionEvent") CreateCessionRequest request,
+    public String addCar(@Valid @ModelAttribute("newCessionEvent") CreateCessionRequest request,
                          RedirectAttributes attributes) {
         String carInfo = request.getMark() + " " + request.getModel() + " " + request.getBodyNumber();
         carService.addCarAndCreateCessionEventAndCessionAgreement(request, currentUser.getUser().getId());

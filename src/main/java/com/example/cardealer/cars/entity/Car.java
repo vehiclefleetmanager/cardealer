@@ -120,7 +120,7 @@ public class Car extends BaseEntity {
     public enum Transmission {
         EMPTY("Pusty"),
         MANUAL("Manualna"),
-        AUTOMATIC("Automatyczna"),
+        AUTOMATIC("Automat"),
         DSG("DSG");
         private String typeName;
 

@@ -35,7 +35,7 @@ public class EmployeeController {
     }
 
     @PutMapping("/{id}")
-    public String updateEmployee(@RequestParam("id") long id, @ModelAttribute("updateEmployee") CreateEmployeeRequest request) {
+    public String updateEmployee(@RequestParam("id") long id, @ModelAttribute("updateEmployee") UpdateEmployeeRequest request) {
         employeeService.updateEmployee(id, request);
         return "redirect:/employees";
     }

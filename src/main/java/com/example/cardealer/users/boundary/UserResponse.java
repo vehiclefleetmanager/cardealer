@@ -2,6 +2,7 @@ package com.example.cardealer.users.boundary;
 
 import com.example.cardealer.users.entity.Role;
 import com.example.cardealer.users.entity.User;
+import com.example.cardealer.utils.enums.UserType;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 
@@ -18,7 +19,7 @@ public class UserResponse {
     String phoneNumber;
     boolean isActive;
     Collection<String> roles;
-
+    UserType userType;
     public static UserResponse from(User user) {
         return new UserResponse(
                 user.getId(),
@@ -27,7 +28,8 @@ public class UserResponse {
                 user.getEmail(),
                 user.getPhoneNumber(),
                 user.isActive(),
-                user.getRoles().stream().map(Role::getName).collect(Collectors.toList())
+                user.getRoles().stream().map(Role::getName).collect(Collectors.toList()),
+                user.getUserType()
         );
     }
 }

@@ -1,6 +1,7 @@
 package com.example.cardealer.users.entity;
 
 import com.example.cardealer.entities.BaseEntity;
+import com.example.cardealer.utils.enums.UserType;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -35,6 +36,8 @@ public class User extends BaseEntity {
             inverseJoinColumns = @JoinColumn(name = "role_id"))
     private Collection<Role> roles = new HashSet<>();
 
+    @Enumerated(EnumType.STRING)
+    private UserType userType;
 
     public void addRole(Role role) {
         if (roles.isEmpty() && getRoles().stream().noneMatch(r -> r.getName().matches(r.getName()))) {
@@ -47,4 +50,6 @@ public class User extends BaseEntity {
             getRoles().remove(role);
         }
     }
+
+
 }

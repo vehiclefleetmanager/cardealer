@@ -4,11 +4,13 @@ import com.example.cardealer.config.Clock;
 import com.example.cardealer.config.TemporaryPassword;
 import com.example.cardealer.employees.boundary.CreateEmployeeRequest;
 import com.example.cardealer.employees.boundary.EmployeeRepository;
+import com.example.cardealer.employees.boundary.UpdateEmployeeRequest;
 import com.example.cardealer.employees.entity.Employee;
 import com.example.cardealer.users.boundary.RoleRepository;
 import com.example.cardealer.users.boundary.UserRepository;
 import com.example.cardealer.users.entity.Role;
 import com.example.cardealer.users.entity.User;
+import com.example.cardealer.utils.enums.UserType;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -42,12 +44,13 @@ public class EmployeeService {
                 request.getPhoneNumber(),
                 request.getEmail(),
                 encoder.encode(tempPass),
-                roleRepository.findByName("Worker"),
+                roleRepository.findByName(request.getRoles()),
                 clock.date(),
                 setEmployeeNumber());
         System.out.println("Temporary password for " + request.getFirstName() + " set: " + tempPass);
         //TODO
         /*send pass o worker's email*/
+        employee.setUserType(UserType.WORKER);
         userRepository.save(employee);
     }
 
@@ -62,7 +65,7 @@ public class EmployeeService {
         return prefix + (employeeUsers + 1);
     }
 
-    public void updateEmployee(long id, CreateEmployeeRequest request) {
+    public void updateEmployee(long id, UpdateEmployeeRequest request) {
         employeeRepository.findById(id).ifPresent(
                 e -> {
                     e.setFirstName(request.getFirstName());
@@ -80,7 +83,7 @@ public class EmployeeService {
         );
     }
 
-    private Collection<Role> setEmployeeRoles(CreateEmployeeRequest request) {
+    private Collection<Role> setEmployeeRoles(UpdateEmployeeRequest request) {
         List<Role> roles = new ArrayList<>();
         for (String r : request.getRoles()) {
             roles.add(roleRepository.findByName(r));

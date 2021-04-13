@@ -53,47 +53,49 @@
                             <div class="form-row">
                                 <div class="form-group col-xl-6">
                                     <input class="form-control" id="mark" name="mark" placeholder="Marka pojazdu"
-                                           required type="text">
+                                           pattern="[A-Za-z]{2,10}" required type="text">
                                 </div>
                                 <div class="form-group col-xl-6">
                                     <input class="form-control" id="model" name="model" placeholder="Model pojazdu"
-                                           required type="text">
+                                           pattern="[A-Za-z]{2,10}" required type="text">
                                 </div>
                                 <div class="form-group col-xl-6">
                                     <input class="form-control" id="bodyNumber" name="bodyNumber"
                                            placeholder="Numer nadwozia"
-                                           required type="text">
+                                           maxlength="17" pattern="[A-HJ-NPR-Z0-9]{17}"
+                                           required
+                                           type="text">
                                 </div>
                                 <div class="form-group col-xl-6">
                                     <input class="form-control" id="ocNumber" name="ocNumber"
                                            placeholder="Numer polisy"
-                                           required type="text">
+                                           pattern="[A-Z0-9]{2,30}" required type="text">
                                 </div>
                             </div>
                             <div class="form-row">
                                 <div class="form-group col-xl-6">
                                     <input class="form-control" id="distance" name="distance" placeholder="Przebieg"
-                                           required type="number">
+                                           max="999999" min="1" required type="number">
                                 </div>
 
                                 <div class="form-group col-xl-6">
                                     <input class="form-control" id="price" name="price" placeholder="Cena"
-                                           required type="number">
+                                           min="5000" required type="number">
                                 </div>
                                 <div class="form-group col-xl-4">
                                     <input class="form-control" id="productionYear" name="productionYear"
                                            placeholder="Rok produkcji"
-                                           required type="number">
+                                           max="2021" min="1960" required type="number">
                                 </div>
                                 <div class="form-group col-xl-4">
                                     <input class="form-control" id="capacityEngine" name="capacityEngine"
                                            placeholder="Pojemność silnika"
-                                           required type="number">
+                                           max="99999" min="400" required type="number">
                                 </div>
                                 <div class="form-group col-xl-4">
                                     <input class="form-control" id="powerEngine" name="powerEngine"
                                            placeholder="Moc silnika"
-                                           required type="number">
+                                           max="999" min="1" required type="number">
                                 </div>
                             </div>
                             <div class="form-row">
@@ -126,44 +128,43 @@
                                 <label for="description"></label>
                                 <textarea class="form-control" id="description" name="description" placeholder=""
                                           required
-                                          rows="3"
-                                          type="text"></textarea>
+                                          rows="3"></textarea>
                             </div>
                             <h6 class="modal-title">Dane właściciela</h6>
                             <!--Owner Car-->
                             <div class="form-row">
                                 <div class="form-group col-xl-4">
                                     <input class="form-control" id="firstName" name="firstName" placeholder="Imię"
-                                           required type="text">
+                                           pattern="[A-Za-z]{2,15}" required type="text">
                                 </div>
                                 <div class="form-group col-xl-4">
                                     <input class="form-control" id="lastName" name="lastName" placeholder="Nazwisko"
-                                           required type="text">
+                                           pattern="[A-Za-z]{2,20}" required type="text">
                                 </div>
                                 <div class="form-group col-xl-4">
                                     <input class="form-control" id="phoneNumber" name="phoneNumber"
-                                           placeholder="Telefon"
-                                           required type="text">
+                                           pattern="[0-9]{9,9}"
+                                           placeholder="Telefon 9 cyfr" required type="text">
                                 </div>
                                 <div class="form-group col-xl-12">
                                     <input class="form-control" id="address" name="address"
                                            placeholder="Adres"
-                                           required type="text">
+                                           pattern="[a-zA-Z0-9 /\\@#$%&]+{2,20}" required type="text">
                                 </div>
                             </div>
                             <div class="form-row">
                                 <div class="form-group col-xl-4">
                                     <input class="form-control" id="tin" name="tin" placeholder="NIP"
-                                           required type="number">
+                                           pattern="[0-9]{10,10}" required type="text">
                                 </div>
                                 <div class="form-group col-xl-4">
                                     <input class="form-control" id="pesel" name="pesel" placeholder="Pesel"
-                                           required type="number">
+                                           pattern="[0-9]{11,11}" required type="text">
                                 </div>
                                 <div class="form-group col-xl-4">
                                     <input class="form-control" id="idNumber" name="idNumber"
                                            placeholder="Dowód osobisty"
-                                           required type="text">
+                                           pattern="[A-Za-z0-9]{9,9}" required type="text">
                                 </div>
                                 <div class="form-group col-xl-12">
                                     <input class="form-control" id="email" name="email" placeholder="Email"
